@@ -50,7 +50,10 @@ export function Navigation() {
           {/* Desktop CTA & Theme Toggle */}
           <div className="hidden md:flex items-center space-x-4">
             <ThemeToggle />
-            <Button className="neu-button border-primary/20">
+            <Button 
+              className="neu-button border-primary/20"
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               Get Started
             </Button>
           </div>
@@ -82,7 +85,13 @@ export function Navigation() {
                 </a>
               ))}
               <div className="pt-2">
-                <Button className="w-full neu-button border-primary/20">
+                <Button 
+                  className="w-full neu-button border-primary/20"
+                  onClick={() => {
+                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+                    setIsOpen(false)
+                  }}
+                >
                   Get Started
                 </Button>
               </div>

@@ -157,7 +157,10 @@ export function Footer() {
                 placeholder="Enter your email"
                 className="flex-1 px-4 py-2 bg-card border border-foreground/20 rounded-l-lg focus:outline-none focus:border-primary text-sm"
               />
-              <button className="px-6 py-2 bg-gradient-primary text-white rounded-r-lg hover:opacity-90 transition-opacity text-sm font-medium">
+              <button 
+                className="px-6 py-2 bg-gradient-primary text-white rounded-r-lg hover:opacity-90 transition-opacity text-sm font-medium"
+                onClick={() => alert('Thank you for subscribing! We\'ll keep you updated.')}
+              >
                 Subscribe
               </button>
             </div>

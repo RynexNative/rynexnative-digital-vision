@@ -96,7 +96,11 @@ export function ServicesSection() {
                 </div>
 
                 {/* CTA */}
-                <Button variant="outline" className={`w-full glass border-${service.color}/30 hover:border-${service.color}/50 group-hover:bg-${service.color}/10`}>
+                <Button 
+                  variant="outline" 
+                  className={`w-full glass border-${service.color}/30 hover:border-${service.color}/50 group-hover:bg-${service.color}/10`}
+                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                >
                   Learn More
                 </Button>
               </div>
@@ -109,7 +113,11 @@ export function ServicesSection() {
           <p className="text-lg text-foreground/80 mb-6">
             Don't see what you're looking for? We create custom solutions for unique challenges.
           </p>
-          <Button size="lg" className="neu-button px-8 py-4 border-primary/20">
+          <Button 
+            size="lg" 
+            className="neu-button px-8 py-4 border-primary/20"
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+          >
             Discuss Your Project
           </Button>
         </div>

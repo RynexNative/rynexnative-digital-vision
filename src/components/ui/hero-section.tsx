@@ -41,6 +41,7 @@ export function HeroSection() {
             <Button 
               size="lg" 
               className="neu-button text-lg px-8 py-4 group border-primary/20 hover:border-primary/40"
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Get Started
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -49,6 +50,7 @@ export function HeroSection() {
               variant="outline" 
               size="lg" 
               className="glass text-lg px-8 py-4 group border-accent/30 hover:border-accent/50"
+              onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
               View Our Work

@@ -110,11 +110,21 @@ export function PortfolioSection() {
 
                 {/* Action Buttons */}
                 <div className="flex gap-3">
-                  <Button variant="outline" size="sm" className="flex-1 glass border-primary/30">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1 glass border-primary/30"
+                    onClick={() => window.open('#', '_blank')}
+                  >
                     <ExternalLink className="w-4 h-4 mr-2" />
                     View
                   </Button>
-                  <Button variant="outline" size="sm" className="flex-1 glass border-accent/30">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1 glass border-accent/30"
+                    onClick={() => window.open('#', '_blank')}
+                  >
                     <Github className="w-4 h-4 mr-2" />
                     Code
                   </Button>
@@ -129,7 +139,12 @@ export function PortfolioSection() {
           <p className="text-lg text-foreground/80 mb-6">
             Interested in seeing more of our work?
           </p>
-          <Button size="lg" variant="outline" className="glass border-primary/30 px-8 py-4">
+          <Button 
+            size="lg" 
+            variant="outline" 
+            className="glass border-primary/30 px-8 py-4"
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+          >
             View Full Portfolio
           </Button>
         </div>
