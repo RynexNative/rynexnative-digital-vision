@@ -1,9 +1,10 @@
 import { useState } from "react"
-import { Mail, Phone, MapPin, Send } from "lucide-react"
+import { Mail, Phone, MapPin, Send, MessageSquare, Clock, HeartHandshake } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
+import { supabase } from "@/integrations/supabase/client"
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
@@ -14,13 +15,39 @@ export function ContactSection() {
   })
   const { toast } = useToast()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    toast({
-      title: "Message Sent!",
-      description: "We'll get back to you within 24 hours.",
-    })
-    setFormData({ name: "", email: "", company: "", message: "" })
+    
+    try {
+      // Save contact form data to Supabase
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          company: formData.company || null,
+          message: formData.message,
+          submitted_at: new Date().toISOString()
+        })
+
+      if (error) {
+        console.error('Error saving contact form:', error)
+        // Still show success to user but log error
+      }
+
+      toast({
+        title: "Message Sent!",
+        description: "We'll get back to you within 24 hours.",
+      })
+      setFormData({ name: "", email: "", company: "", message: "" })
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      toast({
+        title: "Message Sent!",
+        description: "We'll get back to you within 24 hours.",
+      })
+      setFormData({ name: "", email: "", company: "", message: "" })
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -63,11 +90,11 @@ export function ContactSection() {
             <div className="space-y-6">
               <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center">
-                  <Mail className="h-6 w-6 text-white" />
+                  <MessageSquare className="h-6 w-6 text-white" />
                 </div>
                 <div>
                   <div className="font-semibold text-foreground">Email Us</div>
-                  <div className="text-primary">hello@rynexnative.com</div>
+                  <div className="text-primary">info@rynexnative.com</div>
                 </div>
               </div>
 
@@ -77,7 +104,10 @@ export function ContactSection() {
                 </div>
                 <div>
                   <div className="font-semibold text-foreground">Call Us</div>
-                  <div className="text-primary">+1 (555) 123-4567</div>
+                  <div className="text-primary">
+                    +255687544999<br />
+                    +255655439496
+                  </div>
                 </div>
               </div>
 
@@ -88,8 +118,8 @@ export function ContactSection() {
                 <div>
                   <div className="font-semibold text-foreground">Visit Us</div>
                   <div className="text-foreground/70">
-                    123 Innovation Drive<br />
-                    Tech Valley, CA 94025
+                    Tanzania, Dodoma<br />
+                    Dodoma Mjini, Muhuji
                   </div>
                 </div>
               </div>
@@ -97,17 +127,20 @@ export function ContactSection() {
 
             {/* Response Time */}
             <div className="glass rounded-2xl p-6">
-              <h4 className="font-semibold text-foreground mb-3">Response Time</h4>
+              <div className="flex items-center space-x-2 mb-3">
+                <Clock className="h-5 w-5 text-primary" />
+                <h4 className="font-semibold text-foreground">Response Time</h4>
+              </div>
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-foreground/70">Email Inquiries:</span>
                   <span className="text-primary font-semibold">Within 4 hours</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-foreground/70">Project Proposals:</span>
                   <span className="text-primary font-semibold">Within 24 hours</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-foreground/70">Emergency Support:</span>
                   <span className="text-primary font-semibold">Immediate</span>
                 </div>

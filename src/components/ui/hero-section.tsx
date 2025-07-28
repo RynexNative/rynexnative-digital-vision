@@ -5,7 +5,7 @@ import heroImage from "@/assets/hero-image.jpg"
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: 'var(--gradient-hero)' }}>
       <FloatingShapes />
       
       {/* Background Image Overlay */}

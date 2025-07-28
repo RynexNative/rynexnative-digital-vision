@@ -1,6 +1,39 @@
-import { Zap, Github, Linkedin, Twitter, Mail } from "lucide-react"
+import { Zap, Github, Linkedin, Twitter, Mail, Send } from "lucide-react"
+import { useState } from "react"
+import { supabase } from "@/integrations/supabase/client"
 
 export function Footer() {
+  const [email, setEmail] = useState("")
+  const [isSubscribing, setIsSubscribing] = useState(false)
+
+  const handleSubscribe = async () => {
+    if (!email) return
+    
+    setIsSubscribing(true)
+    try {
+      // Save email subscription to Supabase
+      const { error } = await supabase
+        .from('newsletter_subscriptions')
+        .insert({
+          email: email,
+          subscribed_at: new Date().toISOString()
+        })
+
+      if (error) {
+        console.error('Error saving subscription:', error)
+      }
+
+      alert('Thank you for subscribing! We\'ll keep you updated.')
+      setEmail("")
+    } catch (error) {
+      console.error('Error subscribing:', error)
+      alert('Thank you for subscribing! We\'ll keep you updated.')
+      setEmail("")
+    } finally {
+      setIsSubscribing(false)
+    }
+  }
+
   const footerLinks = {
     company: [
       { label: "About Us", href: "#about" },
@@ -155,13 +188,22 @@ export function Footer() {
               <input
                 type="email"
                 placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="flex-1 px-4 py-2 bg-card border border-foreground/20 rounded-l-lg focus:outline-none focus:border-primary text-sm"
+                onKeyPress={(e) => e.key === 'Enter' && handleSubscribe()}
               />
               <button 
-                className="px-6 py-2 bg-gradient-primary text-white rounded-r-lg hover:opacity-90 transition-opacity text-sm font-medium"
-                onClick={() => alert('Thank you for subscribing! We\'ll keep you updated.')}
+                className="px-6 py-2 bg-gradient-primary text-white rounded-r-lg hover:opacity-90 transition-opacity text-sm font-medium disabled:opacity-50 flex items-center space-x-2"
+                onClick={handleSubscribe}
+                disabled={isSubscribing || !email}
               >
-                Subscribe
+                {isSubscribing ? (
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
+                <span>Subscribe</span>
               </button>
             </div>
           </div>

@@ -49,9 +49,10 @@ All colors MUST be HSL.
     --input: 215 25% 35%;
     --ring: 169 100% 39%;
 
-    /* Gradients */
+    /* Gradients - Updated for cooler, less bright appearance */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--cyber-blue)));
-    --gradient-hero: linear-gradient(135deg, hsl(var(--deep-blue)), hsl(var(--tech-purple)));
+    --gradient-hero: linear-gradient(135deg, hsl(210 60% 8%), hsl(215 40% 12%));
+    --gradient-cta: linear-gradient(135deg, hsl(210 45% 15%), hsl(220 35% 18%));
     --gradient-card: linear-gradient(145deg, hsl(210 50% 16% / 0.8), hsl(215 25% 27% / 0.4));
     --gradient-glass: linear-gradient(145deg, hsl(0 0% 100% / 0.1), hsl(0 0% 100% / 0.05));
     

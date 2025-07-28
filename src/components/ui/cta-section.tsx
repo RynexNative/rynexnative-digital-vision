@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 
 export function CTASection() {
   return (
-    <section className="py-20 bg-gradient-hero relative overflow-hidden">
+    <section className="py-20 relative overflow-hidden" style={{ background: 'var(--gradient-cta)' }}>
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-10 w-32 h-32 bg-primary rounded-full animate-float" style={{ animationDelay: '0s' }} />
