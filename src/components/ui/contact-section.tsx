@@ -109,8 +109,8 @@ export function ContactSection() {
                 <div>
                   <div className="font-semibold text-foreground">Call Us</div>
                   <div className="text-primary">
-                    +255687544999<br />
-                    +255655439496
+                    (+255) 687-544-999<br />
+                    (+255) 655-439-496
                   </div>
                 </div>
               </div>
