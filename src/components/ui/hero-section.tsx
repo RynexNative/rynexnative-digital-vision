@@ -1,23 +1,20 @@
-import { ArrowRight, Play } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { FloatingShapes } from "@/components/ui/floating-shapes"
-import heroImage from "@/assets/hero-image.jpg"
-
+import { ArrowRight, Play } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { FloatingShapes } from "@/components/ui/floating-shapes";
+import heroImage from "@/assets/hero-image.jpg";
 export function HeroSection() {
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: 'var(--gradient-hero)' }}>
+  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{
+    background: 'var(--gradient-hero)'
+  }}>
       <FloatingShapes />
       
       {/* Background Image Overlay */}
-      <div 
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage: `url(${heroImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
+      <div className="absolute inset-0 opacity-20" style={{
+      backgroundImage: `url(${heroImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }} />
       
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -30,7 +27,7 @@ export function HeroSection() {
             <span className="text-white">Innovation</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-foreground/80 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed text-slate-300">
             We build intelligent solutions for a connected world through cutting-edge 
             <span className="text-primary font-semibold"> software development</span>, 
             <span className="text-accent font-semibold"> mobile applications</span>, and 
@@ -38,20 +35,15 @@ export function HeroSection() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button 
-              size="lg" 
-              className="neu-button text-lg px-8 py-4 group border-primary/20 hover:border-primary/40"
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            >
+            <Button size="lg" onClick={() => document.getElementById('contact')?.scrollIntoView({
+            behavior: 'smooth'
+          })} className="neu-button text-lg px-8 py-4 group border-primary/20 hover:border-primary/40 text-slate-900">
               Get Started
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="glass text-lg px-8 py-4 group border-accent/30 hover:border-accent/50"
-              onClick={() => document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' })}
-            >
+            <Button variant="outline" size="lg" className="glass text-lg px-8 py-4 group border-accent/30 hover:border-accent/50" onClick={() => document.getElementById('portfolio')?.scrollIntoView({
+            behavior: 'smooth'
+          })}>
               <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
               View Our Work
             </Button>
@@ -85,6 +77,5 @@ export function HeroSection() {
           <div className="w-1 h-3 bg-primary rounded-full mt-2 animate-pulse"></div>
         </div>
       </div>
-    </section>
-  )
+    </section>;
 }
