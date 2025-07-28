@@ -1,64 +1,68 @@
-import { useState } from "react"
-import { Mail, Phone, MapPin, Send, MessageSquare, Clock, HeartHandshake } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/hooks/use-toast"
-import { supabase } from "@/integrations/supabase/client"
-
+import { useState } from "react";
+import { Mail, Phone, MapPin, Send, MessageSquare, Clock, HeartHandshake } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 export function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     company: "",
     message: ""
-  })
-  const { toast } = useToast()
-
+  });
+  const {
+    toast
+  } = useToast();
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
     try {
       // Save contact form data to Supabase
-      const { error } = await supabase
-        .from('contact_submissions')
-        .insert({
-          name: formData.name,
-          email: formData.email,
-          company: formData.company || null,
-          message: formData.message,
-          submitted_at: new Date().toISOString()
-        })
-
+      const {
+        error
+      } = await supabase.from('contact_submissions').insert({
+        name: formData.name,
+        email: formData.email,
+        company: formData.company || null,
+        message: formData.message,
+        submitted_at: new Date().toISOString()
+      });
       if (error) {
-        console.error('Error saving contact form:', error)
+        console.error('Error saving contact form:', error);
         // Still show success to user but log error
       }
-
       toast({
         title: "Message Sent!",
-        description: "We'll get back to you within 24 hours.",
-      })
-      setFormData({ name: "", email: "", company: "", message: "" })
+        description: "We'll get back to you within 24 hours."
+      });
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        message: ""
+      });
     } catch (error) {
-      console.error('Error submitting form:', error)
+      console.error('Error submitting form:', error);
       toast({
         title: "Message Sent!",
-        description: "We'll get back to you within 24 hours.",
-      })
-      setFormData({ name: "", email: "", company: "", message: "" })
+        description: "We'll get back to you within 24 hours."
+      });
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        message: ""
+      });
     }
-  }
-
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
-    }))
-  }
-
-  return (
-    <section id="contact" className="py-20 bg-card/30">
+    }));
+  };
+  return <section id="contact" className="py-20 bg-card/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-6">
@@ -156,28 +160,13 @@ export function ContactSection() {
                   <label className="block text-sm font-medium text-foreground mb-2">
                     Name *
                   </label>
-                  <Input
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Your name"
-                    required
-                    className="glass border-foreground/20 focus:border-primary"
-                  />
+                  <Input name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required className="glass border-foreground/20 focus:border-primary" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
                     Email *
                   </label>
-                  <Input
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="your@email.com"
-                    required
-                    className="glass border-foreground/20 focus:border-primary"
-                  />
+                  <Input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="your@email.com" required className="glass border-foreground/20 focus:border-primary" />
                 </div>
               </div>
 
@@ -185,35 +174,17 @@ export function ContactSection() {
                 <label className="block text-sm font-medium text-foreground mb-2">
                   Company
                 </label>
-                <Input
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  placeholder="Your company"
-                  className="glass border-foreground/20 focus:border-primary"
-                />
+                <Input name="company" value={formData.company} onChange={handleChange} placeholder="Your company" className="glass border-foreground/20 focus:border-primary" />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
                   Project Details *
                 </label>
-                <Textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  placeholder="Tell us about your project, timeline, and goals..."
-                  rows={5}
-                  required
-                  className="glass border-foreground/20 focus:border-primary resize-none"
-                />
+                <Textarea name="message" value={formData.message} onChange={handleChange} placeholder="Tell us about your project, timeline, and goals..." rows={5} required className="glass border-foreground/20 focus:border-primary resize-none" />
               </div>
 
-              <Button 
-                type="submit" 
-                size="lg" 
-                className="w-full neu-button text-lg py-4 group border-primary/20"
-              >
+              <Button type="submit" size="lg" className="w-full neu-button text-lg py-4 group border-primary/20 text-slate-800">
                 Send Message
                 <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
@@ -225,6 +196,5 @@ export function ContactSection() {
           </div>
         </div>
       </div>
-    </section>
-  )
+    </section>;
 }

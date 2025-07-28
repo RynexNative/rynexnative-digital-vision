@@ -53,19 +53,19 @@ export function HeroSection() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
             <div className="glass rounded-2xl p-6 hover-lift">
               <div className="text-3xl font-bold text-primary mb-2">50+</div>
-              <div className="text-sm text-foreground/70">Projects Delivered</div>
+              <div className="text-sm text-foreground/70 text-slate-300">Projects Delivered</div>
             </div>
             <div className="glass rounded-2xl p-6 hover-lift">
               <div className="text-3xl font-bold text-accent mb-2">5+</div>
-              <div className="text-sm text-foreground/70">Years Experience</div>
+              <div className="text-sm text-foreground/70 text-slate-100">Years Experience</div>
             </div>
             <div className="glass rounded-2xl p-6 hover-lift">
               <div className="text-3xl font-bold text-electric-teal mb-2">30+</div>
-              <div className="text-sm text-foreground/70">Happy Clients</div>
+              <div className="text-sm text-foreground/70 text-slate-300">Happy Clients</div>
             </div>
             <div className="glass rounded-2xl p-6 hover-lift">
               <div className="text-3xl font-bold text-tech-purple mb-2">24/7</div>
-              <div className="text-sm text-foreground/70">Support</div>
+              <div className="text-sm text-foreground/70 text-slate-300">Support</div>
             </div>
           </div>
         </div>
