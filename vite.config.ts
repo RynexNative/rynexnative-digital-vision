@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/rynexnative-digital-vision/", // ← Badilisha jina kulingana na repo yako
+  base: "/", // ← Badilisha jina kulingana na repo yako
   // server: {
   //   host: "::",
   //   port: 8080,
