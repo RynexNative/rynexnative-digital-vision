@@ -1,21 +1,22 @@
 import { Star, Quote } from "lucide-react"
+import Founder from './Founder.jsx'
 
 export function TestimonialsSection() {
   const testimonials = [
     {
-      name: "Sarah Chen",
+      name: "Julio Shirima",
       role: "CTO, TechFlow Solutions",
       company: "TechFlow Solutions",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face",
+      image: "https://scontent.fdod1-1.fna.fbcdn.net/v/t39.30808-1/475462801_622684644033842_8671174030927481850_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=106&ccb=1-7&_nc_sid=1d2534&_nc_ohc=ibsuN4vg0mgQ7kNvwHlt-QN&_nc_oc=AdmKDoShKs8AtqqOGKCUIEvuIIhboBHcesmvumrcglcwfZk7m57Q_Q6GWut8PfnFw_0&_nc_zt=24&_nc_ht=scontent.fdod1-1.fna&_nc_gid=BuDNedn2fsFbezttc92Czg&oh=00_AfT6nN4y_BLJ4dHE7f44S4MWdTa65c6K9IoXBJIauFvw8g&oe=688E243C",
       rating: 5,
       content: "RynexNative transformed our legacy system into a modern, scalable platform. Their expertise in cloud migration and security implementation exceeded our expectations. The team's dedication and technical prowess are unmatched.",
       project: "Cloud Migration & Security Audit"
     },
     {
-      name: "Marcus Rodriguez",
-      role: "CEO, InnovateLab",
-      company: "InnovateLab",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+      name: "Deogratius W. Massawe",
+      role: "CEO, Yiit",
+      company: "YIIT",
+      image: "https://scontent.fdod1-1.fna.fbcdn.net/v/t39.30808-1/336665234_207885211940070_3678893893919180023_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_ohc=i1DYqGTY9doQ7kNvwGn9yjt&_nc_oc=AdlXhAR0FCNv10X3CDrWM1Md0q6NhPAy8ApjvBOFouekOzZxbzSY2pAjhaweD0aFjD8&_nc_zt=24&_nc_ht=scontent.fdod1-1.fna&_nc_gid=wWbEec_oVXXXUV0z5gbxgw&oh=00_AfQF_qV0afALR4YxyTW8xdmHjdu2MHkpHqxX8PYcShlmJg&oe=688E3350",
       rating: 5,
       content: "Working with RynexNative on our mobile app was incredible. They delivered a feature-rich, intuitive application that our users love. Their agile approach and constant communication made the entire process seamless.",
       project: "iOS & Android App Development"
@@ -31,6 +32,13 @@ export function TestimonialsSection() {
     }
   ]
 
+  const castoinfo =
+  {
+    name: "Casto S. Shirima",
+    rating: 5,
+  }
+
+
   return (
     <section id="testimonials" className="py-20 bg-background/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,7 +53,7 @@ export function TestimonialsSection() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <div 
+            <div
               key={index}
               className="group glass rounded-3xl p-8 hover-lift relative overflow-hidden"
             >
@@ -75,7 +83,7 @@ export function TestimonialsSection() {
 
               {/* Author */}
               <div className="flex items-center">
-                <img 
+                <img
                   src={testimonial.image}
                   alt={testimonial.name}
                   className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-primary/20"
@@ -100,7 +108,7 @@ export function TestimonialsSection() {
               Join the growing list of companies that rely on our expertise
             </p>
           </div>
-          
+
           <div className="glass rounded-2xl p-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center opacity-60">
               {/* Company Logos Placeholder */}
@@ -126,6 +134,58 @@ export function TestimonialsSection() {
               </div>
             </div>
           </div>
+
+
+          <div className="text-center mb-16 p-10">
+            <h2 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent text-3xl font-bold p-4">
+              Meet the Founder
+            </h2>
+
+            <div className="glass rounded-lg p-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
+
+              {/* Founder Image */}
+              <div className="flex justify-center items-center">
+                <img
+                  src="https://scontent.fdod1-1.fna.fbcdn.net/v/t39.30808-1/459134632_122131539800364312_4254526476636648097_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=103&ccb=1-7&_nc_sid=1d2534&_nc_ohc=1_Rtpms6qZQQ7kNvwH6-xXa&_nc_oc=AdlrXeQnpneA0PVDQnL50QLiQh6e3ISXLRrY0Z4KngZSUz35OepMvWm1qW7FRsypPfM&_nc_zt=24&_nc_ht=scontent.fdod1-1.fna&_nc_gid=fhE8bUzcYkZbQ9K1AzXFjQ&oh=00_AfSCTv4JwTadqNwlhECkjyDExr6CDKCCPQrKYviSZGbf9g&oe=688E0EEE"
+                  alt="Founder of RynexNative"
+                  className="w-48 h-48 rounded-full object-cover border-2 border-primary/20"
+                />
+                
+              </div>
+              
+
+              {/* Founder Info */}
+              <div className="relative overflow-hidden group text-left md:col-span-2 lg:col-span-2">
+                <div className="absolute top-6 right-6 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Quote className="h-12 w-12 text-primary" />
+                </div>
+
+                <div className="flex mb-6">
+                  {[...Array(castoinfo.rating)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 text-primary fill-primary" />
+                  ))}
+                </div>
+
+                <h3 className="font-semibold text-lg">{castoinfo.name}</h3>
+
+                <blockquote className="text-foreground/80 leading-relaxed mb-6 relative z-10">
+                  "Casto is the visionary behind RynexNative, a passionate technologist, ethical hacker,
+                  and advocate for digital transformation in Africa. With a mission to innovate and secure the digital space,
+                  Casto has led numerous initiatives in system development, mobile innovation, and cybersecurity solutions.
+                  My dream is to empower Africa through technology, foster home-grown innovations, and protect the digital future of our people."
+                </blockquote>
+                <div className="mb-6">
+                  <span className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full border border-primary/20">
+                  CEO - Rynexnative, Fullstack Developer
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
         </div>
       </div>
     </section>

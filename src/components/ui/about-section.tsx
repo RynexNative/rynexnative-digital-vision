@@ -51,7 +51,7 @@ export function AboutSection() {
             </p>
             <div className="flex items-center space-x-4 pt-4">
               <div className="w-16 h-1 bg-gradient-primary rounded"></div>
-              <span className="text-primary font-semibold">Since 2019</span>
+              <span className="text-primary font-semibold">Since 2021</span>
             </div>
           </div>
 

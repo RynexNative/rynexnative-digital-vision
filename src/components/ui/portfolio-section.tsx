@@ -1,15 +1,26 @@
 import { ExternalLink, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import yiit from "@/assets/yiit.png";
 
 export function PortfolioSection() {
   const projects = [
+    {
+      title: "School Management System",
+      category: "School Management System",
+      description: "Comprehensive smart School management system with energy optimization and predictive maintenance.",
+      tech: ["React + vite", "Django", "PostSQL", "FastAPI"],
+      image: yiit,
+      gradient: "from-tech-purple to-cyber-blue",
+      privacy: 'Public - Complete',
+    },
     {
       title: "FinTech Mobile App",
       category: "Mobile Development",
       description: "A secure financial application with biometric authentication, real-time transactions, and advanced analytics.",
       tech: ["React Native", "Node.js", "MongoDB", "AWS"],
       image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop",
-      gradient: "from-primary to-accent"
+      gradient: "from-primary to-accent",
+      privacy: 'Private - Complete',
     },
     {
       title: "E-Commerce Platform",
@@ -17,7 +28,8 @@ export function PortfolioSection() {
       description: "Scalable e-commerce solution with AI-powered recommendations and integrated payment processing.",
       tech: ["React", "Python", "PostgreSQL", "Stripe"],
       image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop",
-      gradient: "from-accent to-electric-teal"
+      gradient: "from-accent to-electric-teal",
+      privacy: 'Private - Inprogress',
     },
     {
       title: "Cybersecurity Dashboard",
@@ -25,23 +37,17 @@ export function PortfolioSection() {
       description: "Real-time threat monitoring dashboard with AI-powered anomaly detection and automated response systems.",
       tech: ["Vue.js", "Python", "TensorFlow", "Docker"],
       image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=600&fit=crop",
-      gradient: "from-electric-teal to-tech-purple"
-    },
-    {
-      title: "IoT Smart Building",
-      category: "IoT Development",
-      description: "Comprehensive smart building management system with energy optimization and predictive maintenance.",
-      tech: ["Angular", "Python", "InfluxDB", "MQTT"],
-      image: "https://images.unsplash.com/photo-1518309312-6b3b9c4c6ab6?w=800&h=600&fit=crop",
-      gradient: "from-tech-purple to-cyber-blue"
+      gradient: "from-electric-teal to-tech-purple",
+      privacy: 'Private - Complete',
     },
     {
       title: "Healthcare AI Platform",
       category: "AI & Machine Learning",
       description: "Medical diagnosis assistance platform using machine learning for pattern recognition and decision support.",
       tech: ["React", "TensorFlow", "Python", "GCP"],
-      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=800&h=600&fit=crop",
-      gradient: "from-cyber-blue to-primary"
+      image: "https://respiratory-therapy.com/wp-content/uploads/2024/10/AI-lung-software-1280x640.jpg",
+      gradient: "from-cyber-blue to-primary",
+      privacy: 'Public - Complete',
     },
     {
       title: "Cloud Migration Suite",
@@ -49,7 +55,8 @@ export function PortfolioSection() {
       description: "Enterprise cloud migration toolkit with automated deployment and monitoring capabilities.",
       tech: ["Terraform", "Kubernetes", "AWS", "Jenkins"],
       image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop",
-      gradient: "from-primary to-tech-purple"
+      gradient: "from-primary to-tech-purple",
+      privacy: 'Public - Complete',
     }
   ]
 
@@ -90,6 +97,13 @@ export function PortfolioSection() {
               <div className="p-6">
                 <h3 className="text-xl font-bold font-poppins mb-3 text-foreground group-hover:text-primary transition-colors">
                   {project.title}
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    <span 
+                      className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-md border border-primary/20"
+                    >
+                      {project.privacy}
+                    </span>
+                </div>
                 </h3>
                 
                 <p className="text-foreground/80 text-sm leading-relaxed mb-4">
