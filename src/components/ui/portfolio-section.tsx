@@ -10,6 +10,7 @@ export function PortfolioSection() {
       description: "Comprehensive smart School management system with energy optimization and predictive maintenance.",
       tech: ["React + vite", "Django", "PostSQL", "FastAPI"],
       image: yiit,
+      link: 'school.rynexnative.com',
       gradient: "from-tech-purple to-cyber-blue",
       privacy: 'Public - Complete',
     },
@@ -19,6 +20,7 @@ export function PortfolioSection() {
       description: "A secure financial application with biometric authentication, real-time transactions, and advanced analytics.",
       tech: ["React Native", "Node.js", "MongoDB", "AWS"],
       image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop",
+      link: '#',
       gradient: "from-primary to-accent",
       privacy: 'Private - Complete',
     },
@@ -28,6 +30,7 @@ export function PortfolioSection() {
       description: "Scalable e-commerce solution with AI-powered recommendations and integrated payment processing.",
       tech: ["React", "Python", "PostgreSQL", "Stripe"],
       image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop",
+      link: '#',
       gradient: "from-accent to-electric-teal",
       privacy: 'Private - Inprogress',
     },
@@ -37,6 +40,7 @@ export function PortfolioSection() {
       description: "Real-time threat monitoring dashboard with AI-powered anomaly detection and automated response systems.",
       tech: ["Vue.js", "Python", "TensorFlow", "Docker"],
       image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=600&fit=crop",
+      link: '#',
       gradient: "from-electric-teal to-tech-purple",
       privacy: 'Private - Complete',
     },
@@ -46,6 +50,7 @@ export function PortfolioSection() {
       description: "Medical diagnosis assistance platform using machine learning for pattern recognition and decision support.",
       tech: ["React", "TensorFlow", "Python", "GCP"],
       image: "https://respiratory-therapy.com/wp-content/uploads/2024/10/AI-lung-software-1280x640.jpg",
+      link: '#',
       gradient: "from-cyber-blue to-primary",
       privacy: 'Public - Complete',
     },
@@ -55,6 +60,7 @@ export function PortfolioSection() {
       description: "Enterprise cloud migration toolkit with automated deployment and monitoring capabilities.",
       tech: ["Terraform", "Kubernetes", "AWS", "Jenkins"],
       image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop",
+      link: '#',
       gradient: "from-primary to-tech-purple",
       privacy: 'Public - Complete',
     }
@@ -128,7 +134,10 @@ export function PortfolioSection() {
                     variant="outline" 
                     size="sm" 
                     className="flex-1 glass border-primary/30"
-                    onClick={() => window.open('#', '_blank')}
+                    onClick={() => {
+                      const link = project.link.startsWith('http') ? project.link : `https://${project.link}`;
+                      window.open(link, '_blank');
+                    }}
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
                     View

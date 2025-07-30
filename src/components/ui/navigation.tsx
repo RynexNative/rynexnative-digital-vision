@@ -6,19 +6,19 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const navItems = [{
     label: "About",
-    href: "#about"
+    href: "about"
   }, {
     label: "Services",
-    href: "#services"
+    href: "services"
   }, {
     label: "Portfolio",
-    href: "#portfolio"
+    href: "portfolio"
   }, {
     label: "Testimonials",
-    href: "#testimonials"
+    href: "testimonials"
   }, {
     label: "Contact",
-    href: "#contact"
+    href: "contact"
   }];
   return <nav className="fixed top-0 w-full z-50 glass backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,9 +36,13 @@ export function Navigation() {
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
-              {navItems.map(item => <a key={item.label} href={item.href} className="text-foreground/80 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:bg-primary/10">
+              {navItems.map(item =>  
+              <Button key={item.label} onClick={() => document.getElementById(`${item.href}`)?.scrollIntoView({
+                behavior: 'smooth'
+              })}  className="text-foreground/80 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:bg-primary/10 bg-primary/0">
                   {item.label}
-                </a>)}
+                </Button>
+             )}
             </div>
           </div>
 
