@@ -1,0 +1,50 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Rynexnative",
+  "url": "https://rynexnative.com",
+  "logo": "https://rynexnative.com/images/logo.png",
+  "sameAs": [
+    "https://www.facebook.com/rynexnative",
+    "https://www.instagram.com/rynexnative",
+    "https://twitter.com/rynexnative",
+    "https://www.linkedin.com/company/rynexnative"
+  ],
+  "description": "Rynexnative ni jukwaa la kusambaza taarifa za IPOs zilizo live mtandaoni, likiwa na malengo ya kuwasaidia wawekezaji kupata fursa kwa urahisi.",
+  "founder": {
+    "@type": "Person",
+    "name": "Jina la Mwanzilishi"
+  },
+  "foundingDate": "2021-06-01",
+  "foundingLocation": {
+    "@type": "Place",
+    "name": "Dar es Salaam, Tanzania"
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Mtaa wa Samora, Jengo la Maendeleo, Ghorofa ya 3",
+    "addressLocality": "Dar es Salaam",
+    "addressRegion": "DSM",
+    "postalCode": "14100",
+    "addressCountry": "TZ"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+255712345678",
+    "contactType": "Customer Support",
+    "areaServed": "TZ",
+    "availableLanguage": ["en", "sw"]
+  },
+  "email": "info@rynexnative.com",
+  "telephone": "+255712345678",
+  "legalName": "Rynexnative Ltd",
+  "taxID": "123456789",
+  "numberOfEmployees": 15,
+  "parentOrganization": {
+    "@type": "Organization",
+    "name": "Rynex Group"
+  },
+  "slogan": "Kukaribisha Uwekezaji wa Kesho Leo"
+}
+</script>
