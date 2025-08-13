@@ -48,3 +48,49 @@
   "slogan": "Kukaribisha Uwekezaji wa Kesho Leo"
 }
 </script>
+
+<!-- # Google search -->
+  <!-- <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Rynexnative",
+      "url": "https://rynexnative.com",
+      "logo": "https://rynexnative.com/logo.png",
+      "sameAs": [        
+        "https://www.instagram.com/rynexnative",
+      ],
+      "description": "Your product deserves better. Work with RynexNative for clean, efficient, and user-focused software development. Let RynexNative handle your code while you focus on growth. Get cutting-edge apps, modern designs & expert tech support now. RynexNative is where creativity meets logic.",
+      "founder": {
+        "@type": "Person",
+        "name": "Casto S. Shirima"
+      },
+      "foundingDate": "2021-05-01",
+      "foundingLocation": {
+        "@type": "Place",
+        "name": "Dodoma, Tanzania"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Dodoma mjini, miyuji, mwatano center",
+        "addressLocality": "Dodoma",
+        "addressRegion": "Dodoma",
+        "postalCode": "",
+        "addressCountry": "TZ"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+255687544999",
+        "contactType": "Customer Support",
+        "areaServed": "TZ",
+        "availableLanguage": ["en", "sw"]
+      },
+      "email": "info@rynexnative.com",
+      "telephone": "+255687544999",
+      "legalName": "Rynexnative",
+      "numberOfEmployees": 15,
+
+
+      "slogan": "Innovation and Security at Every Step — The Mark of a Nation."
+    }
+    </script> -->
