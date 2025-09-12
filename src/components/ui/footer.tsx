@@ -136,7 +136,7 @@ export function Footer() {
                       onClick={() => document.getElementById(`services`)?.scrollIntoView({
                         behavior: 'smooth'
                       })}
-                      className="text-foreground/70 hover:text-primary bg-primary/0 hover:bg-primary/0 transition-colors text-sm"
+                      className="text-foreground/70 hover:text-primary bg-primary/0 hover:bg-primary/0 transition-colors text-sm px-0"
                     >
                       {link.label}
                     </Button>
