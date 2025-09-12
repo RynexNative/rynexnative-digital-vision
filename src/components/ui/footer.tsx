@@ -1,6 +1,8 @@
 import { Zap, Github, Linkedin, Twitter, Mail, Send } from "lucide-react"
 import { useState } from "react"
 import { supabase } from "@/integrations/supabase/client"
+import { Button } from "@/components/ui/button";
+
 
 export function Footer() {
   const [email, setEmail] = useState("")
@@ -36,10 +38,10 @@ export function Footer() {
 
   const footerLinks = {
     company: [
-      { label: "About Us", href: "#about" },
-      { label: "Our Team", href: "#team" },
-      { label: "Careers", href: "#careers" },
-      { label: "News", href: "#news" }
+      { label: "About Us", href: "about" },
+      { label: "Our Team", href: "team" },
+      { label: "Careers", href: "careers" },
+      { label: "News", href: "news" }
     ],
     services: [
       { label: "Software Development", href: "#services" },
@@ -116,7 +118,7 @@ export function Footer() {
                   <li key={index}>
                     <a
                       href={link.href}
-                      className="text-foreground/70 hover:text-primary transition-colors text-sm"
+                      className="text-foreground/70 hover:text-primary  transition-colors text-sm"
                     >
                       {link.label}
                     </a>
@@ -130,12 +132,14 @@ export function Footer() {
               <ul className="space-y-3">
                 {footerLinks.services.map((link, index) => (
                   <li key={index}>
-                    <a
-                      href={link.href}
-                      className="text-foreground/70 hover:text-primary transition-colors text-sm"
+                    <Button
+                      onClick={() => document.getElementById(`services`)?.scrollIntoView({
+                        behavior: 'smooth'
+                      })}
+                      className="text-foreground/70 hover:text-primary bg-primary/0 hover:bg-primary/0 transition-colors text-sm"
                     >
                       {link.label}
-                    </a>
+                    </Button>
                   </li>
                 ))}
               </ul>

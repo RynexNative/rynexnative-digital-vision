@@ -1,5 +1,5 @@
 import { Star, Quote } from "lucide-react"
-import Founder from './Founder.jsx'
+// import Founder from './Founder.jsx'
 import FounderImage from '../../assets/founder1.jpg'
 import Julio from '../../assets/Julio.jpg'
 import Yiiti from '../../assets/Yiiti.jpg'
