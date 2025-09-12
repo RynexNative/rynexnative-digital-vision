@@ -1,5 +1,9 @@
 import { Star, Quote } from "lucide-react"
 import Founder from './Founder.jsx'
+import FounderImage from '../../assets/founder1.jpg'
+import Julio from '../../assets/Julio.jpg'
+import Yiiti from '../../assets/Yiiti.jpg'
+import Kingu from '../../assets/kingu.jpg'
 
 export function TestimonialsSection() {
   const testimonials = [
@@ -7,25 +11,25 @@ export function TestimonialsSection() {
       name: "Julio Shirima",
       role: "CTO, TechFlow Solutions",
       company: "TechFlow Solutions",
-      image: "https://scontent.fdod1-1.fna.fbcdn.net/v/t39.30808-1/475462801_622684644033842_8671174030927481850_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=106&ccb=1-7&_nc_sid=1d2534&_nc_ohc=ibsuN4vg0mgQ7kNvwHlt-QN&_nc_oc=AdmKDoShKs8AtqqOGKCUIEvuIIhboBHcesmvumrcglcwfZk7m57Q_Q6GWut8PfnFw_0&_nc_zt=24&_nc_ht=scontent.fdod1-1.fna&_nc_gid=BuDNedn2fsFbezttc92Czg&oh=00_AfT6nN4y_BLJ4dHE7f44S4MWdTa65c6K9IoXBJIauFvw8g&oe=688E243C",
+      image: Julio,
       rating: 5,
       content: "RynexNative transformed our legacy system into a modern, scalable platform. Their expertise in cloud migration and security implementation exceeded our expectations. The team's dedication and technical prowess are unmatched.",
       project: "Cloud Migration & Security Audit"
     },
     {
       name: "Deogratius W. Massawe",
-      role: "CEO, Yiit",
-      company: "YIIT",
-      image: "https://scontent.fdod1-1.fna.fbcdn.net/v/t39.30808-1/336665234_207885211940070_3678893893919180023_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=111&ccb=1-7&_nc_sid=e99d92&_nc_ohc=i1DYqGTY9doQ7kNvwGn9yjt&_nc_oc=AdlXhAR0FCNv10X3CDrWM1Md0q6NhPAy8ApjvBOFouekOzZxbzSY2pAjhaweD0aFjD8&_nc_zt=24&_nc_ht=scontent.fdod1-1.fna&_nc_gid=wWbEec_oVXXXUV0z5gbxgw&oh=00_AfQF_qV0afALR4YxyTW8xdmHjdu2MHkpHqxX8PYcShlmJg&oe=688E3350",
+      role: "CEO, Yiiti",
+      company: "YIITI",
+      image: Yiiti,
       rating: 5,
       content: "Working with RynexNative on our mobile app was incredible. They delivered a feature-rich, intuitive application that our users love. Their agile approach and constant communication made the entire process seamless.",
       project: "iOS & Android App Development"
     },
     {
-      name: "Dr. Emily Watson",
-      role: "Director of IT, MedCore",
-      company: "MedCore Healthcare",
-      image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=150&h=150&fit=crop&crop=face",
+      name: "Keneth .L Kingu",
+      role: "CEO, Zedo IT",
+      company: "Zedo IT",
+      image: Kingu,
       rating: 5,
       content: "The AI-powered healthcare platform RynexNative built for us has revolutionized our patient care delivery. Their understanding of healthcare compliance and technical innovation is remarkable.",
       project: "AI Healthcare Platform"
@@ -146,7 +150,7 @@ export function TestimonialsSection() {
               {/* Founder Image */}
               <div className="flex justify-center items-center">
                 <img
-                  src="https://scontent.fdod1-1.fna.fbcdn.net/v/t39.30808-1/459134632_122131539800364312_4254526476636648097_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=103&ccb=1-7&_nc_sid=1d2534&_nc_ohc=1_Rtpms6qZQQ7kNvwH6-xXa&_nc_oc=AdlrXeQnpneA0PVDQnL50QLiQh6e3ISXLRrY0Z4KngZSUz35OepMvWm1qW7FRsypPfM&_nc_zt=24&_nc_ht=scontent.fdod1-1.fna&_nc_gid=fhE8bUzcYkZbQ9K1AzXFjQ&oh=00_AfSCTv4JwTadqNwlhECkjyDExr6CDKCCPQrKYviSZGbf9g&oe=688E0EEE"
+                  src={FounderImage}
                   alt="Founder of RynexNative"
                   className="w-48 h-48 rounded-full object-cover border-2 border-primary/20"
                 />

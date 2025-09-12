@@ -26,7 +26,7 @@ export function Navigation() {
           {/* Logo */}
           <div className="flex items-center">
             <div className="flex-shrink-0 flex items-center space-x-3">
-              <img src="/lovable-uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" alt="RynexNative Logo" className="w-8 h-8 object-contain" />
+              <img src="/uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" alt="RynexNative Logo" className="w-8 h-8 object-contain" />
               <span className="text-xl font-bold font-poppins bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 RynexNative
               </span>
@@ -67,10 +67,15 @@ export function Navigation() {
 
         {/* Mobile Navigation */}
         {isOpen && <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background/95 backdrop-blur-xl rounded-lg mt-2">
-              {navItems.map(item => <a key={item.label} href={item.href} className="text-foreground/80 hover:text-primary block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200" onClick={() => setIsOpen(false)}>
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background/90 backdrop-blur-xl rounded-lg mt-2  ">
+              {navItems.map(item => <Button key={item.label} onClick={() => {
+
+                document.getElementById(`${item.href}`)?.scrollIntoView({behavior: 'smooth'});
+                setIsOpen(false)
+              }
+                } className="text-foreground/80 hover:text-primary hover:text-primary block px-3 py-2 rounded-md font-medium transition-colors duration-200 hover:bg-primary/80 bg-primary/0">
                   {item.label}
-                </a>)}
+                </Button>)}
               <div className="pt-2">
                 <Button className="w-full neu-button border-primary/20" onClick={() => {
               document.getElementById('contact')?.scrollIntoView({

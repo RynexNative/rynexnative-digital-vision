@@ -62,10 +62,10 @@ export function Footer() {
   }
 
   const socialLinks = [
-    { icon: <Github className="h-5 w-5" />, href: "#", label: "GitHub" },
+    { icon: <Github className="h-5 w-5" />, href: "https://github.com/rynexnative", label: "GitHub" },
     { icon: <Linkedin className="h-5 w-5" />, href: "#", label: "LinkedIn" },
     { icon: <Twitter className="h-5 w-5" />, href: "#", label: "Twitter" },
-    { icon: <Mail className="h-5 w-5" />, href: "#", label: "Email" }
+    { icon: <Mail className="h-5 w-5" />, href: "info@rynexnative.com", label: "Email" }
   ]
 
   return (
