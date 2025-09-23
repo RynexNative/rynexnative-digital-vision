@@ -170,10 +170,10 @@ export function TestimonialsSection() {
                   ))}
                 </div>
 
-                <h3 className="font-semibold text-lg">{castoinfo.name}</h3>
+                <h3 className="font-semibold text-lg">Casto S. Shirima</h3>
 
                 <blockquote className="text-foreground/80 leading-relaxed mb-6 relative z-10">
-                  "Casto is the visionary behind RynexNative, a passionate technologist, ethical hacker,
+                  "Casto S. Shirima is the visionary behind RynexNative, a passionate technologist, ethical hacker,
                   and advocate for digital transformation in Africa. With a mission to innovate and secure the digital space,
                   Casto has led numerous initiatives in system development, mobile innovation, and cybersecurity solutions.
                   My dream is to empower Africa through technology, foster home-grown innovations, and protect the digital future of our people."
