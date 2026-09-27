@@ -1,73 +1,87 @@
-import { Zap, Github, Linkedin, Twitter, Mail, Send } from "lucide-react"
+import { Github, Instagram, Mail, Send } from "lucide-react"
 import { useState } from "react"
 import { supabase } from "@/integrations/supabase/client"
-import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast"
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 
 export function Footer() {
   const [email, setEmail] = useState("")
   const [isSubscribing, setIsSubscribing] = useState(false)
+  const { toast } = useToast()
 
   const handleSubscribe = async () => {
-    if (!email) return
-    
+    const trimmedEmail = email.trim().toLowerCase()
+    if (!trimmedEmail || isSubscribing) return
+
+    if (!EMAIL_PATTERN.test(trimmedEmail)) {
+      toast({
+        variant: "destructive",
+        title: "Invalid email",
+        description: "Please enter a valid email address."
+      })
+      return
+    }
+
     setIsSubscribing(true)
     try {
       // Save email subscription to Supabase
       const { error } = await supabase
         .from('newsletter_subscriptions')
-        .insert({
-          email: email,
-          subscribed_at: new Date().toISOString()
-        })
+        .insert({ email: trimmedEmail })
 
-      if (error) {
-        console.error('Error saving subscription:', error)
-      }
+      // 23505 = unique violation: this email is already subscribed
+      if (error && error.code !== '23505') throw error
 
-      alert('Thank you for subscribing! We\'ll keep you updated.')
+      toast({
+        title: error ? "Already subscribed" : "Thank you for subscribing!",
+        description: error
+          ? "This email is already on our list."
+          : "We'll keep you updated."
+      })
       setEmail("")
     } catch (error) {
       console.error('Error subscribing:', error)
-      alert('Thank you for subscribing! We\'ll keep you updated.')
-      setEmail("")
+      toast({
+        variant: "destructive",
+        title: "Subscription failed",
+        description: "Something went wrong. Please try again."
+      })
     } finally {
       setIsSubscribing(false)
     }
   }
 
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  // Each link scrolls to a section on the page (see Index.tsx for section ids)
   const footerLinks = {
     company: [
-      { label: "About Us", href: "about" },
-      { label: "Our Team", href: "team" },
-      { label: "Careers", href: "careers" },
-      { label: "News", href: "news" }
+      { label: "About Us", target: "about" },
+      { label: "Our Founder", target: "founder" },
+      { label: "Testimonials", target: "testimonials" },
+      { label: "Contact", target: "contact" }
     ],
     services: [
-      { label: "Software Development", href: "#services" },
-      { label: "Mobile Apps", href: "#services" },
-      { label: "Cybersecurity", href: "#services" },
-      { label: "AI Solutions", href: "#services" }
+      { label: "Software Development", target: "services" },
+      { label: "Mobile Apps", target: "services" },
+      { label: "Cybersecurity", target: "services" },
+      { label: "AI Solutions", target: "services" }
     ],
     resources: [
-      { label: "Blog", href: "#blog" },
-      { label: "Case Studies", href: "#portfolio" },
-      { label: "Documentation", href: "#docs" },
-      { label: "Support", href: "#support" }
-    ],
-    legal: [
-      { label: "Privacy Policy", href: "#privacy" },
-      { label: "Terms of Service", href: "#terms" },
-      { label: "Cookie Policy", href: "#cookies" },
-      { label: "GDPR", href: "#gdpr" }
+      { label: "Case Studies", target: "portfolio" },
+      { label: "Why Choose Us", target: "why-choose-us" },
+      { label: "Support", target: "contact" }
     ]
   }
 
   const socialLinks = [
     { icon: <Github className="h-5 w-5" />, href: "https://github.com/rynexnative", label: "GitHub" },
-    { icon: <Linkedin className="h-5 w-5" />, href: "#", label: "LinkedIn" },
-    { icon: <Twitter className="h-5 w-5" />, href: "#", label: "Twitter" },
-    { icon: <Mail className="h-5 w-5" />, href: "info@rynexnative.com", label: "Email" }
+    { icon: <Instagram className="h-5 w-5" />, href: "https://www.instagram.com/rynexnative", label: "Instagram" },
+    { icon: <Mail className="h-5 w-5" />, href: "mailto:info@rynexnative.com", label: "Email" }
   ]
 
   return (
@@ -75,12 +89,12 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer */}
         <div className="py-16">
-          <div className="grid lg:grid-cols-6 gap-8">
+          <div className="grid sm:grid-cols-3 lg:grid-cols-5 gap-8">
             {/* Brand Section */}
-            <div className="lg:col-span-2">
+            <div className="sm:col-span-3 lg:col-span-2">
               <div className="flex items-center space-x-3 mb-6">
                 <img 
-                  src="/lovable-uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" 
+                  src="/uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" 
                   alt="RynexNative Logo" 
                   className="w-8 h-8 object-contain"
                 />
@@ -100,6 +114,7 @@ export function Footer() {
                     key={index}
                     href={social.href}
                     aria-label={social.label}
+                    {...(social.href.startsWith('http') ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                     className="w-10 h-10 bg-card hover:bg-primary/10 rounded-lg flex items-center justify-center transition-colors group"
                   >
                     <div className="text-foreground/60 group-hover:text-primary transition-colors">
@@ -111,71 +126,28 @@ export function Footer() {
             </div>
 
             {/* Links Sections */}
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">Company</h3>
-              <ul className="space-y-3">
-                {footerLinks.company.map((link, index) => (
-                  <li key={index}>
-                    <a
-                      href={link.href}
-                      className="text-foreground/70 hover:text-primary  transition-colors text-sm"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">Services</h3>
-              <ul className="space-y-3">
-                {footerLinks.services.map((link, index) => (
-                  <li key={index}>
-                    <Button
-                      onClick={() => document.getElementById(`services`)?.scrollIntoView({
-                        behavior: 'smooth'
-                      })}
-                      className="text-foreground/70 hover:text-primary bg-primary/0 hover:bg-primary/0 transition-colors text-sm px-0"
-                    >
-                      {link.label}
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">Resources</h3>
-              <ul className="space-y-3">
-                {footerLinks.resources.map((link, index) => (
-                  <li key={index}>
-                    <a
-                      href={link.href}
-                      className="text-foreground/70 hover:text-primary transition-colors text-sm"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">Legal</h3>
-              <ul className="space-y-3">
-                {footerLinks.legal.map((link, index) => (
-                  <li key={index}>
-                    <a
-                      href={link.href}
-                      className="text-foreground/70 hover:text-primary transition-colors text-sm"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {([
+              ["Company", footerLinks.company],
+              ["Services", footerLinks.services],
+              ["Resources", footerLinks.resources]
+            ] as const).map(([title, links]) => (
+              <div key={title}>
+                <h3 className="font-semibold text-foreground mb-4">{title}</h3>
+                <ul className="space-y-3">
+                  {links.map((link) => (
+                    <li key={link.label}>
+                      <button
+                        type="button"
+                        onClick={() => scrollTo(link.target)}
+                        className="text-foreground/70 hover:text-primary transition-colors text-sm text-left"
+                      >
+                        {link.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -191,11 +163,13 @@ export function Footer() {
             <div className="flex w-full md:w-auto max-w-md">
               <input
                 type="email"
+                aria-label="Email address"
+                maxLength={254}
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="flex-1 px-4 py-2 bg-card border border-foreground/20 rounded-l-lg focus:outline-none focus:border-primary text-sm"
-                onKeyPress={(e) => e.key === 'Enter' && handleSubscribe()}
+                onKeyDown={(e) => e.key === 'Enter' && handleSubscribe()}
               />
               <button 
                 className="px-6 py-2 bg-gradient-primary text-white rounded-r-lg hover:opacity-90 transition-opacity text-sm font-medium disabled:opacity-50 flex items-center space-x-2"
@@ -217,7 +191,7 @@ export function Footer() {
         <div className="py-6 border-t border-foreground/10">
           <div className="flex flex-col md:flex-row items-center justify-between text-sm text-foreground/60">
             <div>
-              © 2024 RynexNative. All rights reserved.
+              © {new Date().getFullYear()} RynexNative. All rights reserved.
             </div>
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
               <span>Proudly built with cutting-edge technology</span>

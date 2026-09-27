@@ -1,7 +1,6 @@
 import { Star, Quote } from "lucide-react"
-// import Founder from './Founder.jsx'
-import FounderImage from '../../assets/founder1.jpg'
-import Julio from '../../assets/Julio.jpg'
+import FounderImage from '../../assets/founder1-opt.jpg'
+import Julio from '../../assets/Julio-opt.jpg'
 import Yiiti from '../../assets/Yiiti.jpg'
 import Kingu from '../../assets/kingu.jpg'
 
@@ -140,7 +139,7 @@ export function TestimonialsSection() {
           </div>
 
 
-          <div className="text-center mb-16 p-10">
+          <div id="founder" className="text-center mb-16 p-10">
             <h2 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent text-3xl font-bold p-4">
               Meet the Founder
             </h2>

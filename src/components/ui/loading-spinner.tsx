@@ -39,7 +39,7 @@ export function PageLoader() {
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="glass rounded-3xl p-8 flex flex-col items-center space-y-4">
         <img 
-          src="/lovable-uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" 
+          src="/uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" 
           alt="RynexNative" 
           className="w-12 h-12 object-contain animate-pulse"
         />

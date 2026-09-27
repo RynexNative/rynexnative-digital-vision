@@ -12,26 +12,25 @@ export function ContactSection() {
     company: "",
     message: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     toast
   } = useToast();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       // Save contact form data to Supabase
       const {
         error
       } = await supabase.from('contact_submissions').insert({
-        name: formData.name,
-        email: formData.email,
-        company: formData.company || null,
-        message: formData.message,
-        submitted_at: new Date().toISOString()
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        company: formData.company.trim() || null,
+        message: formData.message.trim()
       });
-      if (error) {
-        console.error('Error saving contact form:', error);
-        // Still show success to user but log error
-      }
+      if (error) throw error;
       toast({
         title: "Message Sent!",
         description: "We'll get back to you within 24 hours."
@@ -44,16 +43,14 @@ export function ContactSection() {
       });
     } catch (error) {
       console.error('Error submitting form:', error);
+      // Keep the form data so the user can retry
       toast({
-        title: "Message Sent!",
-        description: "We'll get back to you within 24 hours."
+        variant: "destructive",
+        title: "Message not sent",
+        description: "Something went wrong. Please try again or email us at info@rynexnative.com."
       });
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        message: ""
-      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -98,7 +95,7 @@ export function ContactSection() {
                 </div>
                 <div>
                   <div className="font-semibold text-foreground">Email Us</div>
-                  <div className="text-primary">info@rynexnative.com</div>
+                  <a href="mailto:info@rynexnative.com" className="text-primary hover:underline">info@rynexnative.com</a>
                 </div>
               </div>
 
@@ -109,8 +106,8 @@ export function ContactSection() {
                 <div>
                   <div className="font-semibold text-foreground">Call Us</div>
                   <div className="text-primary">
-                    (+255) 687-544-999<br />
-                    (+255) 655-439-496
+                    <a href="tel:+255687544999" className="hover:underline">(+255) 687-544-999</a><br />
+                    <a href="tel:+255655439496" className="hover:underline">(+255) 655-439-496</a>
                   </div>
                 </div>
               </div>
@@ -123,7 +120,7 @@ export function ContactSection() {
                   <div className="font-semibold text-foreground">Visit Us</div>
                   <div className="text-foreground/70">
                     Tanzania, Dodoma<br />
-                    Dodoma Mjini, Muhuji
+                    Dodoma Mjini, Miyuji
                   </div>
                 </div>
               </div>
@@ -160,13 +157,13 @@ export function ContactSection() {
                   <label className="block text-sm font-medium text-foreground mb-2">
                     Name *
                   </label>
-                  <Input name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required className="glass border-foreground/20 focus:border-primary" />
+                  <Input name="name" value={formData.name} onChange={handleChange} placeholder="Your name" required maxLength={100} className="glass border-foreground/20 focus:border-primary" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
                     Email *
                   </label>
-                  <Input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="your@email.com" required className="glass border-foreground/20 focus:border-primary" />
+                  <Input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="your@email.com" required maxLength={254} className="glass border-foreground/20 focus:border-primary" />
                 </div>
               </div>
 
@@ -174,23 +171,23 @@ export function ContactSection() {
                 <label className="block text-sm font-medium text-foreground mb-2">
                   Company
                 </label>
-                <Input name="company" value={formData.company} onChange={handleChange} placeholder="Your company" className="glass border-foreground/20 focus:border-primary" />
+                <Input name="company" value={formData.company} onChange={handleChange} placeholder="Your company" maxLength={100} className="glass border-foreground/20 focus:border-primary" />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
                   Project Details *
                 </label>
-                <Textarea name="message" value={formData.message} onChange={handleChange} placeholder="Tell us about your project, timeline, and goals..." rows={5} required className="glass border-foreground/20 focus:border-primary resize-none" />
+                <Textarea name="message" value={formData.message} onChange={handleChange} placeholder="Tell us about your project, timeline, and goals..." rows={5} required maxLength={5000} className="glass border-foreground/20 focus:border-primary resize-none" />
               </div>
 
-              <Button type="submit" size="lg" className="w-full neu-button text-lg py-4 group border-primary/20 text-slate-800">
-                Send Message
+              <Button type="submit" size="lg" disabled={isSubmitting} className="w-full neu-button text-lg py-4 group border-primary/20 text-slate-800">
+                {isSubmitting ? "Sending..." : "Send Message"}
                 <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
 
               <p className="text-xs text-foreground/60 text-center">
-                By submitting this form, you agree to our privacy policy and terms of service.
+                We only use your details to respond to your inquiry.
               </p>
             </form>
           </div>

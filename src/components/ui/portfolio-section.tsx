@@ -1,14 +1,27 @@
 import { ExternalLink, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import yiit from "@/assets/yiit.png";
+import yiit from "@/assets/yiit-opt.png";
+
+type Project = {
+  title: string
+  category: string
+  description: string
+  tech: string[]
+  image: string
+  link: string
+  // Optional public source code URL; the "Code" button is shown only when set
+  repo?: string
+  gradient: string
+  privacy: string
+}
 
 export function PortfolioSection() {
-  const projects = [
+  const projects: Project[] = [
     {
       title: "School Management System",
       category: "School Management System",
-      description: "Comprehensive smart School management system with energy optimization and predictive maintenance.",
-      tech: ["React + vite", "Django", "PostSQL", "FastAPI"],
+      description: "Comprehensive school management system covering student records, attendance, exams, results and fee management.",
+      tech: ["React + vite", "Django", "PostgreSQL", "FastAPI"],
       image: yiit,
       link: 'school.rynexnative.com',
       gradient: "from-tech-purple to-cyber-blue",
@@ -32,7 +45,7 @@ export function PortfolioSection() {
       image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop",
       link: '#',
       gradient: "from-accent to-electric-teal",
-      privacy: 'Private - Inprogress',
+      privacy: 'Private - In Progress',
     },
     {
       title: "Cybersecurity Dashboard",
@@ -103,14 +116,12 @@ export function PortfolioSection() {
               <div className="p-6">
                 <h3 className="text-xl font-bold font-poppins mb-3 text-foreground group-hover:text-primary transition-colors">
                   {project.title}
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    <span 
-                      className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-md border border-primary/20"
-                    >
-                      {project.privacy}
-                    </span>
-                </div>
                 </h3>
+                <div className="flex flex-wrap gap-2 mb-6">
+                  <span className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-md border border-primary/20">
+                    {project.privacy}
+                  </span>
+                </div>
                 
                 <p className="text-foreground/80 text-sm leading-relaxed mb-4">
                   {project.description}
@@ -134,23 +145,26 @@ export function PortfolioSection() {
                     variant="outline" 
                     size="sm" 
                     className="flex-1 glass border-primary/30"
+                    disabled={project.link === '#'}
                     onClick={() => {
                       const link = project.link.startsWith('http') ? project.link : `https://${project.link}`;
-                      window.open(link, '_blank');
+                      window.open(link, '_blank', 'noopener,noreferrer');
                     }}
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
                     View
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="flex-1 glass border-accent/30"
-                    onClick={() => window.open('#', '_blank')}
-                  >
-                    <Github className="w-4 h-4 mr-2" />
-                    Code
-                  </Button>
+                  {project.repo && (
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex-1 glass border-accent/30"
+                      onClick={() => window.open(project.repo, '_blank', 'noopener,noreferrer')}
+                    >
+                      <Github className="w-4 h-4 mr-2" />
+                      Code
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>

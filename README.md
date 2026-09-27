@@ -62,7 +62,16 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/c656679e-92d1-424f-888e-95cf20eb24c0) and click on Share -> Publish.
+The site is deployed to GitHub Pages from the `gh-pages` branch:
+
+```sh
+npm run deploy
+```
+
+This builds the app into `dist/` and pushes it to the `gh-pages` branch. The custom domain
+file lives in `public/CNAME`, so it is copied into every build and `rynexnative.com` is kept
+after each deploy. In the repository settings, Pages should be set to
+"Deploy from a branch" → `gh-pages` / `(root)`.
 
 ## Can I connect a custom domain to my Lovable project?
 
