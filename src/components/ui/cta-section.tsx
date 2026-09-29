@@ -1,4 +1,5 @@
-import { ArrowRight, Calendar, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Calculator, Calendar, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 export function CTASection() {
   return <section className="py-20 relative overflow-hidden" style={{
@@ -40,11 +41,11 @@ export function CTASection() {
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             
-            <Button variant="outline" size="lg" onClick={() => document.getElementById('contact')?.scrollIntoView({
-            behavior: 'smooth'
-          })} className="glass text-lg px-8 py-4 group border-white/30 hover:border-white/50 text-slate-800">
-              <MessageCircle className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
-              Start a Project
+            <Button variant="outline" size="lg" asChild className="glass text-lg px-8 py-4 group border-white/30 hover:border-white/50 text-white hover:text-white">
+              <Link to="/estimate">
+                <Calculator className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+                Get Instant Estimate
+              </Link>
             </Button>
           </div>
 
@@ -55,11 +56,11 @@ export function CTASection() {
                 <MessageCircle className="h-6 w-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-2">Quick Chat</h3>
-              <p className="text-white/70 text-sm mb-4">Get immediate answers to your questions</p>
-              <Button variant="ghost" className="text-primary hover:text-primary/80 hover:bg-primary/10" onClick={() => document.getElementById('contact')?.scrollIntoView({
-              behavior: 'smooth'
-            })}>
-                Start Chat
+              <p className="text-white/70 text-sm mb-4">Get immediate answers on WhatsApp</p>
+              <Button variant="ghost" asChild className="text-primary hover:text-primary/80 hover:bg-primary/10">
+                <a href="https://wa.me/255687544999" target="_blank" rel="noopener noreferrer">
+                  Start Chat
+                </a>
               </Button>
             </div>
 
@@ -80,12 +81,12 @@ export function CTASection() {
               <div className="w-12 h-12 bg-electric-teal rounded-full flex items-center justify-center mx-auto mb-4">
                 <ArrowRight className="h-6 w-6 text-white" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Get Started</h3>
-              <p className="text-white/70 text-sm mb-4">Begin your project today</p>
-              <Button variant="ghost" className="text-electric-teal hover:text-electric-teal/80 hover:bg-electric-teal/10" onClick={() => document.getElementById('contact')?.scrollIntoView({
-              behavior: 'smooth'
-            })}>
-                Start Project
+              <h3 className="text-lg font-semibold text-white mb-2">Know Your Budget</h3>
+              <p className="text-white/70 text-sm mb-4">Instant price range in 2 minutes</p>
+              <Button variant="ghost" asChild className="text-electric-teal hover:text-electric-teal/80 hover:bg-electric-teal/10">
+                <Link to="/estimate">
+                  Estimate Now
+                </Link>
               </Button>
             </div>
           </div>

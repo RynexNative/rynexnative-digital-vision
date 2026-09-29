@@ -14,6 +14,21 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           company: string | null
@@ -65,12 +80,117 @@ export type Database = {
         }
         Relationships: []
       }
+      project_estimates: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string | null
+          estimate_max: number
+          estimate_min: number
+          id: string
+          name: string
+          notes: string | null
+          phone: string
+          project_type: string
+          selections: Json
+          status: string
+          weeks_max: number
+          weeks_min: number
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          estimate_max: number
+          estimate_min: number
+          id?: string
+          name: string
+          notes?: string | null
+          phone: string
+          project_type: string
+          selections?: Json
+          status?: string
+          weeks_max: number
+          weeks_min: number
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string | null
+          estimate_max?: number
+          estimate_min?: number
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string
+          project_type?: string
+          selections?: Json
+          status?: string
+          weeks_max?: number
+          weeks_min?: number
+        }
+        Relationships: []
+      }
+      security_alerts: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          id: string
+          if_affected: string[]
+          is_published: boolean
+          prevention: string[]
+          published_at: string | null
+          severity: string
+          signs: string[]
+          slug: string
+          summary: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string
+          id?: string
+          if_affected?: string[]
+          is_published?: boolean
+          prevention?: string[]
+          published_at?: string | null
+          severity?: string
+          signs?: string[]
+          slug: string
+          summary: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          if_affected?: string[]
+          is_published?: boolean
+          prevention?: string[]
+          published_at?: string | null
+          severity?: string
+          signs?: string[]
+          slug?: string
+          summary?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
