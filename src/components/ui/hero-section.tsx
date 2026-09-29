@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ArrowRight, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FloatingShapes } from "@/components/ui/floating-shapes";
@@ -35,11 +36,11 @@ export function HeroSection() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button size="lg" onClick={() => document.getElementById('contact')?.scrollIntoView({
-            behavior: 'smooth'
-          })} className="neu-button text-lg px-8 py-4 group border-primary/20 hover:border-primary/40 text-slate-900">
-              Get Started
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            <Button size="lg" asChild className="neu-button text-lg px-8 py-4 group border-primary/20 hover:border-primary/40 text-slate-900">
+              <Link to="/estimate">
+                Estimate My Project
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
             <Button variant="outline" size="lg" className="glass text-lg px-8 py-4 group border-accent/30 hover:border-accent/50" onClick={() => document.getElementById('portfolio')?.scrollIntoView({
             behavior: 'smooth'

@@ -8,8 +8,12 @@ import { TestimonialsSection } from "@/components/ui/testimonials-section"
 import { CTASection } from "@/components/ui/cta-section"
 import { ContactSection } from "@/components/ui/contact-section"
 import { Footer } from "@/components/ui/footer"
+import { AlertsPreviewSection } from "@/components/ui/alerts-preview-section"
+import { usePendingSectionScroll } from "@/hooks/use-section-nav"
 
 const Index = () => {
+  usePendingSectionScroll();
+
   return (
     <div className="min-h-screen bg-background font-inter">
       <Navigation />
@@ -19,6 +23,7 @@ const Index = () => {
       <PortfolioSection />
       <WhyChooseUsSection />
       <TestimonialsSection />
+      <AlertsPreviewSection />
       <CTASection />
       <ContactSection />
       <Footer />

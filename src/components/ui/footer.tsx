@@ -1,5 +1,7 @@
 import { Github, Instagram, Mail, Send } from "lucide-react"
 import { useState } from "react"
+import { Link } from "react-router-dom"
+import { useSectionNav } from "@/hooks/use-section-nav"
 import { supabase } from "@/integrations/supabase/client"
 import { useToast } from "@/hooks/use-toast"
 
@@ -53,12 +55,10 @@ export function Footer() {
     }
   }
 
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const scrollTo = useSectionNav()
 
-  // Each link scrolls to a section on the page (see Index.tsx for section ids)
-  const footerLinks = {
+  // Links either scroll to a home page section (see Index.tsx for ids) or open a page
+  const footerLinks: Record<string, ({ label: string; target: string } | { label: string; to: string })[]> = {
     company: [
       { label: "About Us", target: "about" },
       { label: "Our Founder", target: "founder" },
@@ -72,8 +72,9 @@ export function Footer() {
       { label: "AI Solutions", target: "services" }
     ],
     resources: [
+      { label: "Tahadhari za Usalama", to: "/tahadhari" },
+      { label: "Project Estimator", to: "/estimate" },
       { label: "Case Studies", target: "portfolio" },
-      { label: "Why Choose Us", target: "why-choose-us" },
       { label: "Support", target: "contact" }
     ]
   }
@@ -136,13 +137,22 @@ export function Footer() {
                 <ul className="space-y-3">
                   {links.map((link) => (
                     <li key={link.label}>
-                      <button
-                        type="button"
-                        onClick={() => scrollTo(link.target)}
-                        className="text-foreground/70 hover:text-primary transition-colors text-sm text-left"
-                      >
-                        {link.label}
-                      </button>
+                      {"to" in link ? (
+                        <Link
+                          to={link.to}
+                          className="text-foreground/70 hover:text-primary transition-colors text-sm"
+                        >
+                          {link.label}
+                        </Link>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => scrollTo(link.target)}
+                          className="text-foreground/70 hover:text-primary transition-colors text-sm text-left"
+                        >
+                          {link.label}
+                        </button>
+                      )}
                     </li>
                   ))}
                 </ul>

@@ -73,6 +73,21 @@ file lives in `public/CNAME`, so it is copied into every build and `rynexnative.
 after each deploy. In the repository settings, Pages should be set to
 "Deploy from a branch" → `gh-pages` / `(root)`.
 
+## Tahadhari (security alerts), estimator and admin
+
+- `/#/tahadhari`: Swahili security alerts with WhatsApp sharing
+- `/#/estimate`: project price estimator (prices live in `src/features/estimator/pricing.ts`)
+- `/#/admin`: manage alerts and see estimate requests
+
+One-time database setup:
+
+1. In Supabase, open **SQL Editor** and run
+   `supabase/migrations/20260929120000_security_alerts_and_estimates.sql`.
+2. Create your admin account under **Authentication → Users → Add user**.
+3. Sign in at `/#/admin`. The page shows the exact SQL to run to grant that account admin access.
+
+Until the migration is run, the alerts pages show built-in starter alerts.
+
 ## Can I connect a custom domain to my Lovable project?
 
 Yes, you can!
