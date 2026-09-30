@@ -1,0 +1,1 @@
+import{s as e}from"./browser-CTuwhOW3.js";import{rt as t}from"./index-8qmVJ8UT.js";var n=e(t(),1),r=`RynexNative - Empowering Digital Innovation`;function i(e){(0,n.useEffect)(()=>(document.title=e?`${e} | RynexNative`:r,()=>{document.title=r}),[e])}export{i as t};
