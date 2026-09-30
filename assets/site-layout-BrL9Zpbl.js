@@ -1,1 +1,0 @@
-import{j as s,e as n,N as t,F as o}from"./index-DIMfOA8l.js";function r({children:e,className:a}){return s.jsxs("div",{className:n("min-h-screen bg-background font-inter flex flex-col",a),children:[s.jsx(t,{}),s.jsx("main",{className:"flex-1 pt-16",children:e}),s.jsx(o,{})]})}export{r as S};
