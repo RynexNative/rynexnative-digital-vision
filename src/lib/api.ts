@@ -51,3 +51,60 @@ export function errorMessage(error: unknown, fallback: string) {
   }
   return fallback
 }
+
+/* ------------------------------------------------------------------ */
+/* Dashboard (team only): session cookie + CSRF token                  */
+/* ------------------------------------------------------------------ */
+
+let csrfToken: string | null = null
+
+export function setCsrfToken(token: string | null) {
+  csrfToken = token
+}
+
+async function getCsrfToken() {
+  if (!csrfToken) {
+    const data = await request<{ csrfToken: string }>("/api/dashboard/auth/csrf/", { credentials: "include" })
+    csrfToken = data.csrfToken
+  }
+  return csrfToken
+}
+
+function isCsrfFailure(error: unknown) {
+  if (!(error instanceof ApiError) || error.status !== 403) return false
+  const detail = (error.data as { detail?: string } | null)?.detail ?? ""
+  return detail.toLowerCase().includes("csrf")
+}
+
+type DashboardInit = { method?: "GET" | "POST" | "PATCH" | "DELETE"; body?: unknown }
+
+/** Calls /api/dashboard/<path> with the login cookie; unsafe methods send the CSRF token. */
+export async function dashboardRequest<T>(path: string, { method = "GET", body }: DashboardInit = {}, retried = false): Promise<T> {
+  const headers: Record<string, string> = {}
+  if (method !== "GET") headers["X-CSRFToken"] = await getCsrfToken()
+  try {
+    return await request<T>(`/api/dashboard${path}`, {
+      method,
+      credentials: "include",
+      headers,
+      body: body === undefined ? undefined : JSON.stringify(body),
+    })
+  } catch (error) {
+    // The token rotates on login/logout; fetch a fresh one and retry once
+    if (!retried && method !== "GET" && isCsrfFailure(error)) {
+      csrfToken = null
+      return dashboardRequest<T>(path, { method, body }, true)
+    }
+    throw error
+  }
+}
+
+/** First validation message from a DRF 400 response, if any */
+export function validationMessage(error: unknown): string | null {
+  if (!(error instanceof ApiError) || error.status !== 400 || !error.data || typeof error.data !== "object") return null
+  for (const [field, value] of Object.entries(error.data as Record<string, unknown>)) {
+    const message = Array.isArray(value) ? value[0] : value
+    if (typeof message === "string") return field === "detail" || field === "non_field_errors" ? message : `${field}: ${message}`
+  }
+  return null
+}
