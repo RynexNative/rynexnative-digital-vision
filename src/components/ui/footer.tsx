@@ -2,7 +2,7 @@ import { Github, Instagram, Mail, Send } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useSectionNav } from "@/hooks/use-section-nav"
-import { supabase } from "@/integrations/supabase/client"
+import { apiPost, errorMessage } from "@/lib/api"
 import { useToast } from "@/hooks/use-toast"
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -28,17 +28,15 @@ export function Footer() {
 
     setIsSubscribing(true)
     try {
-      // Save email subscription to Supabase
-      const { error } = await supabase
-        .from('newsletter_subscriptions')
-        .insert({ email: trimmedEmail })
-
-      // 23505 = unique violation: this email is already subscribed
-      if (error && error.code !== '23505') throw error
+      const { status } = await apiPost<{ status: "subscribed" | "already_subscribed" }>(
+        "/api/newsletter/",
+        { email: trimmedEmail }
+      )
+      const alreadySubscribed = status === "already_subscribed"
 
       toast({
-        title: error ? "Already subscribed" : "Thank you for subscribing!",
-        description: error
+        title: alreadySubscribed ? "Already subscribed" : "Thank you for subscribing!",
+        description: alreadySubscribed
           ? "This email is already on our list."
           : "We'll keep you updated."
       })
@@ -48,7 +46,7 @@ export function Footer() {
       toast({
         variant: "destructive",
         title: "Subscription failed",
-        description: "Something went wrong. Please try again."
+        description: errorMessage(error, "Something went wrong. Please try again.")
       })
     } finally {
       setIsSubscribing(false)

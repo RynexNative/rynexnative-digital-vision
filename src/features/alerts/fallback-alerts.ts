@@ -1,6 +1,6 @@
 // Starter alerts shown when the database is unreachable or not yet migrated.
 // Keep in sync with the seed data in
-// supabase/migrations/20260929120000_security_alerts_and_estimates.sql
+// the backend seed file (rynexnative-backend: apps/alerts/seed_alerts.json)
 import type { SecurityAlert } from "./types"
 
 const daysAgo = (days: number) => new Date(Date.now() - days * 86_400_000).toISOString()
