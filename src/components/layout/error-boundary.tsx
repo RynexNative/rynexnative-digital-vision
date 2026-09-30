@@ -26,6 +26,12 @@ export class ErrorBoundary extends Component<Props, State> {
           <p className="text-foreground/70 mb-6">
             Huenda kuna toleo jipya la website au internet imekatika. Pakia upya ukurasa kuendelea.
           </p>
+          <details className="mb-6 text-left">
+            <summary className="text-xs text-foreground/50 cursor-pointer text-center">Maelezo ya kiufundi</summary>
+            <pre className="mt-2 text-xs text-foreground/70 bg-card rounded-lg p-3 whitespace-pre-wrap break-words select-all">
+              {this.state.error.name}: {this.state.error.message}
+            </pre>
+          </details>
           <button
             type="button"
             onClick={() => window.location.reload()}
