@@ -68,7 +68,9 @@ The site is deployed to GitHub Pages from the `gh-pages` branch:
 npm run deploy
 ```
 
-This builds the app into `dist/` and pushes it to the `gh-pages` branch. The custom domain
+This builds the app into `dist/` and pushes it to the `gh-pages` branch. Files from earlier
+deploys are kept (`--add`), so a browser still running an older version can keep loading its
+pages instead of failing until the GitHub Pages cache (about 10 minutes) expires. The custom domain
 file lives in `public/CNAME`, so it is copied into every build and `rynexnative.com` is kept
 after each deploy. In the repository settings, Pages should be set to
 "Deploy from a branch" → `gh-pages` / `(root)`.
