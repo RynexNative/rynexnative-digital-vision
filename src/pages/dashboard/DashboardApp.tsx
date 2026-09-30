@@ -41,7 +41,11 @@ function Shell() {
   const logout = useLogout()
   const { pathname } = useLocation()
 
-  useEffect(() => window.scrollTo(0, 0), [pathname])
+  // Braces matter: newer browsers return a Promise from scrollTo, and an effect must
+  // return nothing or a cleanup function (React would call the Promise and crash)
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
 
   const items: NavItem[] = [
     { to: "/admin", label: "Muhtasari", icon: <LayoutDashboard className="h-5 w-5" /> },

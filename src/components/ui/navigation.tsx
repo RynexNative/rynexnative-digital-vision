@@ -25,7 +25,9 @@ export function Navigation() {
   const { pathname } = useLocation();
 
   // Close the mobile menu whenever the page changes
-  useEffect(() => setIsOpen(false), [pathname]);
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   const renderItem = (item: NavItem, mobile: boolean) => {
     const className = cn(itemClassName, mobile && "block w-full text-left text-base");
