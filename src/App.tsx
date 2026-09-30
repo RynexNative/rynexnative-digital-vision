@@ -3,17 +3,19 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, Routes, Route } from "react-router-dom";
-import { Suspense, lazy, useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { PageLoader } from "@/components/ui/loading-spinner";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
+import { ErrorBoundary } from "@/components/layout/error-boundary";
+import { lazyWithReload } from "@/lib/lazy-with-reload";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
 // Secondary pages are loaded on demand to keep the home page fast
-const AlertsPage = lazy(() => import("./pages/AlertsPage"));
-const AlertDetailPage = lazy(() => import("./pages/AlertDetailPage"));
-const EstimatePage = lazy(() => import("./pages/EstimatePage"));
-const DashboardApp = lazy(() => import("./pages/dashboard/DashboardApp"));
+const AlertsPage = lazyWithReload(() => import("./pages/AlertsPage"));
+const AlertDetailPage = lazyWithReload(() => import("./pages/AlertDetailPage"));
+const EstimatePage = lazyWithReload(() => import("./pages/EstimatePage"));
+const DashboardApp = lazyWithReload(() => import("./pages/dashboard/DashboardApp"));
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,7 @@ const App = () => {
         <Sonner />
         <HashRouter>
           <ScrollToTop />
+          <ErrorBoundary>
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -45,6 +48,7 @@ const App = () => {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
+          </ErrorBoundary>
         </HashRouter>
       </TooltipProvider>
     </QueryClientProvider>

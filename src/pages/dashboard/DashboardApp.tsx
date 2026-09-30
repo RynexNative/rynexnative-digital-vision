@@ -1,17 +1,19 @@
-import { Suspense, lazy, useEffect, type ReactNode } from "react"
+import { Suspense, useEffect, type ReactNode } from "react"
 import { NavLink, Route, Routes, useLocation } from "react-router-dom"
 import { Calculator, ExternalLink, LayoutDashboard, Loader2, LogOut, Mail, ShieldAlert, Users } from "lucide-react"
 import { useCurrentUser, useLogout, useStats } from "@/features/dashboard/api"
 import { ErrorState } from "@/features/dashboard/ui"
+import { ErrorBoundary } from "@/components/layout/error-boundary"
 import { useDocumentTitle } from "@/hooks/use-document-title"
+import { lazyWithReload } from "@/lib/lazy-with-reload"
 import { cn } from "@/lib/utils"
 import LoginPage from "./LoginPage"
 
-const OverviewPage = lazy(() => import("./OverviewPage"))
-const AlertsAdminPage = lazy(() => import("./AlertsAdminPage"))
-const EstimatesAdminPage = lazy(() => import("./EstimatesAdminPage"))
-const MessagesAdminPage = lazy(() => import("./MessagesAdminPage"))
-const SubscribersAdminPage = lazy(() => import("./SubscribersAdminPage"))
+const OverviewPage = lazyWithReload(() => import("./OverviewPage"))
+const AlertsAdminPage = lazyWithReload(() => import("./AlertsAdminPage"))
+const EstimatesAdminPage = lazyWithReload(() => import("./EstimatesAdminPage"))
+const MessagesAdminPage = lazyWithReload(() => import("./MessagesAdminPage"))
+const SubscribersAdminPage = lazyWithReload(() => import("./SubscribersAdminPage"))
 
 type NavItem = { to: string; label: string; icon: ReactNode; badge?: number }
 
@@ -109,6 +111,8 @@ function Shell() {
 
       <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-10">
         <div className="max-w-5xl mx-auto">
+          {/* Keyed by page so moving to another section clears an earlier error */}
+          <ErrorBoundary key={pathname} compact>
           <Suspense
             fallback={
               <div className="py-20 flex justify-center">
@@ -125,6 +129,7 @@ function Shell() {
               <Route path="*" element={<OverviewPage />} />
             </Routes>
           </Suspense>
+          </ErrorBoundary>
         </div>
       </main>
 
