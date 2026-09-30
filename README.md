@@ -80,8 +80,12 @@ repository **RynexNative/rynexnative-backend**, deployed at `https://api.rynexna
 
 - The API address is set in `.env.production` (`VITE_API_URL`). For local work,
   `.env.development` points to `http://127.0.0.1:8000` (run the backend with `python manage.py runserver`).
-- The team manages alerts, estimate requests, messages and newsletter subscribers in the
-  Django admin: `https://api.rynexnative.com/admin/` (`/#/admin` on the website redirects there).
+- The team manages everything in the **dashboard** at `https://rynexnative.com/#/admin`:
+  overview, Tahadhari (write/publish alerts), estimate requests, contact messages and
+  newsletter subscribers. Only accounts with *Staff status* in the backend can sign in.
+  Login uses a secure session cookie, so the API must be served from `api.rynexnative.com`
+  (same site as the website); an `onrender.com` address will not keep you logged in.
+- The Django admin (`https://api.rynexnative.com/admin/`) stays available as a backup.
 - If the API cannot be reached, the alerts pages fall back to the built-in starter alerts
   in `src/features/alerts/fallback-alerts.ts`.
 
