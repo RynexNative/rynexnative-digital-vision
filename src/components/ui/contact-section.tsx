@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { apiPost, errorMessage } from "@/lib/api";
 export function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
@@ -21,16 +21,12 @@ export function ContactSection() {
     if (isSubmitting) return;
     setIsSubmitting(true);
     try {
-      // Save contact form data to Supabase
-      const {
-        error
-      } = await supabase.from('contact_submissions').insert({
+      await apiPost("/api/contact/", {
         name: formData.name.trim(),
         email: formData.email.trim(),
-        company: formData.company.trim() || null,
+        company: formData.company.trim(),
         message: formData.message.trim()
       });
-      if (error) throw error;
       toast({
         title: "Message Sent!",
         description: "We'll get back to you within 24 hours."
@@ -47,7 +43,7 @@ export function ContactSection() {
       toast({
         variant: "destructive",
         title: "Message not sent",
-        description: "Something went wrong. Please try again or email us at info@rynexnative.com."
+        description: errorMessage(error, "Something went wrong. Please try again or email us at info@rynexnative.com.")
       });
     } finally {
       setIsSubmitting(false);

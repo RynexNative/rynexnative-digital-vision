@@ -6,6 +6,7 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy, useEffect } from "react";
 import { PageLoader } from "@/components/ui/loading-spinner";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
+import { API_URL } from "@/lib/api";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
@@ -13,9 +14,16 @@ import NotFound from "./pages/NotFound";
 const AlertsPage = lazy(() => import("./pages/AlertsPage"));
 const AlertDetailPage = lazy(() => import("./pages/AlertDetailPage"));
 const EstimatePage = lazy(() => import("./pages/EstimatePage"));
-const AdminPage = lazy(() => import("./pages/AdminPage"));
 
 const queryClient = new QueryClient();
+
+// The team now manages content in the Django admin on the API server
+const AdminRedirect = () => {
+  useEffect(() => {
+    window.location.replace(`${API_URL}/admin/`);
+  }, []);
+  return <PageLoader />;
+};
 
 const App = () => {
   useEffect(() => {
@@ -40,7 +48,7 @@ const App = () => {
               <Route path="/tahadhari" element={<AlertsPage />} />
               <Route path="/tahadhari/:slug" element={<AlertDetailPage />} />
               <Route path="/estimate" element={<EstimatePage />} />
-              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/admin" element={<AdminRedirect />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

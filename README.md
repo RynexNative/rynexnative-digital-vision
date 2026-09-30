@@ -73,20 +73,22 @@ file lives in `public/CNAME`, so it is copied into every build and `rynexnative.
 after each deploy. In the repository settings, Pages should be set to
 "Deploy from a branch" → `gh-pages` / `(root)`.
 
-## Tahadhari (security alerts), estimator and admin
+## Backend (Django API)
+
+Forms, the estimator and the Tahadhari alerts talk to the Django API in the separate
+repository **RynexNative/rynexnative-backend**, deployed at `https://api.rynexnative.com`.
+
+- The API address is set in `.env.production` (`VITE_API_URL`). For local work,
+  `.env.development` points to `http://127.0.0.1:8000` (run the backend with `python manage.py runserver`).
+- The team manages alerts, estimate requests, messages and newsletter subscribers in the
+  Django admin: `https://api.rynexnative.com/admin/` (`/#/admin` on the website redirects there).
+- If the API cannot be reached, the alerts pages fall back to the built-in starter alerts
+  in `src/features/alerts/fallback-alerts.ts`.
+
+Pages:
 
 - `/#/tahadhari`: Swahili security alerts with WhatsApp sharing
 - `/#/estimate`: project price estimator (prices live in `src/features/estimator/pricing.ts`)
-- `/#/admin`: manage alerts and see estimate requests
-
-One-time database setup:
-
-1. In Supabase, open **SQL Editor** and run
-   `supabase/migrations/20260929120000_security_alerts_and_estimates.sql`.
-2. Create your admin account under **Authentication → Users → Add user**.
-3. Sign in at `/#/admin`. The page shows the exact SQL to run to grant that account admin access.
-
-Until the migration is run, the alerts pages show built-in starter alerts.
 
 ## Can I connect a custom domain to my Lovable project?
 

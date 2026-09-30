@@ -20,7 +20,7 @@ import {
 import { SiteLayout } from "@/components/layout/site-layout"
 import { useDocumentTitle } from "@/hooks/use-document-title"
 import { useToast } from "@/hooks/use-toast"
-import { supabase } from "@/integrations/supabase/client"
+import { apiPost, errorMessage } from "@/lib/api"
 import { cn } from "@/lib/utils"
 import {
   CARE_PLAN,
@@ -66,16 +66,6 @@ function loadSaved(): SavedState | null {
     return parsed
   } catch {
     return null
-  }
-}
-
-function newId() {
-  try {
-    return crypto.randomUUID()
-  } catch {
-    return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) =>
-      (Number(c) ^ (Math.random() * 16) >> (Number(c) / 4)).toString(16),
-    )
   }
 }
 
@@ -305,15 +295,13 @@ export default function EstimatePage() {
     }
 
     setIsSubmitting(true)
-    const id = newId()
     try {
-      const { error } = await supabase.from("project_estimates").insert({
-        id,
+      const { reference } = await apiPost<{ reference: string }>("/api/estimates/", {
         name: form.name.trim(),
         phone,
-        email: form.email.trim() || null,
-        company: form.company.trim() || null,
-        notes: form.notes.trim() || null,
+        email: form.email.trim(),
+        company: form.company.trim(),
+        notes: form.notes.trim(),
         project_type: type.id,
         selections: { ...selections },
         estimate_min: estimate.min,
@@ -321,8 +309,7 @@ export default function EstimatePage() {
         weeks_min: estimate.weeksMin,
         weeks_max: estimate.weeksMax,
       })
-      if (error) throw error
-      setReference(id.slice(0, 8).toUpperCase())
+      setReference(reference)
       try {
         sessionStorage.removeItem(STORAGE_KEY)
       } catch {
@@ -333,7 +320,7 @@ export default function EstimatePage() {
       toast({
         variant: "destructive",
         title: "Could not send your request",
-        description: "Please try again, or send it to us on WhatsApp instead.",
+        description: errorMessage(error, "Please try again, or send it to us on WhatsApp instead."),
       })
     } finally {
       setIsSubmitting(false)
