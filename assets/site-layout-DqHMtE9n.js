@@ -1,1 +1,0 @@
-import{$ as e,f as t,k as n,u as r}from"./index-8qmVJ8UT.js";var i=e();function a({children:e,className:a}){return(0,i.jsxs)(`div`,{className:n(`min-h-screen bg-background font-inter flex flex-col`,a),children:[(0,i.jsx)(t,{}),(0,i.jsx)(`main`,{className:`flex-1 pt-16`,children:e}),(0,i.jsx)(r,{})]})}export{a as t};
