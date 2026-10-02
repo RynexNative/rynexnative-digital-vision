@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Calculator, Menu, ShieldAlert, X } from "lucide-react";
+import type { ReactNode } from "react";
+import { Calculator, CalendarDays, Menu, Newspaper, ShieldAlert, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useSectionNav } from "@/hooks/use-section-nav";
 import { cn } from "@/lib/utils";
 
-type NavItem = { label: string; section: string } | { label: string; to: string };
+type NavItem = { label: string; section: string } | { label: string; to: string; icon: ReactNode };
 
 const navItems: NavItem[] = [
   { label: "About", section: "about" },
   { label: "Services", section: "services" },
-  { label: "Portfolio", section: "portfolio" },
-  { label: "Tahadhari", to: "/tahadhari" },
+  { label: "Matukio", to: "/matukio", icon: <CalendarDays className="h-4 w-4" /> },
+  { label: "Habari", to: "/habari", icon: <Newspaper className="h-4 w-4" /> },
+  { label: "Tahadhari", to: "/tahadhari", icon: <ShieldAlert className="h-4 w-4" /> },
   { label: "Contact", section: "contact" },
 ];
 
@@ -40,7 +42,7 @@ export function Navigation() {
           aria-current={active ? "page" : undefined}
           className={cn(className, "inline-flex items-center gap-1.5", active && "text-primary bg-primary/10")}
         >
-          <ShieldAlert className="h-4 w-4" />
+          {item.icon}
           {item.label}
         </Link>
       );
@@ -72,12 +74,12 @@ export function Navigation() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-2 ml-10">
+          <div className="hidden xl:flex items-center space-x-1 ml-8">
             {navItems.map(item => renderItem(item, false))}
           </div>
 
           {/* Desktop CTA & Theme Toggle */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden xl:flex items-center space-x-4">
             <ThemeToggle />
             <Button asChild className="bg-gradient-primary text-white font-semibold hover:opacity-90 shadow-lg shadow-primary/20">
               <Link to="/estimate">
@@ -88,7 +90,7 @@ export function Navigation() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="lg:hidden flex items-center space-x-2">
+          <div className="xl:hidden flex items-center space-x-2">
             <ThemeToggle />
             <button
               type="button"
@@ -103,7 +105,7 @@ export function Navigation() {
         </div>
 
         {/* Mobile Navigation */}
-        {isOpen && <div className="lg:hidden">
+        {isOpen && <div className="xl:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background/95 backdrop-blur-xl rounded-lg mt-2 mb-3 border border-foreground/10">
               {navItems.map(item => renderItem(item, true))}
               <div className="pt-2">

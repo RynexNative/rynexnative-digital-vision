@@ -1,6 +1,20 @@
-import { Suspense, useEffect, type ReactNode } from "react"
+import { Suspense, useEffect, useState, type ReactNode } from "react"
 import { NavLink, Route, Routes, useLocation } from "react-router-dom"
-import { Calculator, ExternalLink, LayoutDashboard, Loader2, LogOut, Mail, ShieldAlert, Users } from "lucide-react"
+import {
+  Calculator,
+  CalendarDays,
+  ExternalLink,
+  LayoutDashboard,
+  Loader2,
+  LogOut,
+  Mail,
+  MoreHorizontal,
+  Newspaper,
+  ScanLine,
+  ShieldAlert,
+  Users,
+} from "lucide-react"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { useCurrentUser, useLogout, useStats } from "@/features/dashboard/api"
 import { ErrorState } from "@/features/dashboard/ui"
 import { ErrorBoundary } from "@/components/layout/error-boundary"
@@ -14,6 +28,10 @@ const AlertsAdminPage = lazyWithReload(() => import("./AlertsAdminPage"))
 const EstimatesAdminPage = lazyWithReload(() => import("./EstimatesAdminPage"))
 const MessagesAdminPage = lazyWithReload(() => import("./MessagesAdminPage"))
 const SubscribersAdminPage = lazyWithReload(() => import("./SubscribersAdminPage"))
+const NewsAdminPage = lazyWithReload(() => import("./NewsAdminPage"))
+const EventsAdminPage = lazyWithReload(() => import("./EventsAdminPage"))
+const EventRegistrationsPage = lazyWithReload(() => import("./EventRegistrationsPage"))
+const CheckInPage = lazyWithReload(() => import("./CheckInPage"))
 
 type NavItem = { to: string; label: string; icon: ReactNode; badge?: number }
 
@@ -49,11 +67,22 @@ function Shell() {
 
   const items: NavItem[] = [
     { to: "/admin", label: "Muhtasari", icon: <LayoutDashboard className="h-5 w-5" /> },
-    { to: "/admin/tahadhari", label: "Tahadhari", icon: <ShieldAlert className="h-5 w-5" />, badge: stats?.alerts.drafts },
+    { to: "/admin/matukio", label: "Matukio", icon: <CalendarDays className="h-5 w-5" />, badge: stats?.events.to_verify },
     { to: "/admin/maombi", label: "Maombi", icon: <Calculator className="h-5 w-5" />, badge: stats?.estimates.new },
     { to: "/admin/ujumbe", label: "Ujumbe", icon: <Mail className="h-5 w-5" />, badge: stats?.messages.new },
+    { to: "/admin/habari", label: "Habari", icon: <Newspaper className="h-5 w-5" />, badge: stats?.news.drafts },
+    { to: "/admin/tahadhari", label: "Tahadhari", icon: <ShieldAlert className="h-5 w-5" />, badge: stats?.alerts.drafts },
     { to: "/admin/wanachama", label: "Wanachama", icon: <Users className="h-5 w-5" /> },
+    { to: "/admin/scan", label: "Scan tiketi", icon: <ScanLine className="h-5 w-5" /> },
   ]
+  // Mobile bottom bar shows the first four; the rest live under "Zaidi"
+  const primaryItems = items.slice(0, 4)
+  const moreItems = items.slice(4)
+  const moreBadge = moreItems.reduce((sum, item) => sum + (item.badge ?? 0), 0)
+  const [moreOpen, setMoreOpen] = useState(false)
+  useEffect(() => {
+    setMoreOpen(false)
+  }, [pathname])
 
   const navClass = ({ isActive }: { isActive: boolean }) =>
     cn(
@@ -130,6 +159,10 @@ function Shell() {
               <Route path="maombi" element={<EstimatesAdminPage />} />
               <Route path="ujumbe" element={<MessagesAdminPage />} />
               <Route path="wanachama" element={<SubscribersAdminPage />} />
+              <Route path="habari" element={<NewsAdminPage />} />
+              <Route path="matukio" element={<EventsAdminPage />} />
+              <Route path="matukio/:id" element={<EventRegistrationsPage />} />
+              <Route path="scan" element={<CheckInPage />} />
               <Route path="*" element={<OverviewPage />} />
             </Routes>
           </Suspense>
@@ -142,7 +175,7 @@ function Shell() {
         aria-label="Dashboard"
         className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t border-foreground/10 bg-background/95 backdrop-blur-xl grid grid-cols-5 pb-[env(safe-area-inset-bottom)]"
       >
-        {items.map((item) => (
+        {primaryItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
@@ -163,7 +196,54 @@ function Shell() {
             ) : null}
           </NavLink>
         ))}
+        <button
+          type="button"
+          onClick={() => setMoreOpen(true)}
+          className={cn(
+            "relative flex flex-col items-center justify-center gap-1 h-16 text-[11px] font-medium",
+            moreItems.some((i) => pathname.startsWith(i.to)) ? "text-primary" : "text-foreground/60",
+          )}
+        >
+          <MoreHorizontal className="h-5 w-5" />
+          Zaidi
+          {moreBadge > 0 && (
+            <span className="absolute top-2 left-1/2 ml-2 min-w-4 h-4 px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
+              {moreBadge > 9 ? "9+" : moreBadge}
+            </span>
+          )}
+        </button>
       </nav>
+
+      <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
+        <SheetContent side="bottom" className="lg:hidden rounded-t-3xl pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+          <SheetHeader className="text-left mb-4">
+            <SheetTitle>Zaidi</SheetTitle>
+          </SheetHeader>
+          <nav className="grid grid-cols-2 gap-2" aria-label="Zaidi">
+            {moreItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  cn("flex items-center gap-3 h-14 px-4 rounded-2xl glass text-sm font-medium", isActive && "text-primary border-primary/40")
+                }
+              >
+                {item.icon}
+                <span className="flex-1">{item.label}</span>
+                {item.badge ? (
+                  <span className="min-w-5 h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-[11px] font-bold flex items-center justify-center">
+                    {item.badge}
+                  </span>
+                ) : null}
+              </NavLink>
+            ))}
+            <a href="/#/" target="_blank" rel="noopener" className="flex items-center gap-3 h-14 px-4 rounded-2xl glass text-sm font-medium">
+              <ExternalLink className="h-5 w-5" />
+              Website
+            </a>
+          </nav>
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }

@@ -70,6 +70,8 @@ export function Footer() {
       { label: "AI Solutions", target: "services" }
     ],
     resources: [
+      { label: "Matukio", to: "/matukio" },
+      { label: "Habari", to: "/habari" },
       { label: "Tahadhari za Usalama", to: "/tahadhari" },
       { label: "Project Estimator", to: "/estimate" },
       { label: "Case Studies", target: "portfolio" },
@@ -176,11 +178,11 @@ export function Footer() {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 px-4 py-2 bg-card border border-foreground/20 rounded-l-lg focus:outline-none focus:border-primary text-sm"
+                className="flex-1 min-w-0 px-4 py-2 bg-card border border-foreground/20 rounded-l-lg focus:outline-none focus:border-primary text-sm"
                 onKeyDown={(e) => e.key === 'Enter' && handleSubscribe()}
               />
               <button 
-                className="px-6 py-2 bg-gradient-primary text-white rounded-r-lg hover:opacity-90 transition-opacity text-sm font-medium disabled:opacity-50 flex items-center space-x-2"
+                className="flex-shrink-0 px-4 sm:px-6 py-2 bg-gradient-primary text-white rounded-r-lg hover:opacity-90 transition-opacity text-sm font-medium disabled:opacity-50 flex items-center space-x-2"
                 onClick={handleSubscribe}
                 disabled={isSubscribing || !email}
               >

@@ -16,6 +16,11 @@ const AlertsPage = lazyWithReload(() => import("./pages/AlertsPage"));
 const AlertDetailPage = lazyWithReload(() => import("./pages/AlertDetailPage"));
 const EstimatePage = lazyWithReload(() => import("./pages/EstimatePage"));
 const DashboardApp = lazyWithReload(() => import("./pages/dashboard/DashboardApp"));
+const NewsPage = lazyWithReload(() => import("./pages/NewsPage"));
+const NewsDetailPage = lazyWithReload(() => import("./pages/NewsDetailPage"));
+const EventsPage = lazyWithReload(() => import("./pages/EventsPage"));
+const EventDetailPage = lazyWithReload(() => import("./pages/EventDetailPage"));
+const TicketPage = lazyWithReload(() => import("./pages/TicketPage"));
 
 const queryClient = new QueryClient();
 
@@ -43,6 +48,11 @@ const App = () => {
               <Route path="/tahadhari" element={<AlertsPage />} />
               <Route path="/tahadhari/:slug" element={<AlertDetailPage />} />
               <Route path="/estimate" element={<EstimatePage />} />
+              <Route path="/habari" element={<NewsPage />} />
+              <Route path="/habari/:slug" element={<NewsDetailPage />} />
+              <Route path="/matukio" element={<EventsPage />} />
+              <Route path="/matukio/:slug" element={<EventDetailPage />} />
+              <Route path="/tiketi/:id" element={<TicketPage />} />
               <Route path="/admin/*" element={<DashboardApp />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

@@ -1,7 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ApiError, dashboardRequest, setCsrfToken } from "@/lib/api"
+import type { RegistrationStatus } from "@/features/events/types"
 import type {
+  CheckInResult,
   DashboardAlert,
+  DashboardEvent,
+  DashboardNews,
+  DashboardRegistration,
   DashboardEstimate,
   DashboardMessage,
   DashboardStats,
@@ -177,4 +182,153 @@ export function useDeleteSubscriber() {
     mutationFn: (id: string) => dashboardRequest<void>(`/subscribers/${id}/`, { method: "DELETE" }),
     onSuccess: () => invalidate("subscribers", "stats"),
   })
+}
+
+/* ---------------- News ---------------- */
+
+export type NewsInput = Omit<DashboardNews, "id" | "published_at" | "created_at" | "updated_at">
+
+export const useNewsAdmin = () => useDashboardQuery<DashboardNews[]>(["dashboard", "news"], "/news/")
+
+export function useSaveNews() {
+  const invalidate = useInvalidate()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, data }: { id?: string; data: NewsInput }) =>
+      id
+        ? dashboardRequest<DashboardNews>(`/news/${id}/`, { method: "PATCH", body: data })
+        : dashboardRequest<DashboardNews>("/news/", { method: "POST", body: data }),
+    onSuccess: () => {
+      invalidate("news", "stats")
+      queryClient.invalidateQueries({ queryKey: ["news"] })
+    },
+  })
+}
+
+export function useSetNewsPublished() {
+  const invalidate = useInvalidate()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, published }: { id: string; published: boolean }) =>
+      dashboardRequest<DashboardNews>(`/news/${id}/${published ? "publish" : "unpublish"}/`, { method: "POST" }),
+    onSuccess: () => {
+      invalidate("news", "stats")
+      queryClient.invalidateQueries({ queryKey: ["news"] })
+    },
+  })
+}
+
+export function useDeleteNews() {
+  const invalidate = useInvalidate()
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => dashboardRequest<void>(`/news/${id}/`, { method: "DELETE" }),
+    onSuccess: () => {
+      invalidate("news", "stats")
+      queryClient.invalidateQueries({ queryKey: ["news"] })
+    },
+  })
+}
+
+/* ---------------- Events ---------------- */
+
+export type EventInput = Omit<DashboardEvent, "id" | "published_at" | "created_at" | "updated_at" | "counts">
+
+export const useEventsAdmin = () => useDashboardQuery<DashboardEvent[]>(["dashboard", "events"], "/events/")
+export const useEventAdmin = (id: string) => useDashboardQuery<DashboardEvent>(["dashboard", "events", id], `/events/${id}/`)
+
+function useEventInvalidate() {
+  const invalidate = useInvalidate()
+  const queryClient = useQueryClient()
+  return () => {
+    invalidate("events", "registrations", "stats")
+    queryClient.invalidateQueries({ queryKey: ["events"] })
+  }
+}
+
+export function useSaveEvent() {
+  const done = useEventInvalidate()
+  return useMutation({
+    mutationFn: ({ id, data }: { id?: string; data: EventInput }) =>
+      id
+        ? dashboardRequest<DashboardEvent>(`/events/${id}/`, { method: "PATCH", body: data })
+        : dashboardRequest<DashboardEvent>("/events/", { method: "POST", body: data }),
+    onSuccess: done,
+  })
+}
+
+export function useSetEventPublished() {
+  const done = useEventInvalidate()
+  return useMutation({
+    mutationFn: ({ id, published }: { id: string; published: boolean }) =>
+      dashboardRequest<DashboardEvent>(`/events/${id}/${published ? "publish" : "unpublish"}/`, { method: "POST" }),
+    onSuccess: done,
+  })
+}
+
+export function useDeleteEvent() {
+  const done = useEventInvalidate()
+  return useMutation({
+    mutationFn: (id: string) => dashboardRequest<void>(`/events/${id}/`, { method: "DELETE" }),
+    onSuccess: done,
+  })
+}
+
+export const useRegistrationsAdmin = (eventId: string, status: string, q: string) =>
+  useDashboardQuery<DashboardRegistration[]>(
+    ["dashboard", "registrations", eventId, status, q],
+    `/registrations/${query({ event: eventId, status, q })}`,
+  )
+
+export function useSetRegistrationStatus() {
+  const done = useEventInvalidate()
+  return useMutation({
+    mutationFn: ({ id, status }: { id: string; status: RegistrationStatus }) =>
+      dashboardRequest<DashboardRegistration>(`/registrations/${id}/`, { method: "PATCH", body: { status } }),
+    onSuccess: done,
+  })
+}
+
+export function useCheckIn() {
+  const done = useEventInvalidate()
+  return useMutation({
+    mutationFn: async (code: string): Promise<CheckInResult> => {
+      try {
+        return await dashboardRequest<CheckInResult>("/checkin/", { method: "POST", body: { code } })
+      } catch (error) {
+        // 404/409 carry a normal result body ("not found", "not paid yet")
+        if (error instanceof ApiError && (error.status === 404 || error.status === 409) && error.data) {
+          return error.data as CheckInResult
+        }
+        throw error
+      }
+    },
+    onSuccess: done,
+  })
+}
+
+/* ---------------- Image uploads (Cloudinary) ---------------- */
+
+type UploadSignature = {
+  cloud_name: string
+  api_key: string
+  folder: string
+  timestamp: number
+  signature: string
+  upload_url: string
+}
+
+/** Uploads an image straight from the browser to Cloudinary and returns its https URL. */
+export async function uploadImage(file: File): Promise<string> {
+  const sig = await dashboardRequest<UploadSignature>("/uploads/signature/", { method: "POST" })
+  const form = new FormData()
+  form.append("file", file)
+  form.append("api_key", sig.api_key)
+  form.append("timestamp", String(sig.timestamp))
+  form.append("folder", sig.folder)
+  form.append("signature", sig.signature)
+  const response = await fetch(sig.upload_url, { method: "POST", body: form })
+  const data = (await response.json().catch(() => null)) as { secure_url?: string; error?: { message?: string } } | null
+  if (!response.ok || !data?.secure_url) throw new Error(data?.error?.message ?? "Upload failed")
+  return data.secure_url
 }

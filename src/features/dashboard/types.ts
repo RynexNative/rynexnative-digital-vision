@@ -1,4 +1,6 @@
 import type { AlertSeverity } from "@/features/alerts/types"
+import type { NewsCategory } from "@/features/news/types"
+import type { EventMode, EventType, RegistrationStatus } from "@/features/events/types"
 
 export type DashboardUser = { username: string; email: string; name: string; is_superuser: boolean }
 
@@ -54,6 +56,8 @@ export type DashboardMessage = {
 export type DashboardSubscriber = { id: string; email: string; created_at: string }
 
 export type DashboardStats = {
+  events: { upcoming: number; registrations_week: number; to_verify: number }
+  news: { published: number; drafts: number }
   estimates: { total: number; new: number; this_week: number; won: number }
   messages: { total: number; new: number }
   alerts: { total: number; published: number; drafts: number }
@@ -91,4 +95,70 @@ export function formatWhen(iso: string) {
 export function whatsappNumber(phone: string) {
   const digits = phone.replace(/\D/g, "")
   return digits.startsWith("0") ? `255${digits.slice(1)}` : digits
+}
+
+/* ---------------- News & events ---------------- */
+
+
+export type DashboardNews = {
+  id: string
+  slug: string
+  title: string
+  excerpt: string
+  body: string
+  cover_image: string
+  category: NewsCategory
+  is_published: boolean
+  published_at: string | null
+  created_at: string
+  updated_at: string
+}
+
+export type DashboardEvent = {
+  id: string
+  slug: string
+  title: string
+  summary: string
+  description: string
+  cover_image: string
+  event_type: EventType
+  mode: EventMode
+  venue: string
+  online_link: string
+  starts_at: string
+  ends_at: string | null
+  capacity: number | null
+  price: number
+  registration_deadline: string | null
+  registrations_open: boolean
+  is_published: boolean
+  published_at: string | null
+  created_at: string
+  updated_at: string
+  counts: { confirmed: number; awaiting_payment: number; to_verify: number; checked_in: number }
+}
+
+export type DashboardRegistration = {
+  id: string
+  event: string
+  event_title: string
+  name: string
+  phone: string
+  email: string
+  organization: string
+  status: RegistrationStatus
+  amount: number
+  payment_reference: string
+  payment_submitted_at: string | null
+  confirmed_at: string | null
+  ticket_code: string
+  checked_in: boolean
+  checked_in_at: string | null
+  created_at: string
+}
+
+export type CheckInResult = {
+  result: "ok" | "already" | "not_confirmed" | "not_found"
+  detail: string
+  registration?: DashboardRegistration
 }
