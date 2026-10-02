@@ -86,8 +86,8 @@ export default function OverviewPage() {
           to="/admin/matukio"
           icon={<CalendarDays className="h-5 w-5" />}
           label="Matukio yajayo"
-          value={stats?.events.upcoming}
-          hint={isLoading ? "…" : `${stats?.events.registrations_week ?? 0} wamejisajili wiki hii`}
+          value={stats?.events?.upcoming}
+          hint={isLoading ? "…" : `${stats?.events?.registrations_week ?? 0} wamejisajili wiki hii`}
         />
         <StatCard
           to="/admin/wanachama"
@@ -98,14 +98,14 @@ export default function OverviewPage() {
         />
       </div>
 
-      {Boolean(stats?.events.to_verify) && (
+      {Boolean(stats?.events?.to_verify) && (
         <Link
           to="/admin/matukio"
           className="glass rounded-2xl p-4 mb-4 flex items-center gap-3 border-accent/40 hover:bg-accent/5 transition-colors"
         >
           <Hourglass className="h-5 w-5 text-accent flex-shrink-0" />
           <p className="text-sm flex-1">
-            Malipo <strong>{stats?.events.to_verify}</strong> ya matukio yanasubiri uthibitisho wako.
+            Malipo <strong>{stats?.events?.to_verify}</strong> ya matukio yanasubiri uthibitisho wako.
           </p>
           <ArrowRight className="h-4 w-4 text-accent" />
         </Link>

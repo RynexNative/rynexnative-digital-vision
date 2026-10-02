@@ -67,10 +67,10 @@ function Shell() {
 
   const items: NavItem[] = [
     { to: "/admin", label: "Muhtasari", icon: <LayoutDashboard className="h-5 w-5" /> },
-    { to: "/admin/matukio", label: "Matukio", icon: <CalendarDays className="h-5 w-5" />, badge: stats?.events.to_verify },
+    { to: "/admin/matukio", label: "Matukio", icon: <CalendarDays className="h-5 w-5" />, badge: stats?.events?.to_verify },
     { to: "/admin/maombi", label: "Maombi", icon: <Calculator className="h-5 w-5" />, badge: stats?.estimates.new },
     { to: "/admin/ujumbe", label: "Ujumbe", icon: <Mail className="h-5 w-5" />, badge: stats?.messages.new },
-    { to: "/admin/habari", label: "Habari", icon: <Newspaper className="h-5 w-5" />, badge: stats?.news.drafts },
+    { to: "/admin/habari", label: "Habari", icon: <Newspaper className="h-5 w-5" />, badge: stats?.news?.drafts },
     { to: "/admin/tahadhari", label: "Tahadhari", icon: <ShieldAlert className="h-5 w-5" />, badge: stats?.alerts.drafts },
     { to: "/admin/wanachama", label: "Wanachama", icon: <Users className="h-5 w-5" /> },
     { to: "/admin/scan", label: "Scan tiketi", icon: <ScanLine className="h-5 w-5" /> },

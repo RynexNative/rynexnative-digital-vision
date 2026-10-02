@@ -56,8 +56,9 @@ export type DashboardMessage = {
 export type DashboardSubscriber = { id: string; email: string; created_at: string }
 
 export type DashboardStats = {
-  events: { upcoming: number; registrations_week: number; to_verify: number }
-  news: { published: number; drafts: number }
+  // Optional: an older backend without events/news must not crash the dashboard
+  events?: { upcoming: number; registrations_week: number; to_verify: number }
+  news?: { published: number; drafts: number }
   estimates: { total: number; new: number; this_week: number; won: number }
   messages: { total: number; new: number }
   alerts: { total: number; published: number; drafts: number }
