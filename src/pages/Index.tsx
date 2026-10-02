@@ -9,6 +9,7 @@ import { CTASection } from "@/components/ui/cta-section"
 import { ContactSection } from "@/components/ui/contact-section"
 import { Footer } from "@/components/ui/footer"
 import { AlertsPreviewSection } from "@/components/ui/alerts-preview-section"
+import { EventsNewsSection } from "@/components/ui/events-news-section"
 import { usePendingSectionScroll } from "@/hooks/use-section-nav"
 
 const Index = () => {
@@ -23,6 +24,7 @@ const Index = () => {
       <PortfolioSection />
       <WhyChooseUsSection />
       <TestimonialsSection />
+      <EventsNewsSection />
       <AlertsPreviewSection />
       <CTASection />
       <ContactSection />

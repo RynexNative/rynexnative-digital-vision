@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import { Link } from "react-router-dom"
-import { ArrowRight, Calculator, Mail, Plus, ShieldAlert, Trophy, Users } from "lucide-react"
+import { ArrowRight, Calculator, CalendarDays, Hourglass, Mail, Plus, Trophy, Users } from "lucide-react"
 import { useCurrentUser, useStats } from "@/features/dashboard/api"
 import { ESTIMATE_STATUS, MESSAGE_STATUS, formatWhen } from "@/features/dashboard/types"
 import { EmptyState, ErrorState, PageHeader, Pill } from "@/features/dashboard/ui"
@@ -83,11 +83,11 @@ export default function OverviewPage() {
           highlight={Boolean(stats?.messages.new)}
         />
         <StatCard
-          to="/admin/tahadhari"
-          icon={<ShieldAlert className="h-5 w-5" />}
-          label="Tahadhari hewani"
-          value={stats?.alerts.published}
-          hint={isLoading ? "…" : `${stats?.alerts.drafts ?? 0} rasimu`}
+          to="/admin/matukio"
+          icon={<CalendarDays className="h-5 w-5" />}
+          label="Matukio yajayo"
+          value={stats?.events.upcoming}
+          hint={isLoading ? "…" : `${stats?.events.registrations_week ?? 0} wamejisajili wiki hii`}
         />
         <StatCard
           to="/admin/wanachama"
@@ -97,6 +97,19 @@ export default function OverviewPage() {
           hint={isLoading ? "…" : `+${stats?.subscribers.this_week ?? 0} wiki hii`}
         />
       </div>
+
+      {Boolean(stats?.events.to_verify) && (
+        <Link
+          to="/admin/matukio"
+          className="glass rounded-2xl p-4 mb-4 flex items-center gap-3 border-accent/40 hover:bg-accent/5 transition-colors"
+        >
+          <Hourglass className="h-5 w-5 text-accent flex-shrink-0" />
+          <p className="text-sm flex-1">
+            Malipo <strong>{stats?.events.to_verify}</strong> ya matukio yanasubiri uthibitisho wako.
+          </p>
+          <ArrowRight className="h-4 w-4 text-accent" />
+        </Link>
+      )}
 
       {Boolean(stats?.estimates.won) && (
         <div className="glass rounded-2xl p-4 mb-8 flex items-center gap-3 border-emerald-500/20">
