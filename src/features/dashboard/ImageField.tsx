@@ -8,6 +8,20 @@ import { inputClass } from "./styles"
 
 const MAX_MB = 8
 
+/** Explains why Cloudinary refused the upload (shown to the admin, so it can be technical) */
+function uploadErrorText(error: unknown) {
+  if (error instanceof ApiError) {
+    const detail = (error.data as { detail?: string } | null)?.detail
+    return detail ?? `Server ilijibu ${error.status}. Jaribu tena.`
+  }
+  const message = error instanceof Error ? error.message : ""
+  if (/invalid signature/i.test(message)) return "Cloudinary: API Secret si sahihi. Nakili API Secret upya kwenye CLOUDINARY_URL."
+  if (/unknown api key|invalid api_key/i.test(message)) return "Cloudinary: API Key si sahihi kwenye CLOUDINARY_URL."
+  if (/cloud_name|invalid cloud/i.test(message)) return "Cloudinary: Cloud name si sahihi kwenye CLOUDINARY_URL."
+  if (message === "Failed to fetch") return "Imeshindikana kufika Cloudinary. Angalia internet yako."
+  return message ? `Cloudinary: ${message}` : "Jaribu tena."
+}
+
 /** Cover image picker: upload to Cloudinary, or paste an existing image link. */
 export function ImageField({ value, onChange, label = "Picha ya juu (cover)" }: { value: string; onChange: (url: string) => void; label?: string }) {
   const { toast } = useToast()
@@ -33,7 +47,9 @@ export function ImageField({ value, onChange, label = "Picha ya juu (cover)" }: 
       toast({
         variant: "destructive",
         title: "Picha haikupakiwa",
-        description: notConfigured ? "Cloudinary bado haijawekwa kwenye server. Bandika link ya picha badala yake." : "Jaribu tena.",
+        description: notConfigured
+          ? "Server haikusoma CLOUDINARY_URL. Kwenye Render, Value iwe cloudinary://API_KEY:API_SECRET@CLOUD_NAME peke yake, kisha redeploy."
+          : uploadErrorText(error),
       })
       if (notConfigured) setPasting(true)
     } finally {
