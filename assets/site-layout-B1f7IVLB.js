@@ -1,0 +1,1 @@
+import{j as s,aB as n,aC as t,d as o}from"./index-Bvin91yJ.js";function r({children:a,className:e}){return s.jsxs("div",{className:o("min-h-screen bg-background font-inter flex flex-col",e),children:[s.jsx(n,{}),s.jsx("main",{className:"flex-1 pt-16",children:a}),s.jsx(t,{})]})}export{r as S};
