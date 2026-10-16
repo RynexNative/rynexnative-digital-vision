@@ -1,6 +1,7 @@
 import type { AlertSeverity } from "@/features/alerts/types"
 import type { NewsCategory } from "@/features/news/types"
 import type { EventMode, EventType, RegistrationStatus } from "@/features/events/types"
+import type { PreferredContact, ServicePackage } from "@/features/packages/types"
 
 export type DashboardUser = { username: string; email: string; name: string; is_superuser: boolean }
 
@@ -56,8 +57,10 @@ export type DashboardMessage = {
 export type DashboardSubscriber = { id: string; email: string; created_at: string }
 
 export type DashboardStats = {
-  events: { upcoming: number; registrations_week: number; to_verify: number }
-  news: { published: number; drafts: number }
+  // Optional: an older backend without events/news must not crash the dashboard
+  events?: { upcoming: number; registrations_week: number; to_verify: number }
+  news?: { published: number; drafts: number }
+  packages?: { published: number; inquiries_new: number; inquiries_week: number }
   estimates: { total: number; new: number; this_week: number; won: number }
   messages: { total: number; new: number }
   alerts: { total: number; published: number; drafts: number }
@@ -67,27 +70,27 @@ export type DashboardStats = {
 }
 
 export const ESTIMATE_STATUS: Record<EstimateStatus, { label: string; className: string }> = {
-  new: { label: "Mpya", className: "bg-primary/15 text-primary border-primary/30" },
-  contacted: { label: "Tumewasiliana", className: "bg-accent/15 text-accent border-accent/30" },
-  won: { label: "Tumepata kazi", className: "bg-emerald-500/15 text-emerald-500 border-emerald-500/30" },
-  lost: { label: "Haikufanikiwa", className: "bg-foreground/10 text-foreground/60 border-foreground/15" },
+  new: { label: "New", className: "bg-primary/15 text-primary border-primary/30" },
+  contacted: { label: "Contacted", className: "bg-accent/15 text-accent border-accent/30" },
+  won: { label: "Won", className: "bg-emerald-500/15 text-emerald-500 border-emerald-500/30" },
+  lost: { label: "Lost", className: "bg-foreground/10 text-foreground/60 border-foreground/15" },
 }
 
 export const MESSAGE_STATUS: Record<MessageStatus, { label: string; className: string }> = {
-  new: { label: "Mpya", className: "bg-primary/15 text-primary border-primary/30" },
-  replied: { label: "Imejibiwa", className: "bg-emerald-500/15 text-emerald-500 border-emerald-500/30" },
-  archived: { label: "Kumbukumbu", className: "bg-foreground/10 text-foreground/60 border-foreground/15" },
+  new: { label: "New", className: "bg-primary/15 text-primary border-primary/30" },
+  replied: { label: "Replied", className: "bg-emerald-500/15 text-emerald-500 border-emerald-500/30" },
+  archived: { label: "Archived", className: "bg-foreground/10 text-foreground/60 border-foreground/15" },
 }
 
-const dateTime = new Intl.DateTimeFormat("sw-TZ", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
+const dateTime = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
 
 export function formatWhen(iso: string) {
   const date = new Date(iso)
   const minutes = Math.round((Date.now() - date.getTime()) / 60000)
-  if (minutes < 1) return "Sasa hivi"
-  if (minutes < 60) return `Dakika ${minutes} zilizopita`
+  if (minutes < 1) return "Just now"
+  if (minutes < 60) return `${minutes} min ago`
   const hours = Math.round(minutes / 60)
-  if (hours < 24) return `Saa ${hours} zilizopita`
+  if (hours < 24) return `${hours} h ago`
   return dateTime.format(date)
 }
 
@@ -162,3 +165,34 @@ export type CheckInResult = {
   detail: string
   registration?: DashboardRegistration
 }
+
+/* ---------------- Packages ---------------- */
+
+export type DashboardPackage = Omit<ServicePackage, "bonus_ends_at"> & {
+  bonus_ends_at: string | null
+  sort_order: number
+  is_published: boolean
+  published_at: string | null
+  created_at: string
+  updated_at: string
+  inquiries: number
+}
+
+export type InquiryStatus = EstimateStatus
+
+export type DashboardInquiry = {
+  id: string
+  package: string | null
+  package_slug: string
+  package_name: string
+  name: string
+  phone: string
+  email: string
+  company: string
+  message: string
+  preferred_contact: PreferredContact
+  status: InquiryStatus
+  created_at: string
+}
+
+export const INQUIRY_STATUS = ESTIMATE_STATUS

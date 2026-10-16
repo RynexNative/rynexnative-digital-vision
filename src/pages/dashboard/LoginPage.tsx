@@ -6,9 +6,9 @@ import { buttonPrimary, inputClass } from "@/features/dashboard/styles"
 import { ApiError, validationMessage } from "@/lib/api"
 
 function loginError(error: unknown) {
-  if (error instanceof ApiError && error.status === 429) return "Umejaribu mara nyingi sana. Subiri kidogo kisha ujaribu tena."
-  if (error instanceof ApiError && error.status === 400) return validationMessage(error) ?? "Username au password si sahihi."
-  return "Imeshindikana kuunganisha na server. Angalia internet yako."
+  if (error instanceof ApiError && error.status === 429) return "Too many attempts. Please wait a moment and try again."
+  if (error instanceof ApiError && error.status === 400) return validationMessage(error) ?? "Incorrect username or password."
+  return "Could not reach the server. Check your internet connection."
 }
 
 export default function LoginPage() {
@@ -29,7 +29,7 @@ export default function LoginPage() {
         <div className="text-center">
           <img src="/uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" alt="" className="w-12 h-12 mx-auto mb-4" />
           <h1 className="text-2xl font-bold font-poppins text-white">RynexNative Dashboard</h1>
-          <p className="text-sm text-slate-400 mt-1">Ingia kusimamia maudhui na wateja</p>
+          <p className="text-sm text-slate-400 mt-1">Sign in to manage content and clients</p>
         </div>
 
         {login.isError && (
@@ -64,7 +64,7 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setShowPassword((v) => !v)}
-              aria-label={showPassword ? "Ficha password" : "Onyesha password"}
+              aria-label={showPassword ? "Hide password" : "Show password"}
               className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 inline-flex items-center justify-center text-foreground/50 hover:text-foreground"
             >
               {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -74,12 +74,12 @@ export default function LoginPage() {
 
         <button type="submit" disabled={login.isPending} className={`${buttonPrimary} w-full`}>
           {login.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
-          Ingia
+          Sign in
         </button>
       </form>
       <Link to="/" className="mt-6 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-primary">
         <ArrowLeft className="h-4 w-4" />
-        Rudi kwenye website
+        Back to website
       </Link>
     </div>
   )

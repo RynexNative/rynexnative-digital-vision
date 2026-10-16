@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import type { ReactNode } from "react";
-import { Calculator, CalendarDays, Menu, Newspaper, ShieldAlert, X } from "lucide-react";
+import { Calculator, CalendarDays, Gem, Menu, Newspaper, ShieldAlert, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useSectionNav } from "@/hooks/use-section-nav";
@@ -12,9 +12,10 @@ type NavItem = { label: string; section: string } | { label: string; to: string;
 const navItems: NavItem[] = [
   { label: "About", section: "about" },
   { label: "Services", section: "services" },
-  { label: "Matukio", to: "/matukio", icon: <CalendarDays className="h-4 w-4" /> },
-  { label: "Habari", to: "/habari", icon: <Newspaper className="h-4 w-4" /> },
-  { label: "Tahadhari", to: "/tahadhari", icon: <ShieldAlert className="h-4 w-4" /> },
+  { label: "Packages", to: "/packages", icon: <Gem className="h-4 w-4" /> },
+  { label: "Events", to: "/events", icon: <CalendarDays className="h-4 w-4" /> },
+  { label: "News", to: "/news", icon: <Newspaper className="h-4 w-4" /> },
+  { label: "Alerts", to: "/alerts", icon: <ShieldAlert className="h-4 w-4" /> },
   { label: "Contact", section: "contact" },
 ];
 

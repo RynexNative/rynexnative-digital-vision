@@ -8,28 +8,28 @@ export function AlertsPreviewSection() {
   const alerts = (data?.alerts ?? []).slice(0, 3)
 
   return (
-    <section id="tahadhari" className="py-20 bg-card/30 relative overflow-hidden">
+    <section id="alerts" className="py-20 bg-card/30 relative overflow-hidden">
       <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-red-500/5 blur-3xl" aria-hidden="true" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-sm font-semibold mb-4">
               <ShieldAlert className="h-4 w-4" />
-              Tahadhari za Usalama
+              Security Alerts
             </div>
             <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-4">
-              Jilinde na{" "}
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">utapeli mtandaoni</span>
+              Protect yourself from{" "}
+              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">online scams</span>
             </h2>
             <p className="text-lg text-foreground/80 leading-relaxed">
-              Tahadhari kwa Kiswahili kuhusu utapeli unaoenea Tanzania: jinsi ya kuutambua na nini cha kufanya. Kutoka kwa timu yetu ya cybersecurity.
+              Clear alerts about scams spreading in Tanzania: how to spot them and what to do. From our cybersecurity team.
             </p>
           </div>
           <Link
-            to="/tahadhari"
+            to="/alerts"
             className="inline-flex items-center gap-2 h-11 px-5 rounded-xl glass font-semibold hover:bg-primary/10 hover:text-primary transition-colors self-start md:self-auto"
           >
-            Ona tahadhari zote
+            See all alerts
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

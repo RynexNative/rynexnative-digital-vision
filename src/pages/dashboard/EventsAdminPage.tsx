@@ -107,20 +107,20 @@ function EventEditor({ initial, onDone }: { initial: Draft; onDone: () => void }
       { id: draft.id, data },
       {
         onSuccess: () => {
-          toast({ title: draft.is_published ? "Tukio limechapishwa ✅" : "Rasimu imehifadhiwa" })
+          toast({ title: draft.is_published ? "Event published ✅" : "Draft saved" })
           onDone()
         },
         onError: (error) =>
-          toast({ variant: "destructive", title: "Imeshindikana kuhifadhi", description: validationMessage(error) ?? errorMessage(error, "Jaribu tena.") }),
+          toast({ variant: "destructive", title: "Could not save", description: validationMessage(error) ?? errorMessage(error, "Please try again.") }),
       },
     )
   }
 
   return (
     <form onSubmit={submit} className="space-y-5 pb-4">
-      <ImageField value={draft.cover_image} onChange={(url) => set("cover_image", url)} label="Picha / bango la tukio" />
+      <ImageField value={draft.cover_image} onChange={(url) => set("cover_image", url)} label="Event image / poster" />
       <label className="block">
-        <span className="block text-sm font-medium mb-1.5">Jina la tukio *</span>
+        <span className="block text-sm font-medium mb-1.5">Event name *</span>
         <input
           required
           minLength={3}
@@ -135,7 +135,7 @@ function EventEditor({ initial, onDone }: { initial: Draft; onDone: () => void }
       </label>
       <div className="grid sm:grid-cols-2 gap-4">
         <label className="block">
-          <span className="block text-sm font-medium mb-1.5">Aina</span>
+          <span className="block text-sm font-medium mb-1.5">Type</span>
           <select value={draft.event_type} onChange={(e) => set("event_type", e.target.value as EventType)} className={inputClass}>
             {(Object.keys(EVENT_TYPES) as EventType[]).map((t) => (
               <option key={t} value={t}>
@@ -145,7 +145,7 @@ function EventEditor({ initial, onDone }: { initial: Draft; onDone: () => void }
           </select>
         </label>
         <label className="block">
-          <span className="block text-sm font-medium mb-1.5">Litafanyika wapi</span>
+          <span className="block text-sm font-medium mb-1.5">Where it takes place</span>
           <select value={draft.mode} onChange={(e) => set("mode", e.target.value as EventMode)} className={inputClass}>
             {(Object.keys(EVENT_MODES) as EventMode[]).map((m) => (
               <option key={m} value={m}>
@@ -157,62 +157,62 @@ function EventEditor({ initial, onDone }: { initial: Draft; onDone: () => void }
       </div>
       {needsVenue && (
         <label className="block">
-          <span className="block text-sm font-medium mb-1.5">Mahali *</span>
-          <input required maxLength={200} value={draft.venue} onChange={(e) => set("venue", e.target.value)} placeholder="Mf. Mwatano Center, Dodoma" className={inputClass} />
+          <span className="block text-sm font-medium mb-1.5">Venue *</span>
+          <input required maxLength={200} value={draft.venue} onChange={(e) => set("venue", e.target.value)} placeholder="E.g. Mwatano Center, Dodoma" className={inputClass} />
         </label>
       )}
       {needsLink && (
         <label className="block">
-          <span className="block text-sm font-medium mb-1">Link ya Zoom / Google Meet</span>
-          <span className="block text-xs text-foreground/50 mb-1.5">Inaonekana kwa waliothibitishwa tu, kwenye tiketi yao</span>
+          <span className="block text-sm font-medium mb-1">Zoom / Google Meet link</span>
+          <span className="block text-xs text-foreground/50 mb-1.5">Only confirmed participants see it, on their ticket</span>
           <input type="url" value={draft.online_link} onChange={(e) => set("online_link", e.target.value)} placeholder="https://..." className={inputClass} />
         </label>
       )}
       <div className="grid sm:grid-cols-2 gap-4">
         <label className="block">
-          <span className="block text-sm font-medium mb-1.5">Linaanza *</span>
+          <span className="block text-sm font-medium mb-1.5">Starts *</span>
           <input required type="datetime-local" value={draft.starts_at} onChange={(e) => set("starts_at", e.target.value)} className={inputClass} />
         </label>
         <label className="block">
-          <span className="block text-sm font-medium mb-1.5">Linaisha</span>
+          <span className="block text-sm font-medium mb-1.5">Ends</span>
           <input type="datetime-local" min={draft.starts_at} value={draft.ends_at} onChange={(e) => set("ends_at", e.target.value)} className={inputClass} />
         </label>
       </div>
       <div className="grid sm:grid-cols-3 gap-4">
         <label className="block">
-          <span className="block text-sm font-medium mb-1.5">Bei (TZS)</span>
+          <span className="block text-sm font-medium mb-1.5">Price (TZS)</span>
           <input type="number" min={0} step={500} value={draft.price} onChange={(e) => set("price", e.target.value)} className={inputClass} />
-          <span className="block text-xs text-foreground/50 mt-1">0 = bure</span>
+          <span className="block text-xs text-foreground/50 mt-1">0 = free</span>
         </label>
         <label className="block">
-          <span className="block text-sm font-medium mb-1.5">Nafasi</span>
-          <input type="number" min={1} value={draft.capacity} onChange={(e) => set("capacity", e.target.value)} placeholder="Bila kikomo" className={inputClass} />
+          <span className="block text-sm font-medium mb-1.5">Seats</span>
+          <input type="number" min={1} value={draft.capacity} onChange={(e) => set("capacity", e.target.value)} placeholder="Unlimited" className={inputClass} />
         </label>
         <label className="block">
-          <span className="block text-sm font-medium mb-1.5">Mwisho wa usajili</span>
+          <span className="block text-sm font-medium mb-1.5">Registration deadline</span>
           <input type="datetime-local" max={draft.starts_at} value={draft.registration_deadline} onChange={(e) => set("registration_deadline", e.target.value)} className={inputClass} />
         </label>
       </div>
       <label className="block">
-        <span className="block text-sm font-medium mb-1.5">Muhtasari *</span>
+        <span className="block text-sm font-medium mb-1.5">Summary *</span>
         <textarea required minLength={10} maxLength={400} rows={2} value={draft.summary} onChange={(e) => set("summary", e.target.value)} className={cn(inputClass, "resize-y")} />
       </label>
       <label className="block">
-        <span className="block text-sm font-medium mb-1">Maelezo kamili</span>
-        <span className="block text-xs text-foreground/50 mb-1.5">Utajifunza nini, nani anafaa kuhudhuria, ratiba... · "## " kichwa · "- " orodha</span>
+        <span className="block text-sm font-medium mb-1">Full description</span>
+        <span className="block text-xs text-foreground/50 mb-1.5">What people will learn, who should attend, schedule... · "## " heading · "- " list</span>
         <textarea rows={10} value={draft.description} onChange={(e) => set("description", e.target.value)} className={cn(inputClass, "resize-y text-sm leading-relaxed")} />
       </label>
       <label className="flex items-center justify-between gap-3 rounded-xl border border-foreground/10 px-4 py-3 cursor-pointer">
         <span>
-          <span className="block text-sm font-medium">Usajili uko wazi</span>
-          <span className="block text-xs text-foreground/50">Zima kufunga usajili bila kuficha tukio</span>
+          <span className="block text-sm font-medium">Registration is open</span>
+          <span className="block text-xs text-foreground/50">Turn off to close registration without hiding the event</span>
         </span>
         <Switch checked={draft.registrations_open} onCheckedChange={(v) => set("registrations_open", v)} />
       </label>
       <details className="rounded-xl border border-foreground/10 px-4 py-3">
-        <summary className="text-sm font-medium cursor-pointer">Mipangilio ya link</summary>
+        <summary className="text-sm font-medium cursor-pointer">Link settings</summary>
         <label className="block mt-3">
-          <span className="block text-xs text-foreground/60 mb-1.5">rynexnative.com/#/matukio/</span>
+          <span className="block text-xs text-foreground/60 mb-1.5">rynexnative.com/#/events/</span>
           <input
             required
             pattern="[a-z0-9]+(-[a-z0-9]+)*"
@@ -228,15 +228,15 @@ function EventEditor({ initial, onDone }: { initial: Draft; onDone: () => void }
       <div className="sticky -bottom-6 -mx-6 -mb-6 px-6 py-4 bg-background/95 backdrop-blur border-t border-foreground/10 flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3">
         <label className="flex items-center gap-3 cursor-pointer">
           <Switch checked={draft.is_published} onCheckedChange={(v) => set("is_published", v)} />
-          <span className="text-sm font-medium">{draft.is_published ? "Chapisha (linaonekana kwa wote)" : "Rasimu (halionekani)"}</span>
+          <span className="text-sm font-medium">{draft.is_published ? "Published (visible to everyone)" : "Draft (hidden)"}</span>
         </label>
         <div className="flex gap-2">
           <button type="button" onClick={onDone} className="h-11 px-4 rounded-xl glass font-medium">
-            Ghairi
+            Cancel
           </button>
           <button type="submit" disabled={save.isPending} className={buttonPrimary}>
             {save.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-            {draft.is_published ? "Chapisha" : "Hifadhi rasimu"}
+            {draft.is_published ? "Publish" : "Save draft"}
           </button>
         </div>
       </div>
@@ -262,17 +262,17 @@ export default function EventsAdminPage() {
   return (
     <>
       <PageHeader
-        title="Matukio"
-        subtitle="Mafunzo, warsha na webinars. Simamia usajili na malipo."
+        title="Events"
+        subtitle="Training, workshops and webinars. Manage registrations and payments."
         action={
           <div className="flex gap-2">
             <Link to="/admin/scan" className={cn(buttonGhost, "h-11 px-4")}>
               <ScanLine className="h-4 w-4" />
-              Scan tiketi
+              Scan tickets
             </Link>
             <button type="button" onClick={() => setEditing(EMPTY)} className={buttonPrimary}>
               <Plus className="h-4 w-4" />
-              Tukio jipya
+              New event
             </button>
           </div>
         }
@@ -282,9 +282,9 @@ export default function EventsAdminPage() {
           value={filter}
           onChange={setFilter}
           options={[
-            { id: "upcoming", label: `Yajayo (${upcoming.length})` },
-            { id: "past", label: `Yaliyopita (${past.length})` },
-            { id: "all", label: "Yote" },
+            { id: "upcoming", label: `Upcoming (${upcoming.length})` },
+            { id: "past", label: `Past (${past.length})` },
+            { id: "all", label: "All" },
           ]}
         />
       </div>
@@ -295,12 +295,12 @@ export default function EventsAdminPage() {
         <ErrorState onRetry={() => refetch()} />
       ) : visible.length === 0 ? (
         <EmptyState
-          title={filter === "upcoming" ? "Hakuna tukio lijalo" : "Hakuna matukio hapa"}
+          title={filter === "upcoming" ? "No upcoming events" : "No events here"}
           action={
             filter === "upcoming" && (
               <button type="button" onClick={() => setEditing(EMPTY)} className={buttonPrimary}>
                 <Plus className="h-4 w-4" />
-                Panga tukio
+                Plan an event
               </button>
             )
           }
@@ -316,11 +316,11 @@ export default function EventsAdminPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
                       {event.is_published ? (
-                        <Pill className="bg-primary/15 text-primary border-primary/30">Hewani</Pill>
+                        <Pill className="bg-primary/15 text-primary border-primary/30">Live</Pill>
                       ) : (
-                        <Pill className="bg-foreground/10 text-foreground/60 border-foreground/15">Rasimu</Pill>
+                        <Pill className="bg-foreground/10 text-foreground/60 border-foreground/15">Draft</Pill>
                       )}
-                      {!event.registrations_open && <Pill className="bg-foreground/10 text-foreground/60 border-foreground/15">Usajili umefungwa</Pill>}
+                      {!event.registrations_open && <Pill className="bg-foreground/10 text-foreground/60 border-foreground/15">Registration closed</Pill>}
                       <span className="text-xs text-foreground/50">
                         {EVENT_TYPES[event.event_type]} · {formatPrice(event.price)}
                       </span>
@@ -334,14 +334,14 @@ export default function EventsAdminPage() {
                 </div>
 
                 <Link
-                  to={`/admin/matukio/${event.id}`}
+                  to={`/admin/events/${event.id}`}
                   className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2 rounded-xl bg-card/50 p-3 hover:bg-card/80 transition-colors"
                 >
                   {[
-                    ["Waliojisajili", `${total}${event.capacity ? ` / ${event.capacity}` : ""}`, ""],
-                    ["Wamethibitishwa", event.counts.confirmed, "text-emerald-500"],
-                    ["Malipo ya kukagua", event.counts.to_verify, event.counts.to_verify ? "text-accent" : ""],
-                    ["Wameingia", event.counts.checked_in, ""],
+                    ["Registered", `${total}${event.capacity ? ` / ${event.capacity}` : ""}`, ""],
+                    ["Confirmed", event.counts.confirmed, "text-emerald-500"],
+                    ["Payments to verify", event.counts.to_verify, event.counts.to_verify ? "text-accent" : ""],
+                    ["Checked in", event.counts.checked_in, ""],
                   ].map(([label, value, color]) => (
                     <div key={label as string}>
                       <p className="text-[11px] text-foreground/50">{label}</p>
@@ -351,9 +351,9 @@ export default function EventsAdminPage() {
                 </Link>
 
                 <div className="mt-3 flex flex-wrap gap-2">
-                  <Link to={`/admin/matukio/${event.id}`} className={cn(buttonGhost, "text-primary")}>
+                  <Link to={`/admin/events/${event.id}`} className={cn(buttonGhost, "text-primary")}>
                     <Users className="h-4 w-4" />
-                    Usajili
+                    Registrations
                     {event.counts.to_verify > 0 && (
                       <span className="ml-1 min-w-5 h-5 px-1.5 rounded-full bg-accent text-white text-[11px] font-bold flex items-center justify-center">
                         {event.counts.to_verify}
@@ -362,27 +362,27 @@ export default function EventsAdminPage() {
                   </Link>
                   <button type="button" onClick={() => setEditing(toDraft(event))} className={buttonGhost}>
                     <Pencil className="h-4 w-4" />
-                    Hariri
+                    Edit
                   </button>
                   <button
                     type="button"
                     onClick={() =>
                       setPublished.mutate(
                         { id: event.id, published: !event.is_published },
-                        { onSuccess: () => toast({ title: event.is_published ? "Limeondolewa hewani" : "Limechapishwa ✅" }) },
+                        { onSuccess: () => toast({ title: event.is_published ? "Unpublished" : "Published ✅" }) },
                       )
                     }
                     className={buttonGhost}
                   >
                     {event.is_published ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    {event.is_published ? "Ondoa" : "Chapisha"}
+                    {event.is_published ? "Unpublish" : "Publish"}
                   </button>
                   {event.is_published && (
-                    <Link to={`/matukio/${event.slug}`} target="_blank" className={buttonGhost} aria-label="Ona kwenye website">
+                    <Link to={`/events/${event.slug}`} target="_blank" className={buttonGhost} aria-label="View on website">
                       <ExternalLink className="h-4 w-4" />
                     </Link>
                   )}
-                  <button type="button" onClick={() => setDeleting(event)} className={cn(buttonGhost, "hover:text-red-500")} aria-label="Futa">
+                  <button type="button" onClick={() => setDeleting(event)} className={cn(buttonGhost, "hover:text-red-500")} aria-label="Delete">
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
@@ -395,8 +395,8 @@ export default function EventsAdminPage() {
       <Sheet open={editing !== null} onOpenChange={(open) => !open && setEditing(null)}>
         <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto">
           <SheetHeader className="mb-6 text-left">
-            <SheetTitle>{editing?.id ? "Hariri tukio" : "Tukio jipya"}</SheetTitle>
-            <SheetDescription>Tarehe na saa ziko kwenye saa za Tanzania (EAT) kama ilivyo kwenye kifaa chako.</SheetDescription>
+            <SheetTitle>{editing?.id ? "Edit event" : "New event"}</SheetTitle>
+            <SheetDescription>Dates and times use your device's time zone (Tanzania: EAT).</SheetDescription>
           </SheetHeader>
           {editing && <EventEditor key={editing.id ?? "new"} initial={editing} onDone={() => setEditing(null)} />}
         </SheetContent>
@@ -405,30 +405,30 @@ export default function EventsAdminPage() {
       <AlertDialog open={deleting !== null} onOpenChange={(open) => !open && setDeleting(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Futa tukio hili?</AlertDialogTitle>
+            <AlertDialogTitle>Delete this event?</AlertDialogTitle>
             <AlertDialogDescription>
-              "{deleting?.title}" litafutwa kabisa. Tukio lenye watu waliojisajili haliwezi kufutwa; lifiche au funga usajili badala yake.
+              "{deleting?.title}" will be deleted permanently. An event with registrations cannot be deleted; unpublish it or close registration instead.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Ghairi</AlertDialogCancel>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               className="bg-red-600 hover:bg-red-700 text-white"
               onClick={() =>
                 deleting &&
                 remove.mutate(deleting.id, {
-                  onSuccess: () => toast({ title: "Tukio limefutwa" }),
+                  onSuccess: () => toast({ title: "Event deleted" }),
                   onError: (error) =>
                     toast({
                       variant: "destructive",
-                      title: "Halikufutwa",
+                      title: "Not deleted",
                       description:
-                        (error instanceof ApiError ? (error.data as { detail?: string } | null)?.detail : undefined) ?? errorMessage(error, "Jaribu tena."),
+                        (error instanceof ApiError ? (error.data as { detail?: string } | null)?.detail : undefined) ?? errorMessage(error, "Please try again."),
                     }),
                 })
               }
             >
-              Futa
+              Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

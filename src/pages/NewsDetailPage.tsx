@@ -12,7 +12,7 @@ export default function NewsDetailPage() {
   const { slug } = useParams()
   const { data: post, isLoading, isError } = useNewsPost(slug)
   const { data: all = [] } = useNewsList()
-  useDocumentTitle(post?.title ?? "Habari")
+  useDocumentTitle(post?.title ?? "News")
 
   if (isLoading) {
     return (
@@ -31,10 +31,10 @@ export default function NewsDetailPage() {
       <SiteLayout>
         <div className="max-w-xl mx-auto px-4 py-24 text-center">
           <Newspaper className="h-12 w-12 text-foreground/30 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold font-poppins mb-3">Habari haikupatikana</h1>
-          <Link to="/habari" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+          <h1 className="text-3xl font-bold font-poppins mb-3">Post not found</h1>
+          <Link to="/news" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
             <ArrowLeft className="h-4 w-4" />
-            Habari zote
+            All news
           </Link>
         </div>
       </SiteLayout>
@@ -47,9 +47,9 @@ export default function NewsDetailPage() {
     <SiteLayout>
       <article className="max-w-3xl mx-auto px-4 sm:px-6 py-10 md:py-14">
         <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-foreground/50 mb-6">
-          <Link to="/" className="hover:text-primary">Nyumbani</Link>
+          <Link to="/" className="hover:text-primary">Home</Link>
           <ChevronRight className="h-4 w-4" />
-          <Link to="/habari" className="hover:text-primary">Habari</Link>
+          <Link to="/news" className="hover:text-primary">News</Link>
         </nav>
         <div className="flex items-center gap-2 text-sm mb-4">
           <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary font-semibold">{NEWS_CATEGORIES[post.category]}</span>
@@ -62,7 +62,7 @@ export default function NewsDetailPage() {
         )}
         <RichText text={post.body ?? ""} className="text-lg leading-relaxed text-foreground/85" />
         <div className="mt-10 pt-8 border-t border-foreground/10">
-          <p className="font-semibold mb-3">Share habari hii</p>
+          <p className="font-semibold mb-3">Share this post</p>
           <ShareButtons title={post.title} text={post.excerpt} url={newsUrl(post.slug)} />
         </div>
       </article>
@@ -70,7 +70,7 @@ export default function NewsDetailPage() {
       {related.length > 0 && (
         <section className="border-t border-foreground/10 bg-card/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-            <h2 className="text-2xl font-bold font-poppins mb-8">Habari nyingine</h2>
+            <h2 className="text-2xl font-bold font-poppins mb-8">More news</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((p) => (
                 <NewsCard key={p.id} post={p} />

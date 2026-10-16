@@ -26,7 +26,7 @@ type Filter = RegistrationStatus | "all"
 function exportCsv(event: DashboardEvent, rows: DashboardRegistration[]) {
   const cells = (values: (string | number)[]) => values.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(",")
   const lines = [
-    cells(["Jina", "Simu", "Email", "Chuo/Kampuni", "Hali", "Kiasi", "Namba ya muamala", "Tiketi", "Ameingia", "Alijisajili"]),
+    cells(["Name", "Phone", "Email", "School/Company", "Status", "Amount", "Transaction ID", "Ticket", "Checked in", "Registered"]),
     ...rows.map((r) =>
       cells([
         r.name,
@@ -37,14 +37,14 @@ function exportCsv(event: DashboardEvent, rows: DashboardRegistration[]) {
         r.amount,
         r.payment_reference,
         r.ticket_code,
-        r.checked_in ? "Ndiyo" : "",
+        r.checked_in ? "Yes" : "",
         new Date(r.created_at).toLocaleString("en-GB"),
       ]),
     ),
   ]
   const link = Object.assign(document.createElement("a"), {
     href: URL.createObjectURL(new Blob(["﻿" + lines.join("\n")], { type: "text/csv;charset=utf-8" })),
-    download: `usajili-${event.slug}.csv`,
+    download: `registrations-${event.slug}.csv`,
   })
   link.click()
   URL.revokeObjectURL(link.href)
@@ -63,17 +63,17 @@ function RegistrationCard({ registration, event, onCancel }: { registration: Das
       {
         onSuccess: () =>
           toast({
-            title: `${first} amethibitishwa ✅`,
-            description: registration.email ? "Tiketi imetumwa kwa email yake." : "Mtumie tiketi kwa WhatsApp.",
+            title: `${first} is confirmed ✅`,
+            description: registration.email ? "The ticket was sent to their email." : "Send them the ticket on WhatsApp.",
           }),
-        onError: (error) => toast({ variant: "destructive", title: "Imeshindikana", description: errorMessage(error, "Jaribu tena.") }),
+        onError: (error) => toast({ variant: "destructive", title: "Something went wrong", description: errorMessage(error, "Please try again.") }),
       },
     )
 
   const whatsappText =
     registration.status === "confirmed"
-      ? `Habari ${first}, usajili wako wa *${event.title}* umethibitishwa ✅\n\nTiketi yako (yenye QR code): ${ticketUrl(registration.id)}\n\nTutaonana ${formatEventDay(event.starts_at)}!`
-      : `Habari ${first}, ni RynexNative kuhusu usajili wako wa *${event.title}*.\n\nTiketi yako: ${ticketUrl(registration.id)}`
+      ? `Hi ${first}, your registration for *${event.title}* is confirmed ✅\n\nYour ticket (with QR code): ${ticketUrl(registration.id)}\n\nSee you on ${formatEventDay(event.starts_at)}!`
+      : `Hi ${first}, this is RynexNative about your registration for *${event.title}*.\n\nYour ticket: ${ticketUrl(registration.id)}`
 
   return (
     <li className={cn("glass rounded-2xl p-5", registration.status === "payment_submitted" && "border-accent/40")}>
@@ -87,12 +87,12 @@ function RegistrationCard({ registration, event, onCancel }: { registration: Das
             </p>
           )}
           <p className="text-xs text-foreground/50 mt-1">
-            {formatWhen(registration.created_at)} · Tiketi <span className="font-mono font-semibold">{registration.ticket_code}</span>
+            {formatWhen(registration.created_at)} · Ticket <span className="font-mono font-semibold">{registration.ticket_code}</span>
           </p>
         </div>
         <div className="text-right flex-shrink-0 space-y-1">
           <Pill className={status.className}>{status.label}</Pill>
-          {registration.checked_in && <p className="text-[11px] text-emerald-500 font-semibold">✓ Ameingia</p>}
+          {registration.checked_in && <p className="text-[11px] text-emerald-500 font-semibold">✓ Checked in</p>}
         </div>
       </div>
 
@@ -104,14 +104,14 @@ function RegistrationCard({ registration, event, onCancel }: { registration: Das
           )}
         >
           <span>
-            Kiasi: <strong>{formatPrice(registration.amount)}</strong>
+            Amount: <strong>{formatPrice(registration.amount)}</strong>
           </span>
           {registration.payment_reference ? (
             <span>
-              Muamala: <strong className="font-mono">{registration.payment_reference}</strong>
+              Transaction: <strong className="font-mono">{registration.payment_reference}</strong>
             </span>
           ) : (
-            <span className="text-foreground/50">Bado hajaweka namba ya muamala</span>
+            <span className="text-foreground/50">No transaction ID yet</span>
           )}
         </div>
       )}
@@ -125,7 +125,7 @@ function RegistrationCard({ registration, event, onCancel }: { registration: Das
             className="h-9 px-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white inline-flex items-center gap-1.5 text-sm font-semibold disabled:opacity-50"
           >
             <CheckCircle2 className="h-4 w-4" />
-            {registration.amount > 0 ? "Thibitisha malipo" : "Thibitisha"}
+            {registration.amount > 0 ? "Confirm payment" : "Confirm"}
           </button>
         )}
         <a
@@ -149,7 +149,7 @@ function RegistrationCard({ registration, event, onCancel }: { registration: Das
         {registration.status !== "cancelled" && (
           <button type="button" onClick={onCancel} className={cn(buttonGhost, "hover:text-red-500")}>
             <XCircle className="h-4 w-4" />
-            Ghairi
+            Cancel
           </button>
         )}
       </div>
@@ -172,9 +172,9 @@ export default function EventRegistrationsPage() {
 
   return (
     <>
-      <Link to="/admin/matukio" className="inline-flex items-center gap-1.5 text-sm text-foreground/60 hover:text-primary mb-4">
+      <Link to="/admin/events" className="inline-flex items-center gap-1.5 text-sm text-foreground/60 hover:text-primary mb-4">
         <ArrowLeft className="h-4 w-4" />
-        Matukio yote
+        All events
       </Link>
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
         <div>
@@ -182,7 +182,7 @@ export default function EventRegistrationsPage() {
           {event && (
             <p className="text-foreground/60 mt-1">
               {formatEventDay(event.starts_at)} · {formatPrice(event.price)}
-              {event.capacity ? ` · nafasi ${event.capacity}` : ""}
+              {event.capacity ? ` · ${event.capacity} seats` : ""}
             </p>
           )}
         </div>
@@ -203,10 +203,10 @@ export default function EventRegistrationsPage() {
       {event && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
           {[
-            ["Wamethibitishwa", event.counts.confirmed, "text-emerald-500"],
-            ["Malipo ya kukagua", event.counts.to_verify, event.counts.to_verify ? "text-accent" : ""],
-            ["Wanasubiri kulipa", event.counts.awaiting_payment, "text-amber-500"],
-            ["Wameingia", event.counts.checked_in, ""],
+            ["Confirmed", event.counts.confirmed, "text-emerald-500"],
+            ["Payments to verify", event.counts.to_verify, event.counts.to_verify ? "text-accent" : ""],
+            ["Awaiting payment", event.counts.awaiting_payment, "text-amber-500"],
+            ["Checked in", event.counts.checked_in, ""],
           ].map(([label, value, color]) => (
             <div key={label as string} className="glass rounded-2xl p-4">
               <p className="text-xs text-foreground/60">{label}</p>
@@ -221,14 +221,14 @@ export default function EventRegistrationsPage() {
           value={filter}
           onChange={setFilter}
           options={[
-            { id: "all", label: "Wote" },
-            { id: "payment_submitted", label: "Kukagua malipo" },
-            { id: "pending_payment", label: "Hawajalipa" },
-            { id: "confirmed", label: "Wamethibitishwa" },
-            { id: "cancelled", label: "Wameghairiwa" },
+            { id: "all", label: "All" },
+            { id: "payment_submitted", label: "Verify payment" },
+            { id: "pending_payment", label: "Not paid" },
+            { id: "confirmed", label: "Confirmed" },
+            { id: "cancelled", label: "Cancelled" },
           ]}
         />
-        <SearchInput value={q} onChange={setQ} placeholder="Jina, simu, tiketi, muamala..." />
+        <SearchInput value={q} onChange={setQ} placeholder="Name, phone, ticket, transaction..." />
       </div>
 
       {isLoading || !event ? (
@@ -237,8 +237,8 @@ export default function EventRegistrationsPage() {
         <ErrorState onRetry={() => refetch()} />
       ) : rows.length === 0 ? (
         <EmptyState
-          title={filter === "payment_submitted" ? "Hakuna malipo ya kukagua 🎉" : "Hakuna usajili hapa"}
-          text={filter === "all" && !search ? "Share link ya tukio ili watu wajisajili." : undefined}
+          title={filter === "payment_submitted" ? "No payments to verify 🎉" : "No registrations here"}
+          text={filter === "all" && !search ? "Share the event link so people can register." : undefined}
         />
       ) : (
         <ul className="space-y-3">
@@ -251,21 +251,21 @@ export default function EventRegistrationsPage() {
       <AlertDialog open={cancelling !== null} onOpenChange={(open) => !open && setCancelling(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Ghairi usajili wa {cancelling?.name}?</AlertDialogTitle>
+            <AlertDialogTitle>Cancel {cancelling?.name}'s registration?</AlertDialogTitle>
             <AlertDialogDescription>
-              Tiketi yake itaacha kufanya kazi na nafasi yake itakuwa wazi. Kama alishalipa, kumbuka kumrudishia pesa.
+              Their ticket will stop working and the seat becomes free. If they already paid, remember to refund them.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Rudi</AlertDialogCancel>
+            <AlertDialogCancel>Back</AlertDialogCancel>
             <AlertDialogAction
               className="bg-red-600 hover:bg-red-700 text-white"
               onClick={() =>
                 cancelling &&
-                setStatus.mutate({ id: cancelling.id, status: "cancelled" }, { onSuccess: () => toast({ title: "Usajili umeghairiwa" }) })
+                setStatus.mutate({ id: cancelling.id, status: "cancelled" }, { onSuccess: () => toast({ title: "Registration cancelled" }) })
               }
             >
-              Ghairi usajili
+              Cancel registration
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

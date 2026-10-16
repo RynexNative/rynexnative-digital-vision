@@ -276,8 +276,8 @@ export default function EstimatePage() {
 
   const whatsappHref = () => {
     const name = form.name.trim()
-    const text = `Habari RynexNative${name ? `, mimi ni ${name}` : ""}. Nimetumia project estimator kwenye website yenu:\n\n${summaryText()}${
-      form.notes.trim() ? `\n\nMaelezo: ${form.notes.trim()}` : ""
+    const text = `Hello RynexNative${name ? `, my name is ${name}` : ""}. I used the project estimator on your website:\n\n${summaryText()}${
+      form.notes.trim() ? `\n\nNotes: ${form.notes.trim()}` : ""
     }`
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`
   }

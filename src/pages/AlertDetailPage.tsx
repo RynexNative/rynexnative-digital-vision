@@ -61,7 +61,7 @@ export default function AlertDetailPage() {
   const { data, isLoading } = usePublishedAlerts()
   const alerts = data?.alerts ?? []
   const alert = alerts.find((a) => a.slug === slug)
-  useDocumentTitle(alert ? alert.title : "Tahadhari")
+  useDocumentTitle(alert ? alert.title : "Security alert")
 
   if (isLoading) {
     return (
@@ -81,11 +81,11 @@ export default function AlertDetailPage() {
       <SiteLayout>
         <div className="max-w-xl mx-auto px-4 py-24 text-center">
           <AlertTriangle className="h-12 w-12 text-foreground/30 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold font-poppins mb-3">Tahadhari haikupatikana</h1>
-          <p className="text-foreground/70 mb-8">Huenda imeondolewa au link si sahihi.</p>
-          <Link to="/tahadhari" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+          <h1 className="text-3xl font-bold font-poppins mb-3">Alert not found</h1>
+          <p className="text-foreground/70 mb-8">It may have been removed, or the link is incorrect.</p>
+          <Link to="/alerts" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
             <ArrowLeft className="h-4 w-4" />
-            Rudi kwenye tahadhari zote
+            Back to all alerts
           </Link>
         </div>
       </SiteLayout>
@@ -108,9 +108,9 @@ export default function AlertDetailPage() {
           />
           <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-10 md:py-16">
             <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-slate-400 mb-8">
-              <Link to="/" className="hover:text-primary">Nyumbani</Link>
+              <Link to="/" className="hover:text-primary">Home</Link>
               <ChevronRight className="h-4 w-4" />
-              <Link to="/tahadhari" className="hover:text-primary">Tahadhari</Link>
+              <Link to="/alerts" className="hover:text-primary">Alerts</Link>
             </nav>
             <div className="flex flex-wrap items-center gap-3 mb-5">
               <SeverityBadge severity={alert.severity} />
@@ -129,7 +129,7 @@ export default function AlertDetailPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10 md:py-14 space-y-8">
           {paragraphs.length > 0 && (
             <section>
-              <h2 className="text-xl md:text-2xl font-bold font-poppins mb-4">Jinsi utapeli huu unavyofanyika</h2>
+              <h2 className="text-xl md:text-2xl font-bold font-poppins mb-4">How this scam works</h2>
               <div className="space-y-4 text-foreground/85 text-lg leading-relaxed">
                 {paragraphs.map((p, i) => (
                   <p key={i} className="whitespace-pre-line">{p}</p>
@@ -138,24 +138,24 @@ export default function AlertDetailPage() {
             </section>
           )}
 
-          <InfoBlock tone="danger" icon={<AlertTriangle className="h-6 w-6" />} title="Dalili za kutambua" items={alert.signs} />
-          <InfoBlock tone="safe" icon={<ShieldCheck className="h-6 w-6" />} title="Jinsi ya kujikinga" items={alert.prevention} />
-          <InfoBlock tone="action" icon={<LifeBuoy className="h-6 w-6" />} title="Kama umeathirika, fanya hivi" items={alert.if_affected} ordered />
+          <InfoBlock tone="danger" icon={<AlertTriangle className="h-6 w-6" />} title="Warning signs" items={alert.signs} />
+          <InfoBlock tone="safe" icon={<ShieldCheck className="h-6 w-6" />} title="How to protect yourself" items={alert.prevention} />
+          <InfoBlock tone="action" icon={<LifeBuoy className="h-6 w-6" />} title="If you are affected, do this" items={alert.if_affected} ordered />
 
           {/* Share again at the end, when the reader is most convinced */}
           <div className="glass rounded-3xl p-6 md:p-8 text-center">
-            <h2 className="text-xl font-bold font-poppins mb-2">Linda unaowapenda</h2>
-            <p className="text-foreground/70 mb-5">Share tahadhari hii kwenye group za familia na marafiki. Inaweza kumwokoa mtu leo.</p>
+            <h2 className="text-xl font-bold font-poppins mb-2">Protect the people you love</h2>
+            <p className="text-foreground/70 mb-5">Share this alert in your family and friends groups. It could save someone today.</p>
             <ShareBar alert={alert} className="justify-center" />
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-foreground/10 pt-8">
-            <Link to="/tahadhari" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+            <Link to="/alerts" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
               <ArrowLeft className="h-4 w-4" />
-              Tahadhari zote
+              All alerts
             </Link>
             <button type="button" onClick={() => goToSection("contact")} className="text-sm text-foreground/70 hover:text-primary">
-              Unahitaji msaada? Wasiliana na RynexNative →
+              Need help? Contact RynexNative →
             </button>
           </div>
         </div>
@@ -164,7 +164,7 @@ export default function AlertDetailPage() {
       {related.length > 0 && (
         <section className="border-t border-foreground/10 bg-card/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-            <h2 className="text-2xl font-bold font-poppins mb-8">Tahadhari nyingine</h2>
+            <h2 className="text-2xl font-bold font-poppins mb-8">More alerts</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((a) => (
                 <AlertCard key={a.id} alert={a} />

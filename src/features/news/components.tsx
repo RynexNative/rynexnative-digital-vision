@@ -18,7 +18,7 @@ export function NewsCover({ src, alt, width, className }: { src: string; alt: st
 export function NewsCard({ post, featured = false }: { post: NewsPost; featured?: boolean }) {
   return (
     <Link
-      to={`/habari/${post.slug}`}
+      to={`/news/${post.slug}`}
       className={cn(
         "group glass rounded-3xl overflow-hidden flex flex-col hover-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
         featured && "md:flex-row",
@@ -44,7 +44,7 @@ export function NewsCard({ post, featured = false }: { post: NewsPost; featured?
         </h3>
         <p className={cn("text-foreground/70 leading-relaxed", featured ? "md:text-lg" : "text-sm line-clamp-3")}>{post.excerpt}</p>
         <span className="mt-auto pt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-          Soma zaidi
+          Read more
           <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
         </span>
       </div>

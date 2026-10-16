@@ -24,7 +24,7 @@ export function ShareButtons({ title, text, url, className }: { title: string; t
       setCopied(true)
       window.setTimeout(() => setCopied(false), 2000)
     } catch {
-      window.prompt("Nakili link hii:", url)
+      window.prompt("Copy this link:", url)
     }
   }
 
@@ -41,7 +41,7 @@ export function ShareButtons({ title, text, url, className }: { title: string; t
       </a>
       <button type="button" onClick={copy} className={cn(buttonClass, "glass hover:bg-primary/10 text-foreground")}>
         {copied ? <Check className="h-4 w-4 text-primary" /> : <Link2 className="h-4 w-4" />}
-        <span aria-live="polite">{copied ? "Imenakiliwa!" : "Nakili link"}</span>
+        <span aria-live="polite">{copied ? "Copied!" : "Copy link"}</span>
       </button>
       {canNativeShare && (
         <button

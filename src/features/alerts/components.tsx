@@ -23,7 +23,7 @@ export function SeverityBadge({ severity, className }: { severity: AlertSeverity
 export function AlertCard({ alert, featured = false }: { alert: SecurityAlert; featured?: boolean }) {
   return (
     <Link
-      to={`/tahadhari/${alert.slug}`}
+      to={`/alerts/${alert.slug}`}
       className={cn(
         "group glass rounded-3xl p-6 flex flex-col hover-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
         featured && "md:p-8 border-red-500/20",
@@ -49,7 +49,7 @@ export function AlertCard({ alert, featured = false }: { alert: SecurityAlert; f
           {formatAlertDate(alert.published_at)}
         </time>
         <span className="inline-flex items-center gap-1 font-semibold text-primary">
-          Soma zaidi
+          Read more
           <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
         </span>
       </div>
@@ -78,7 +78,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 function whatsappShareText(alert: SecurityAlert) {
-  return `⚠️ *TAHADHARI: ${alert.title}*\n\n${alert.summary}\n\nSoma dalili na jinsi ya kujikinga:\n${alertUrl(alert.slug)}`
+  return `⚠️ *SCAM ALERT: ${alert.title}*\n\n${alert.summary}\n\nRead the warning signs and how to protect yourself:\n${alertUrl(alert.slug)}`
 }
 
 export function ShareBar({ alert, className }: { alert: SecurityAlert; className?: string }) {
@@ -92,7 +92,7 @@ export function ShareBar({ alert, className }: { alert: SecurityAlert; className
       setCopied(true)
       window.setTimeout(() => setCopied(false), 2000)
     } catch {
-      window.prompt("Nakili link hii:", url)
+      window.prompt("Copy this link:", url)
     }
   }
 
@@ -118,7 +118,7 @@ export function ShareBar({ alert, className }: { alert: SecurityAlert; className
       </a>
       <button type="button" onClick={copyLink} className={cn(buttonClass, "glass hover:bg-primary/10 text-foreground")}>
         {copied ? <Check className="h-4 w-4 text-primary" /> : <Link2 className="h-4 w-4" />}
-        <span aria-live="polite">{copied ? "Imenakiliwa!" : "Nakili link"}</span>
+        <span aria-live="polite">{copied ? "Copied!" : "Copy link"}</span>
       </button>
       {canNativeShare && (
         <button type="button" onClick={nativeShare} className={cn(buttonClass, "glass hover:bg-primary/10 text-foreground")}>
