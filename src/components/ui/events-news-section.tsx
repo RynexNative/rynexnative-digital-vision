@@ -12,7 +12,7 @@ export function EventsNewsSection() {
   if (events.length === 0 && news.length === 0) return null
 
   return (
-    <section id="matukio" className="py-20 bg-background/50">
+    <section id="events" className="py-20 bg-background/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {events.length > 0 && (
           <div>
@@ -20,16 +20,16 @@ export function EventsNewsSection() {
               <div className="max-w-2xl">
                 <p className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-4">
                   <CalendarDays className="h-4 w-4" />
-                  Matukio yajayo
+                  Upcoming events
                 </p>
                 <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-3">
-                  Jifunze{" "}
-                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">pamoja nasi</span>
+                  Learn{" "}
+                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">with us</span>
                 </h2>
-                <p className="text-lg text-foreground/80">Mafunzo, warsha na webinars. Jisajili na upate tiketi yako mtandaoni.</p>
+                <p className="text-lg text-foreground/80">Training, workshops and webinars. Register and get your ticket online.</p>
               </div>
-              <Link to="/matukio" className="inline-flex items-center gap-2 h-11 px-5 rounded-xl glass font-semibold hover:text-primary self-start md:self-auto">
-                Matukio yote
+              <Link to="/events" className="inline-flex items-center gap-2 h-11 px-5 rounded-xl glass font-semibold hover:text-primary self-start md:self-auto">
+                All events
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -47,12 +47,12 @@ export function EventsNewsSection() {
               <div className="max-w-2xl">
                 <p className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-semibold mb-4">
                   <Newspaper className="h-4 w-4" />
-                  Habari mpya
+                  Latest news
                 </p>
-                <h2 className="text-3xl md:text-4xl font-bold font-poppins">Kinachoendelea RynexNative</h2>
+                <h2 className="text-3xl md:text-4xl font-bold font-poppins">What's new at RynexNative</h2>
               </div>
-              <Link to="/habari" className="inline-flex items-center gap-2 h-11 px-5 rounded-xl glass font-semibold hover:text-primary self-start md:self-auto">
-                Habari zote
+              <Link to="/news" className="inline-flex items-center gap-2 h-11 px-5 rounded-xl glass font-semibold hover:text-primary self-start md:self-auto">
+                All news
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>

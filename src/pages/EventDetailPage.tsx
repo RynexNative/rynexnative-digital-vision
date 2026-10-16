@@ -33,14 +33,14 @@ function RegisterForm({ slug, price }: { slug: string; price: number }) {
         onSuccess: (ticket) => {
           if (!ticket?.id) return // honeypot response
           saveTicket(slug, ticket.id)
-          navigate(`/tiketi/${ticket.id}`)
+          navigate(`/ticket/${ticket.id}`)
         },
         onError: (error) => {
           const detail = error instanceof ApiError ? (error.data as { detail?: string } | null)?.detail : undefined
           toast({
             variant: "destructive",
-            title: "Usajili haukukamilika",
-            description: detail ?? validationMessage(error) ?? errorMessage(error, "Jaribu tena baada ya muda mfupi."),
+            title: "Registration not completed",
+            description: detail ?? validationMessage(error) ?? errorMessage(error, "Please try again in a moment."),
           })
         },
       },
@@ -50,11 +50,11 @@ function RegisterForm({ slug, price }: { slug: string; price: number }) {
   return (
     <form onSubmit={submit} className="space-y-3">
       <label className="block">
-        <span className="block text-sm font-medium mb-1.5">Jina kamili *</span>
+        <span className="block text-sm font-medium mb-1.5">Full name *</span>
         <input required minLength={2} maxLength={100} autoComplete="name" value={form.name} onChange={set("name")} className={inputClass} />
       </label>
       <label className="block">
-        <span className="block text-sm font-medium mb-1.5">Simu / WhatsApp *</span>
+        <span className="block text-sm font-medium mb-1.5">Phone / WhatsApp *</span>
         <input
           required
           type="tel"
@@ -69,12 +69,12 @@ function RegisterForm({ slug, price }: { slug: string; price: number }) {
       </label>
       <label className="block">
         <span className="block text-sm font-medium mb-1.5">
-          Email <span className="text-foreground/50 font-normal">(tutakutumia tiketi)</span>
+          Email <span className="text-foreground/50 font-normal">(we'll send your ticket)</span>
         </span>
         <input type="email" autoComplete="email" maxLength={254} value={form.email} onChange={set("email")} className={inputClass} />
       </label>
       <label className="block">
-        <span className="block text-sm font-medium mb-1.5">Chuo / Kampuni</span>
+        <span className="block text-sm font-medium mb-1.5">School / Company</span>
         <input autoComplete="organization" maxLength={100} value={form.organization} onChange={set("organization")} className={inputClass} />
       </label>
       <input type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" value={form.website} onChange={set("website")} className="hidden" />
@@ -84,10 +84,10 @@ function RegisterForm({ slug, price }: { slug: string; price: number }) {
         className="w-full h-12 rounded-xl bg-gradient-primary text-white font-semibold inline-flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-60"
       >
         {register.isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : <TicketIcon className="h-5 w-5" />}
-        {price === 0 ? "Jisajili bure" : `Jisajili · ${formatPrice(price)}`}
+        {price === 0 ? "Register for free" : `Register · ${formatPrice(price)}`}
       </button>
       {price > 0 && (
-        <p className="text-xs text-foreground/60 text-center">Baada ya kujisajili utaona maelekezo ya kulipa kwa simu.</p>
+        <p className="text-xs text-foreground/60 text-center">After registering you'll see how to pay by mobile money.</p>
       )}
     </form>
   )
@@ -96,7 +96,7 @@ function RegisterForm({ slug, price }: { slug: string; price: number }) {
 export default function EventDetailPage() {
   const { slug = "" } = useParams()
   const { data: event, isLoading, isError } = useEvent(slug)
-  useDocumentTitle(event?.title ?? "Matukio")
+  useDocumentTitle(event?.title ?? "Events")
   const existingTicket = savedTicketFor(slug)
 
   if (isLoading) {
@@ -115,10 +115,10 @@ export default function EventDetailPage() {
       <SiteLayout>
         <div className="max-w-xl mx-auto px-4 py-24 text-center">
           <CalendarDays className="h-12 w-12 text-foreground/30 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold font-poppins mb-3">Tukio halikupatikana</h1>
-          <Link to="/matukio" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+          <h1 className="text-3xl font-bold font-poppins mb-3">Event not found</h1>
+          <Link to="/events" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
             <ArrowLeft className="h-4 w-4" />
-            Matukio yote
+            All events
           </Link>
         </div>
       </SiteLayout>
@@ -129,7 +129,7 @@ export default function EventDetailPage() {
     { icon: <CalendarDays className="h-5 w-5" />, label: formatEventDay(event.starts_at) },
     { icon: <Clock className="h-5 w-5" />, label: formatEventTime(event.starts_at, event.ends_at) },
     event.mode !== "online" && { icon: <MapPin className="h-5 w-5" />, label: event.venue },
-    event.mode !== "physical" && { icon: <Monitor className="h-5 w-5" />, label: "Link ya kujiunga inatumwa kwa waliothibitishwa" },
+    event.mode !== "physical" && { icon: <Monitor className="h-5 w-5" />, label: "The joining link is sent to confirmed participants" },
     event.capacity !== null && { icon: <Users className="h-5 w-5" />, label: <SeatsInfo event={event} showIcon={false} /> },
   ].filter(Boolean) as { icon: React.ReactNode; label: React.ReactNode }[]
 
@@ -142,9 +142,9 @@ export default function EventDetailPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" aria-hidden="true" />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
           <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-slate-400 mb-6">
-            <Link to="/" className="hover:text-primary">Nyumbani</Link>
+            <Link to="/" className="hover:text-primary">Home</Link>
             <ChevronRight className="h-4 w-4" />
-            <Link to="/matukio" className="hover:text-primary">Matukio</Link>
+            <Link to="/events" className="hover:text-primary">Events</Link>
           </nav>
           <div className="flex flex-wrap gap-2 mb-4">
             <span className="px-3 py-1 rounded-full bg-primary/15 text-primary text-sm font-semibold">{EVENT_TYPES[event.event_type]}</span>
@@ -168,12 +168,12 @@ export default function EventDetailPage() {
           </ul>
           {event.description && (
             <>
-              <h2 className="text-2xl font-bold font-poppins mb-2">Kuhusu tukio hili</h2>
+              <h2 className="text-2xl font-bold font-poppins mb-2">About this event</h2>
               <RichText text={event.description} className="text-lg leading-relaxed text-foreground/85" />
             </>
           )}
           <div className="mt-10 pt-8 border-t border-foreground/10">
-            <p className="font-semibold mb-3">Mwalike rafiki</p>
+            <p className="font-semibold mb-3">Invite a friend</p>
             <ShareButtons
               title={event.title}
               text={`${event.summary}\n📅 ${formatEventDay(event.starts_at)}`}
@@ -182,32 +182,32 @@ export default function EventDetailPage() {
           </div>
         </div>
 
-        <aside className="lg:sticky lg:top-24 glass rounded-3xl p-6" id="jisajili">
+        <aside className="lg:sticky lg:top-24 glass rounded-3xl p-6" id="register">
           {existingTicket ? (
             <div className="text-center">
               <TicketIcon className="h-10 w-10 text-primary mx-auto mb-3" />
-              <h2 className="text-xl font-bold font-poppins mb-1">Umeshajisajili</h2>
-              <p className="text-sm text-foreground/70 mb-5">Tiketi yako imehifadhiwa kwenye kifaa hiki.</p>
+              <h2 className="text-xl font-bold font-poppins mb-1">You are registered</h2>
+              <p className="text-sm text-foreground/70 mb-5">Your ticket is saved on this device.</p>
               <Link
-                to={`/tiketi/${existingTicket}`}
+                to={`/ticket/${existingTicket}`}
                 className="w-full h-12 rounded-xl bg-gradient-primary text-white font-semibold inline-flex items-center justify-center gap-2"
               >
-                Fungua tiketi yangu
+                Open my ticket
               </Link>
             </div>
           ) : event.registration_open ? (
             <>
-              <h2 className="text-xl font-bold font-poppins mb-1">Jisajili sasa</h2>
-              <p className="text-sm text-foreground/70 mb-5">Utapata tiketi yenye QR code mara moja.</p>
+              <h2 className="text-xl font-bold font-poppins mb-1">Register now</h2>
+              <p className="text-sm text-foreground/70 mb-5">You'll get a ticket with a QR code straight away.</p>
               <RegisterForm slug={event.slug} price={event.price} />
             </>
           ) : (
             <div className="text-center py-4">
               <CalendarDays className="h-10 w-10 text-foreground/30 mx-auto mb-3" />
-              <h2 className="text-lg font-bold mb-1">Usajili haupo wazi</h2>
+              <h2 className="text-lg font-bold mb-1">Registration is not open</h2>
               <p className="text-sm text-foreground/70">{event.registration_closed_reason}</p>
-              <Link to="/matukio" className="inline-block mt-4 text-primary font-semibold text-sm hover:underline">
-                Angalia matukio mengine
+              <Link to="/events" className="inline-block mt-4 text-primary font-semibold text-sm hover:underline">
+                See other events
               </Link>
             </div>
           )}

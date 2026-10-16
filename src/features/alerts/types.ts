@@ -17,26 +17,26 @@ export type SecurityAlert = {
 
 export const SEVERITY_META: Record<AlertSeverity, { label: string; shortLabel: string; className: string; dotClassName: string }> = {
   high: {
-    label: "Hatari Kubwa",
-    shortLabel: "Kubwa",
+    label: "High risk",
+    shortLabel: "High",
     className: "bg-red-500/15 text-red-500 border-red-500/30",
     dotClassName: "bg-red-500",
   },
   medium: {
-    label: "Hatari ya Wastani",
-    shortLabel: "Wastani",
+    label: "Medium risk",
+    shortLabel: "Medium",
     className: "bg-amber-500/15 text-amber-500 border-amber-500/30",
     dotClassName: "bg-amber-500",
   },
   low: {
-    label: "Hatari Ndogo",
-    shortLabel: "Ndogo",
+    label: "Low risk",
+    shortLabel: "Low",
     className: "bg-emerald-500/15 text-emerald-500 border-emerald-500/30",
     dotClassName: "bg-emerald-500",
   },
 }
 
-const dateFormatter = new Intl.DateTimeFormat("sw-TZ", { day: "numeric", month: "long", year: "numeric" })
+const dateFormatter = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" })
 
 export function formatAlertDate(iso: string | null) {
   if (!iso) return ""
@@ -46,7 +46,7 @@ export function formatAlertDate(iso: string | null) {
 
 /** Public, shareable URL of an alert (the site uses hash routing). */
 export function alertUrl(slug: string) {
-  return `${window.location.origin}/#/tahadhari/${slug}`
+  return `${window.location.origin}/#/alerts/${slug}`
 }
 
 export function slugify(text: string) {

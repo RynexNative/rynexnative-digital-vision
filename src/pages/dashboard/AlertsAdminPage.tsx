@@ -97,14 +97,14 @@ function AlertEditor({ initial, categories, onDone }: { initial: Draft; categori
       { id: draft.id, data: toInput(draft) },
       {
         onSuccess: () => {
-          toast({ title: draft.is_published ? "Tahadhari imechapishwa ✅" : "Rasimu imehifadhiwa" })
+          toast({ title: draft.is_published ? "Alert published ✅" : "Draft saved" })
           onDone()
         },
         onError: (error) =>
           toast({
             variant: "destructive",
-            title: "Imeshindikana kuhifadhi",
-            description: validationMessage(error) ?? errorMessage(error, "Jaribu tena."),
+            title: "Could not save",
+            description: validationMessage(error) ?? errorMessage(error, "Please try again."),
           }),
       },
     )
@@ -113,22 +113,22 @@ function AlertEditor({ initial, categories, onDone }: { initial: Draft; categori
   const listField = (key: "signs" | "prevention" | "if_affected", label: string, hint: string) => (
     <label className="block">
       <span className="block text-sm font-medium mb-1">{label}</span>
-      <span className="block text-xs text-foreground/50 mb-1.5">{hint} · kimoja kwa kila mstari</span>
+      <span className="block text-xs text-foreground/50 mb-1.5">{hint} · one per line</span>
       <textarea rows={4} value={draft[key]} onChange={(e) => set(key, e.target.value)} className={cn(inputClass, "text-sm resize-y")} />
-      <span className="block text-xs text-foreground/40 mt-1">{toLines(draft[key]).length} vipengele</span>
+      <span className="block text-xs text-foreground/40 mt-1">{toLines(draft[key]).length} items</span>
     </label>
   )
 
   return (
     <form onSubmit={submit} className="space-y-5 pb-4">
       <label className="block">
-        <span className="block text-sm font-medium mb-1.5">Kichwa cha habari *</span>
+        <span className="block text-sm font-medium mb-1.5">Title *</span>
         <input
           required
           minLength={3}
           maxLength={200}
           value={draft.title}
-          placeholder="Mf. Ujumbe wa &quot;Tuma kwa namba hii&quot;"
+          placeholder="E.g. The &quot;Send it to this number&quot; SMS"
           onChange={(e) => {
             set("title", e.target.value)
             if (!slugTouched) set("slug", slugify(e.target.value))
@@ -139,7 +139,7 @@ function AlertEditor({ initial, categories, onDone }: { initial: Draft; categori
 
       <div className="grid sm:grid-cols-2 gap-4">
         <label className="block">
-          <span className="block text-sm font-medium mb-1.5">Kiwango cha hatari *</span>
+          <span className="block text-sm font-medium mb-1.5">Risk level *</span>
           <select value={draft.severity} onChange={(e) => set("severity", e.target.value as AlertSeverity)} className={inputClass}>
             {(Object.keys(SEVERITY_META) as AlertSeverity[]).map((s) => (
               <option key={s} value={s}>
@@ -149,7 +149,7 @@ function AlertEditor({ initial, categories, onDone }: { initial: Draft; categori
           </select>
         </label>
         <label className="block">
-          <span className="block text-sm font-medium mb-1.5">Aina *</span>
+          <span className="block text-sm font-medium mb-1.5">Category *</span>
           <input
             required
             list="alert-categories"
@@ -168,8 +168,8 @@ function AlertEditor({ initial, categories, onDone }: { initial: Draft; categori
       </div>
 
       <label className="block">
-        <span className="block text-sm font-medium mb-1">Muhtasari *</span>
-        <span className="block text-xs text-foreground/50 mb-1.5">Unaonekana kwenye kadi na kwenye ujumbe wa WhatsApp</span>
+        <span className="block text-sm font-medium mb-1">Summary *</span>
+        <span className="block text-xs text-foreground/50 mb-1.5">Shown on cards and in WhatsApp shares</span>
         <textarea
           required
           minLength={10}
@@ -185,19 +185,19 @@ function AlertEditor({ initial, categories, onDone }: { initial: Draft; categori
       </label>
 
       <label className="block">
-        <span className="block text-sm font-medium mb-1">Jinsi utapeli unavyofanyika</span>
-        <span className="block text-xs text-foreground/50 mb-1.5">Acha mstari mtupu kati ya aya</span>
+        <span className="block text-sm font-medium mb-1">How the scam works</span>
+        <span className="block text-xs text-foreground/50 mb-1.5">Leave a blank line between paragraphs</span>
         <textarea rows={6} value={draft.description} onChange={(e) => set("description", e.target.value)} className={cn(inputClass, "resize-y")} />
       </label>
 
-      {listField("signs", "Dalili za kutambua", "Mambo ya kumsaidia msomaji kutambua utapeli")}
-      {listField("prevention", "Jinsi ya kujikinga", "Hatua za kuchukua kabla")}
-      {listField("if_affected", "Kama umeathirika", "Hatua kwa mpangilio")}
+      {listField("signs", "Warning signs", "What helps the reader recognise the scam")}
+      {listField("prevention", "How to protect yourself", "Steps to take beforehand")}
+      {listField("if_affected", "If you are affected", "Steps in order")}
 
       <details className="rounded-xl border border-foreground/10 px-4 py-3">
-        <summary className="text-sm font-medium cursor-pointer">Mipangilio ya link</summary>
+        <summary className="text-sm font-medium cursor-pointer">Link settings</summary>
         <label className="block mt-3">
-          <span className="block text-xs text-foreground/60 mb-1.5">rynexnative.com/#/tahadhari/</span>
+          <span className="block text-xs text-foreground/60 mb-1.5">rynexnative.com/#/alerts/</span>
           <input
             required
             pattern="[a-z0-9]+(-[a-z0-9]+)*"
@@ -214,15 +214,15 @@ function AlertEditor({ initial, categories, onDone }: { initial: Draft; categori
       <div className="sticky -bottom-6 -mx-6 -mb-6 px-6 py-4 bg-background/95 backdrop-blur border-t border-foreground/10 flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3">
         <label className="flex items-center gap-3 cursor-pointer">
           <Switch checked={draft.is_published} onCheckedChange={(v) => set("is_published", v)} />
-          <span className="text-sm font-medium">{draft.is_published ? "Chapisha (inaonekana kwa wote)" : "Rasimu (haionekani)"}</span>
+          <span className="text-sm font-medium">{draft.is_published ? "Published (visible to everyone)" : "Draft (hidden)"}</span>
         </label>
         <div className="flex gap-2">
           <button type="button" onClick={onDone} className="h-11 px-4 rounded-xl glass font-medium">
-            Ghairi
+            Cancel
           </button>
           <button type="submit" disabled={save.isPending} className={buttonPrimary}>
             {save.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-            {draft.is_published ? "Chapisha" : "Hifadhi rasimu"}
+            {draft.is_published ? "Publish" : "Save draft"}
           </button>
         </div>
       </div>
@@ -241,7 +241,7 @@ export default function AlertsAdminPage() {
   const [editing, setEditing] = useState<Draft | null>(null)
   const [deleting, setDeleting] = useState<DashboardAlert | null>(null)
 
-  // /admin/tahadhari?new=1 opens the editor straight away (from the overview button)
+  // /admin/alerts?new=1 opens the editor straight away (from the overview button)
   useEffect(() => {
     if (searchParams.get("new")) {
       setEditing(EMPTY_DRAFT)
@@ -261,20 +261,20 @@ export default function AlertsAdminPage() {
     setPublished.mutate(
       { id: alert.id, published: !alert.is_published },
       {
-        onSuccess: () => toast({ title: alert.is_published ? "Imeondolewa hewani" : "Imechapishwa ✅" }),
-        onError: (error) => toast({ variant: "destructive", title: "Imeshindikana", description: errorMessage(error, "Jaribu tena.") }),
+        onSuccess: () => toast({ title: alert.is_published ? "Unpublished" : "Published ✅" }),
+        onError: (error) => toast({ variant: "destructive", title: "Something went wrong", description: errorMessage(error, "Please try again.") }),
       },
     )
 
   return (
     <>
       <PageHeader
-        title="Tahadhari"
-        subtitle="Andika na uchapishe tahadhari za usalama mtandaoni."
+        title="Security alerts"
+        subtitle="Write and publish online safety alerts."
         action={
           <button type="button" onClick={() => setEditing(EMPTY_DRAFT)} className={buttonPrimary}>
             <Plus className="h-4 w-4" />
-            Tahadhari mpya
+            New alert
           </button>
         }
       />
@@ -284,12 +284,12 @@ export default function AlertsAdminPage() {
           value={filter}
           onChange={setFilter}
           options={[
-            { id: "all", label: `Zote (${alerts.length})` },
-            { id: "published", label: `Hewani (${alerts.length - drafts})` },
-            { id: "draft", label: `Rasimu (${drafts})` },
+            { id: "all", label: `All (${alerts.length})` },
+            { id: "published", label: `Live (${alerts.length - drafts})` },
+            { id: "draft", label: `Drafts (${drafts})` },
           ]}
         />
-        <SearchInput value={q} onChange={setQ} placeholder="Tafuta tahadhari..." />
+        <SearchInput value={q} onChange={setQ} placeholder="Search alerts..." />
       </div>
 
       {isLoading ? (
@@ -298,12 +298,12 @@ export default function AlertsAdminPage() {
         <ErrorState onRetry={() => refetch()} />
       ) : visible.length === 0 ? (
         <EmptyState
-          title={alerts.length ? "Hakuna kinacholingana" : "Bado hakuna tahadhari"}
+          title={alerts.length ? "Nothing matches" : "No alerts yet"}
           action={
             !alerts.length && (
               <button type="button" onClick={() => setEditing(EMPTY_DRAFT)} className={buttonPrimary}>
                 <Plus className="h-4 w-4" />
-                Andika ya kwanza
+                Write the first one
               </button>
             )
           }
@@ -316,15 +316,15 @@ export default function AlertsAdminPage() {
                 <div className="flex flex-wrap items-center gap-2 mb-1.5">
                   <SeverityBadge severity={alert.severity} />
                   {alert.is_published ? (
-                    <Pill className="bg-primary/15 text-primary border-primary/30">Hewani</Pill>
+                    <Pill className="bg-primary/15 text-primary border-primary/30">Live</Pill>
                   ) : (
-                    <Pill className="bg-foreground/10 text-foreground/60 border-foreground/15">Rasimu</Pill>
+                    <Pill className="bg-foreground/10 text-foreground/60 border-foreground/15">Draft</Pill>
                   )}
                   <span className="text-xs text-foreground/50">{alert.category}</span>
                 </div>
                 <p className="font-semibold group-hover:text-primary transition-colors">{alert.title}</p>
                 <p className="text-xs text-foreground/50 mt-0.5">
-                  {alert.is_published ? `Imechapishwa ${formatAlertDate(alert.published_at)}` : `Imehaririwa ${formatAlertDate(alert.updated_at)}`}
+                  {alert.is_published ? `Published ${formatAlertDate(alert.published_at)}` : `Edited ${formatAlertDate(alert.updated_at)}`}
                 </p>
               </button>
               <div className="flex flex-wrap gap-2">
@@ -333,21 +333,21 @@ export default function AlertsAdminPage() {
                   onClick={() => togglePublished(alert)}
                   disabled={setPublished.isPending}
                   className={buttonGhost}
-                  title={alert.is_published ? "Ondoa hewani" : "Chapisha"}
+                  title={alert.is_published ? "Unpublish" : "Publish"}
                 >
                   {alert.is_published ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  {alert.is_published ? "Ondoa" : "Chapisha"}
+                  {alert.is_published ? "Unpublish" : "Publish"}
                 </button>
                 <button type="button" onClick={() => setEditing(toDraft(alert))} className={buttonGhost}>
                   <Pencil className="h-4 w-4" />
-                  Hariri
+                  Edit
                 </button>
                 {alert.is_published && (
-                  <Link to={`/tahadhari/${alert.slug}`} target="_blank" className={buttonGhost} aria-label="Ona kwenye website">
+                  <Link to={`/alerts/${alert.slug}`} target="_blank" className={buttonGhost} aria-label="View on website">
                     <ExternalLink className="h-4 w-4" />
                   </Link>
                 )}
-                <button type="button" onClick={() => setDeleting(alert)} className={cn(buttonGhost, "hover:text-red-500")} aria-label="Futa">
+                <button type="button" onClick={() => setDeleting(alert)} className={cn(buttonGhost, "hover:text-red-500")} aria-label="Delete">
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
@@ -359,8 +359,8 @@ export default function AlertsAdminPage() {
       <Sheet open={editing !== null} onOpenChange={(open) => !open && setEditing(null)}>
         <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto">
           <SheetHeader className="mb-6 text-left">
-            <SheetTitle>{editing?.id ? "Hariri tahadhari" : "Tahadhari mpya"}</SheetTitle>
-            <SheetDescription>Andika kwa Kiswahili rahisi. Wasomaji wengi watasoma kwenye simu.</SheetDescription>
+            <SheetTitle>{editing?.id ? "Edit alert" : "New alert"}</SheetTitle>
+            <SheetDescription>Write in simple, clear language. Most readers are on a phone.</SheetDescription>
           </SheetHeader>
           {editing && (
             <AlertEditor key={editing.id ?? "new"} initial={editing} categories={categories} onDone={() => setEditing(null)} />
@@ -371,25 +371,25 @@ export default function AlertsAdminPage() {
       <AlertDialog open={deleting !== null} onOpenChange={(open) => !open && setDeleting(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Futa tahadhari hii?</AlertDialogTitle>
+            <AlertDialogTitle>Delete this alert?</AlertDialogTitle>
             <AlertDialogDescription>
-              "{deleting?.title}" itafutwa kabisa, na link zake zilizoshirikiwa hazitafanya kazi tena. Kama unataka kuificha tu,
-              bonyeza "Ondoa" badala yake.
+              "{deleting?.title}" will be deleted permanently and its shared links will stop working. To just hide it,
+              use "Unpublish" instead.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Ghairi</AlertDialogCancel>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               className="bg-red-600 hover:bg-red-700 text-white"
               onClick={() =>
                 deleting &&
                 remove.mutate(deleting.id, {
-                  onSuccess: () => toast({ title: "Tahadhari imefutwa" }),
-                  onError: (error) => toast({ variant: "destructive", title: "Imeshindikana", description: errorMessage(error, "Jaribu tena.") }),
+                  onSuccess: () => toast({ title: "Alert deleted" }),
+                  onError: (error) => toast({ variant: "destructive", title: "Something went wrong", description: errorMessage(error, "Please try again.") }),
                 })
               }
             >
-              Futa
+              Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

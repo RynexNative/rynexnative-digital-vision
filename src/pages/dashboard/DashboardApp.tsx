@@ -4,6 +4,8 @@ import {
   Calculator,
   CalendarDays,
   ExternalLink,
+  Gem,
+  Inbox,
   LayoutDashboard,
   Loader2,
   LogOut,
@@ -32,6 +34,8 @@ const NewsAdminPage = lazyWithReload(() => import("./NewsAdminPage"))
 const EventsAdminPage = lazyWithReload(() => import("./EventsAdminPage"))
 const EventRegistrationsPage = lazyWithReload(() => import("./EventRegistrationsPage"))
 const CheckInPage = lazyWithReload(() => import("./CheckInPage"))
+const PackagesAdminPage = lazyWithReload(() => import("./PackagesAdminPage"))
+const PackageRequestsPage = lazyWithReload(() => import("./PackageRequestsPage"))
 
 type NavItem = { to: string; label: string; icon: ReactNode; badge?: number }
 
@@ -66,16 +70,18 @@ function Shell() {
   }, [pathname])
 
   const items: NavItem[] = [
-    { to: "/admin", label: "Muhtasari", icon: <LayoutDashboard className="h-5 w-5" /> },
-    { to: "/admin/matukio", label: "Matukio", icon: <CalendarDays className="h-5 w-5" />, badge: stats?.events?.to_verify },
-    { to: "/admin/maombi", label: "Maombi", icon: <Calculator className="h-5 w-5" />, badge: stats?.estimates.new },
-    { to: "/admin/ujumbe", label: "Ujumbe", icon: <Mail className="h-5 w-5" />, badge: stats?.messages.new },
-    { to: "/admin/habari", label: "Habari", icon: <Newspaper className="h-5 w-5" />, badge: stats?.news?.drafts },
-    { to: "/admin/tahadhari", label: "Tahadhari", icon: <ShieldAlert className="h-5 w-5" />, badge: stats?.alerts.drafts },
-    { to: "/admin/wanachama", label: "Wanachama", icon: <Users className="h-5 w-5" /> },
-    { to: "/admin/scan", label: "Scan tiketi", icon: <ScanLine className="h-5 w-5" /> },
+    { to: "/admin", label: "Overview", icon: <LayoutDashboard className="h-5 w-5" /> },
+    { to: "/admin/requests", label: "Requests", icon: <Inbox className="h-5 w-5" />, badge: stats?.packages?.inquiries_new },
+    { to: "/admin/events", label: "Events", icon: <CalendarDays className="h-5 w-5" />, badge: stats?.events?.to_verify },
+    { to: "/admin/estimates", label: "Estimates", icon: <Calculator className="h-5 w-5" />, badge: stats?.estimates.new },
+    { to: "/admin/messages", label: "Messages", icon: <Mail className="h-5 w-5" />, badge: stats?.messages.new },
+    { to: "/admin/packages", label: "Packages", icon: <Gem className="h-5 w-5" /> },
+    { to: "/admin/news", label: "News", icon: <Newspaper className="h-5 w-5" />, badge: stats?.news?.drafts },
+    { to: "/admin/alerts", label: "Alerts", icon: <ShieldAlert className="h-5 w-5" />, badge: stats?.alerts.drafts },
+    { to: "/admin/subscribers", label: "Subscribers", icon: <Users className="h-5 w-5" /> },
+    { to: "/admin/scan", label: "Scan tickets", icon: <ScanLine className="h-5 w-5" /> },
   ]
-  // Mobile bottom bar shows the first four; the rest live under "Zaidi"
+  // Mobile bottom bar shows the first four; the rest live under "More"
   const primaryItems = items.slice(0, 4)
   const moreItems = items.slice(4)
   const moreBadge = moreItems.reduce((sum, item) => sum + (item.badge ?? 0), 0)
@@ -120,13 +126,13 @@ function Shell() {
         <div className="border-t border-foreground/10 pt-4 space-y-1">
           <a href="/#/" target="_blank" rel="noopener" className={navClass({ isActive: false })}>
             <ExternalLink className="h-5 w-5" />
-            Fungua website
+            Open website
           </a>
           <button type="button" onClick={() => logout.mutate()} className={cn(navClass({ isActive: false }), "w-full")}>
             <LogOut className="h-5 w-5" />
-            Toka
+            Log out
           </button>
-          <p className="px-3 pt-2 text-xs text-foreground/50 truncate">Umeingia kama {user?.name}</p>
+          <p className="px-3 pt-2 text-xs text-foreground/50 truncate">Signed in as {user?.name}</p>
         </div>
       </aside>
 
@@ -138,7 +144,7 @@ function Shell() {
         </div>
         <button type="button" onClick={() => logout.mutate()} className="h-9 px-3 rounded-lg glass inline-flex items-center gap-1.5 text-sm">
           <LogOut className="h-4 w-4" />
-          Toka
+          Log out
         </button>
       </header>
 
@@ -155,14 +161,16 @@ function Shell() {
           >
             <Routes>
               <Route index element={<OverviewPage />} />
-              <Route path="tahadhari" element={<AlertsAdminPage />} />
-              <Route path="maombi" element={<EstimatesAdminPage />} />
-              <Route path="ujumbe" element={<MessagesAdminPage />} />
-              <Route path="wanachama" element={<SubscribersAdminPage />} />
-              <Route path="habari" element={<NewsAdminPage />} />
-              <Route path="matukio" element={<EventsAdminPage />} />
-              <Route path="matukio/:id" element={<EventRegistrationsPage />} />
+              <Route path="alerts" element={<AlertsAdminPage />} />
+              <Route path="estimates" element={<EstimatesAdminPage />} />
+              <Route path="messages" element={<MessagesAdminPage />} />
+              <Route path="subscribers" element={<SubscribersAdminPage />} />
+              <Route path="news" element={<NewsAdminPage />} />
+              <Route path="events" element={<EventsAdminPage />} />
+              <Route path="events/:id" element={<EventRegistrationsPage />} />
               <Route path="scan" element={<CheckInPage />} />
+              <Route path="packages" element={<PackagesAdminPage />} />
+              <Route path="requests" element={<PackageRequestsPage />} />
               <Route path="*" element={<OverviewPage />} />
             </Routes>
           </Suspense>
@@ -205,7 +213,7 @@ function Shell() {
           )}
         >
           <MoreHorizontal className="h-5 w-5" />
-          Zaidi
+          More
           {moreBadge > 0 && (
             <span className="absolute top-2 left-1/2 ml-2 min-w-4 h-4 px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
               {moreBadge > 9 ? "9+" : moreBadge}
@@ -217,9 +225,9 @@ function Shell() {
       <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
         <SheetContent side="bottom" className="lg:hidden rounded-t-3xl pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           <SheetHeader className="text-left mb-4">
-            <SheetTitle>Zaidi</SheetTitle>
+            <SheetTitle>More</SheetTitle>
           </SheetHeader>
-          <nav className="grid grid-cols-2 gap-2" aria-label="Zaidi">
+          <nav className="grid grid-cols-2 gap-2" aria-label="More">
             {moreItems.map((item) => (
               <NavLink
                 key={item.to}

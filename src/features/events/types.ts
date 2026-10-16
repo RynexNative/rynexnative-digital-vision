@@ -49,28 +49,28 @@ export type Ticket = {
 }
 
 export const EVENT_TYPES: Record<EventType, string> = {
-  training: "Mafunzo",
-  workshop: "Warsha",
+  training: "Training",
+  workshop: "Workshop",
   webinar: "Webinar",
-  meetup: "Mkutano",
+  meetup: "Meetup",
 }
 
 export const EVENT_MODES: Record<EventMode, string> = {
-  physical: "Ana kwa ana",
-  online: "Mtandaoni",
-  hybrid: "Ana kwa ana + Mtandaoni",
+  physical: "In person",
+  online: "Online",
+  hybrid: "In person + Online",
 }
 
 export const REGISTRATION_STATUS: Record<RegistrationStatus, { label: string; className: string }> = {
-  pending_payment: { label: "Inasubiri malipo", className: "bg-amber-500/15 text-amber-500 border-amber-500/30" },
-  payment_submitted: { label: "Malipo yanakaguliwa", className: "bg-accent/15 text-accent border-accent/30" },
-  confirmed: { label: "Imethibitishwa", className: "bg-emerald-500/15 text-emerald-500 border-emerald-500/30" },
-  cancelled: { label: "Imeghairiwa", className: "bg-foreground/10 text-foreground/60 border-foreground/15" },
+  pending_payment: { label: "Awaiting payment", className: "bg-amber-500/15 text-amber-500 border-amber-500/30" },
+  payment_submitted: { label: "Payment under review", className: "bg-accent/15 text-accent border-accent/30" },
+  confirmed: { label: "Confirmed", className: "bg-emerald-500/15 text-emerald-500 border-emerald-500/30" },
+  cancelled: { label: "Cancelled", className: "bg-foreground/10 text-foreground/60 border-foreground/15" },
 }
 
-const day = new Intl.DateTimeFormat("sw-TZ", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
-const time = new Intl.DateTimeFormat("sw-TZ", { hour: "2-digit", minute: "2-digit" })
-const short = new Intl.DateTimeFormat("sw-TZ", { day: "numeric", month: "short" })
+const day = new Intl.DateTimeFormat("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
+const time = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit" })
+const short = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short" })
 
 export function formatEventDay(iso: string) {
   return day.format(new Date(iso))
@@ -84,22 +84,22 @@ export function formatEventTime(start: string, end: string | null) {
   return sameDay ? `${time.format(s)} – ${time.format(e)}` : `${time.format(s)} – ${short.format(e)} ${time.format(e)}`
 }
 
-/** Big calendar-style date badge: { day: "12", month: "Okt" } */
+/** Big calendar-style date badge: { day: "12", month: "Oct" } */
 export function dateBadge(iso: string) {
   const d = new Date(iso)
   return { day: String(d.getDate()), month: short.format(d).replace(/[\d\s.]/g, "").slice(0, 3) }
 }
 
 export function formatPrice(price: number) {
-  return price === 0 ? "Bure" : `TZS ${new Intl.NumberFormat("en-US").format(price)}`
+  return price === 0 ? "Free" : `TZS ${new Intl.NumberFormat("en-US").format(price)}`
 }
 
 export function eventUrl(slug: string) {
-  return `${window.location.origin}/#/matukio/${slug}`
+  return `${window.location.origin}/#/events/${slug}`
 }
 
 export function ticketUrl(id: string) {
-  return `${window.location.origin}/#/tiketi/${id}`
+  return `${window.location.origin}/#/ticket/${id}`
 }
 
 /** Text encoded in the ticket QR code (read by the dashboard scanner) */

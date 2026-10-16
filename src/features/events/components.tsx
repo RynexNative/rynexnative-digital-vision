@@ -23,11 +23,11 @@ export function SeatsInfo({
 }) {
   if (event.seats_left === null || event.capacity === null) return null
   const low = event.seats_left > 0 && event.seats_left <= Math.max(5, event.capacity * 0.15)
-  if (event.seats_left === 0) return <span className="text-red-500 font-semibold">Nafasi zimejaa</span>
+  if (event.seats_left === 0) return <span className="text-red-500 font-semibold">Fully booked</span>
   return (
     <span className={cn("inline-flex items-center gap-1.5", low ? "text-amber-500 font-semibold" : "text-foreground/60")}>
       {showIcon && <Users className="h-4 w-4" />}
-      {low ? `Zimebaki nafasi ${event.seats_left} tu!` : `Nafasi ${event.seats_left} zimebaki`}
+      {low ? `Only ${event.seats_left} seats left!` : `${event.seats_left} seats left`}
     </span>
   )
 }
@@ -35,7 +35,7 @@ export function SeatsInfo({
 export function EventCard({ event, past = false }: { event: EventSummary; past?: boolean }) {
   return (
     <Link
-      to={`/matukio/${event.slug}`}
+      to={`/events/${event.slug}`}
       className={cn(
         "group glass rounded-3xl overflow-hidden flex flex-col hover-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
         past && "opacity-80",
@@ -73,7 +73,7 @@ export function EventCard({ event, past = false }: { event: EventSummary; past?:
           </p>
           <p className="flex items-center gap-2">
             {event.mode === "online" ? <Monitor className="h-4 w-4 text-primary flex-shrink-0" /> : <MapPin className="h-4 w-4 text-primary flex-shrink-0" />}
-            <span className="truncate">{event.mode === "online" ? "Mtandaoni" : event.venue}</span>
+            <span className="truncate">{event.mode === "online" ? "Online" : event.venue}</span>
           </p>
           {!past && (
             <p className="text-sm pt-1">

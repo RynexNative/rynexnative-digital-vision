@@ -30,14 +30,14 @@ function EstimateCard({ estimate }: { estimate: DashboardEstimate }) {
   const setStatus = useSetEstimateStatus()
   const info = describeSelections(estimate)
   const firstName = estimate.name.split(" ")[0]
-  const whatsappText = `Habari ${firstName}, ni RynexNative. Tumepokea ombi lako la ${info.type.toLowerCase()} (#${estimate.reference}). Tungependa kuzungumza zaidi kuhusu mahitaji yako.`
+  const whatsappText = `Hi ${firstName}, this is RynexNative. We received your ${info.type.toLowerCase()} estimate request (#${estimate.reference}). We would love to talk more about what you need.`
 
   const changeStatus = (status: EstimateStatus) =>
     setStatus.mutate(
       { id: estimate.id, status },
       {
         onSuccess: () => toast({ title: `Status: ${ESTIMATE_STATUS[status].label}` }),
-        onError: (error) => toast({ variant: "destructive", title: "Imeshindikana", description: errorMessage(error, "Jaribu tena.") }),
+        onError: (error) => toast({ variant: "destructive", title: "Something went wrong", description: errorMessage(error, "Please try again.") }),
       },
     )
 
@@ -82,13 +82,13 @@ function EstimateCard({ estimate }: { estimate: DashboardEstimate }) {
             {info.scale && <span className="text-foreground/60"> · {info.scale.label} ({info.scale.description})</span>}
           </p>
           {info.features.length > 0 && <p className="text-foreground/70">{info.features.join(", ")}</p>}
-          <p className="text-xs text-foreground/50">{[info.design, info.timeline && `Muda: ${info.timeline}`].filter(Boolean).join(" · ")}</p>
+          <p className="text-xs text-foreground/50">{[info.design, info.timeline && `Timeline: ${info.timeline}`].filter(Boolean).join(" · ")}</p>
         </div>
         <div className="sm:text-right">
           <p className="font-bold text-primary whitespace-nowrap">{formatTZS(estimate.estimate_min)}</p>
-          <p className="text-xs text-foreground/60 whitespace-nowrap">hadi {formatTZS(estimate.estimate_max).replace("TZS ", "")}</p>
+          <p className="text-xs text-foreground/60 whitespace-nowrap">to {formatTZS(estimate.estimate_max).replace("TZS ", "")}</p>
           <p className="text-xs text-foreground/50">
-            Wiki {estimate.weeks_min}–{estimate.weeks_max}
+            {estimate.weeks_min}–{estimate.weeks_max} weeks
           </p>
         </div>
       </div>
@@ -110,7 +110,7 @@ function EstimateCard({ estimate }: { estimate: DashboardEstimate }) {
           WhatsApp
         </a>
         {estimate.email && (
-          <a href={`mailto:${estimate.email}?subject=${encodeURIComponent(`Ombi lako #${estimate.reference} - RynexNative`)}`} className={buttonGhost}>
+          <a href={`mailto:${estimate.email}?subject=${encodeURIComponent(`Your request #${estimate.reference} - RynexNative`)}`} className={buttonGhost}>
             <Mail className="h-4 w-4" />
             Email
           </a>
@@ -128,20 +128,20 @@ export default function EstimatesAdminPage() {
 
   return (
     <>
-      <PageHeader title="Maombi ya makadirio" subtitle="Wateja waliotumia kikokotoo cha bei. Wasiliana nao ndani ya saa 24." />
+      <PageHeader title="Estimate requests" subtitle="Clients who used the price estimator. Reach out within 24 hours." />
       <div className="flex flex-col sm:flex-row gap-3 mb-5">
         <FilterTabs
           value={filter}
           onChange={setFilter}
           options={[
-            { id: "new", label: "Mapya" },
-            { id: "contacted", label: "Tumewasiliana" },
-            { id: "won", label: "Tumepata" },
-            { id: "lost", label: "Hayakufanikiwa" },
-            { id: "all", label: "Yote" },
+            { id: "new", label: "New" },
+            { id: "contacted", label: "Contacted" },
+            { id: "won", label: "Won" },
+            { id: "lost", label: "Lost" },
+            { id: "all", label: "All" },
           ]}
         />
-        <SearchInput value={q} onChange={setQ} placeholder="Tafuta jina, simu, kampuni..." />
+        <SearchInput value={q} onChange={setQ} placeholder="Search name, phone, company..." />
       </div>
 
       {isLoading ? (
@@ -150,8 +150,8 @@ export default function EstimatesAdminPage() {
         <ErrorState onRetry={() => refetch()} />
       ) : data.length === 0 ? (
         <EmptyState
-          title={filter === "new" && !search ? "Hakuna maombi mapya 🎉" : "Hakuna maombi hapa"}
-          text={filter === "new" && !search ? "Umeshughulikia maombi yote." : undefined}
+          title={filter === "new" && !search ? "No new requests 🎉" : "No requests here"}
+          text={filter === "new" && !search ? "You have handled every request." : undefined}
         />
       ) : (
         <ul className="space-y-3">

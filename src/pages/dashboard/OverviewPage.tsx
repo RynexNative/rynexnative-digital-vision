@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import { Link } from "react-router-dom"
-import { ArrowRight, Calculator, CalendarDays, Hourglass, Mail, Plus, Trophy, Users } from "lucide-react"
+import { ArrowRight, Calculator, CalendarDays, Hourglass, Inbox, Mail, Plus, Trophy } from "lucide-react"
 import { useCurrentUser, useStats } from "@/features/dashboard/api"
 import { ESTIMATE_STATUS, MESSAGE_STATUS, formatWhen } from "@/features/dashboard/types"
 import { EmptyState, ErrorState, PageHeader, Pill } from "@/features/dashboard/ui"
@@ -10,9 +10,9 @@ import { PROJECT_TYPES } from "@/features/estimator/pricing"
 
 function greeting() {
   const hour = new Date().getHours()
-  if (hour < 12) return "Habari za asubuhi"
-  if (hour < 16) return "Habari za mchana"
-  return "Habari za jioni"
+  if (hour < 12) return "Good morning"
+  if (hour < 16) return "Good afternoon"
+  return "Good evening"
 }
 
 function StatCard({
@@ -56,56 +56,58 @@ export default function OverviewPage() {
     <>
       <PageHeader
         title={`${greeting()}, ${user?.name.split(" ")[0] ?? ""} 👋`}
-        subtitle="Haya ndiyo yanayoendelea kwenye website yako."
+        subtitle="Here is what is happening on your website."
         action={
-          <Link to="/admin/tahadhari?new=1" className={buttonPrimary}>
+          <Link to="/admin/packages?new=1" className={buttonPrimary}>
             <Plus className="h-4 w-4" />
-            Tahadhari mpya
+            New package
           </Link>
         }
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-8">
+        {/* Package requests first: they are the warmest leads */}
         <StatCard
-          to="/admin/maombi"
+          to="/admin/requests"
+          icon={<Inbox className="h-5 w-5" />}
+          label="Package requests"
+          value={stats?.packages?.inquiries_new}
+          hint={isLoading ? "…" : `${stats?.packages?.inquiries_week ?? 0} this week`}
+          highlight={Boolean(stats?.packages?.inquiries_new)}
+        />
+        <StatCard
+          to="/admin/estimates"
           icon={<Calculator className="h-5 w-5" />}
-          label="Maombi mapya"
+          label="New estimates"
           value={stats?.estimates.new}
-          hint={isLoading ? "…" : `${stats?.estimates.this_week ?? 0} wiki hii`}
+          hint={isLoading ? "…" : `${stats?.estimates.this_week ?? 0} this week`}
           highlight={Boolean(stats?.estimates.new)}
         />
         <StatCard
-          to="/admin/ujumbe"
+          to="/admin/messages"
           icon={<Mail className="h-5 w-5" />}
-          label="Ujumbe mpya"
+          label="New messages"
           value={stats?.messages.new}
-          hint={isLoading ? "…" : `${stats?.messages.total ?? 0} jumla`}
+          hint={isLoading ? "…" : `${stats?.messages.total ?? 0} in total`}
           highlight={Boolean(stats?.messages.new)}
         />
         <StatCard
-          to="/admin/matukio"
+          to="/admin/events"
           icon={<CalendarDays className="h-5 w-5" />}
-          label="Matukio yajayo"
+          label="Upcoming events"
           value={stats?.events?.upcoming}
-          hint={isLoading ? "…" : `${stats?.events?.registrations_week ?? 0} wamejisajili wiki hii`}
-        />
-        <StatCard
-          to="/admin/wanachama"
-          icon={<Users className="h-5 w-5" />}
-          label="Wanachama"
-          value={stats?.subscribers.total}
-          hint={isLoading ? "…" : `+${stats?.subscribers.this_week ?? 0} wiki hii`}
+          hint={isLoading ? "…" : `${stats?.events?.registrations_week ?? 0} registrations this week`}
         />
       </div>
 
       {Boolean(stats?.events?.to_verify) && (
         <Link
-          to="/admin/matukio"
+          to="/admin/events"
           className="glass rounded-2xl p-4 mb-4 flex items-center gap-3 border-accent/40 hover:bg-accent/5 transition-colors"
         >
           <Hourglass className="h-5 w-5 text-accent flex-shrink-0" />
           <p className="text-sm flex-1">
-            Malipo <strong>{stats?.events?.to_verify}</strong> ya matukio yanasubiri uthibitisho wako.
+            <strong>{stats?.events?.to_verify}</strong> event payment(s) are waiting for your confirmation.
           </p>
           <ArrowRight className="h-4 w-4 text-accent" />
         </Link>
@@ -115,7 +117,7 @@ export default function OverviewPage() {
         <div className="glass rounded-2xl p-4 mb-8 flex items-center gap-3 border-emerald-500/20">
           <Trophy className="h-5 w-5 text-emerald-500 flex-shrink-0" />
           <p className="text-sm">
-            Mmepata kazi <strong>{stats?.estimates.won}</strong> kutoka kwa maombi {stats?.estimates.total} ya kikokotoo.
+            You won <strong>{stats?.estimates.won}</strong> project(s) from {stats?.estimates.total} estimator requests.
           </p>
         </div>
       )}
@@ -123,8 +125,8 @@ export default function OverviewPage() {
       <div className="grid lg:grid-cols-2 gap-6">
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-semibold text-lg">Maombi ya karibuni</h2>
-            <Link to="/admin/maombi" className="text-sm text-primary hover:underline">Yote</Link>
+            <h2 className="font-semibold text-lg">Recent estimates</h2>
+            <Link to="/admin/estimates" className="text-sm text-primary hover:underline">View all</Link>
           </div>
           {isLoading ? (
             <div className="glass rounded-2xl h-48 animate-pulse" />
@@ -132,7 +134,7 @@ export default function OverviewPage() {
             <ul className="glass rounded-2xl divide-y divide-foreground/10">
               {stats.recent_estimates.map((e) => (
                 <li key={e.id}>
-                  <Link to="/admin/maombi" className="flex items-center gap-3 p-4 hover:bg-foreground/5 transition-colors">
+                  <Link to="/admin/estimates" className="flex items-center gap-3 p-4 hover:bg-foreground/5 transition-colors">
                     <div className="min-w-0 flex-1">
                       <p className="font-medium truncate">{e.name}</p>
                       <p className="text-xs text-foreground/60 truncate">
@@ -149,14 +151,14 @@ export default function OverviewPage() {
               ))}
             </ul>
           ) : (
-            <EmptyState title="Bado hakuna maombi" text="Maombi kutoka kwenye kikokotoo cha bei yataonekana hapa." />
+            <EmptyState title="No estimates yet" text="Requests from the price estimator will appear here." />
           )}
         </section>
 
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-semibold text-lg">Ujumbe wa karibuni</h2>
-            <Link to="/admin/ujumbe" className="text-sm text-primary hover:underline">Yote</Link>
+            <h2 className="font-semibold text-lg">Recent messages</h2>
+            <Link to="/admin/messages" className="text-sm text-primary hover:underline">View all</Link>
           </div>
           {isLoading ? (
             <div className="glass rounded-2xl h-48 animate-pulse" />
@@ -164,7 +166,7 @@ export default function OverviewPage() {
             <ul className="glass rounded-2xl divide-y divide-foreground/10">
               {stats.recent_messages.map((m) => (
                 <li key={m.id}>
-                  <Link to="/admin/ujumbe" className="flex items-start gap-3 p-4 hover:bg-foreground/5 transition-colors">
+                  <Link to="/admin/messages" className="flex items-start gap-3 p-4 hover:bg-foreground/5 transition-colors">
                     <div className="min-w-0 flex-1">
                       <p className="font-medium truncate">{m.name}</p>
                       <p className="text-xs text-foreground/60 line-clamp-1">{m.message}</p>
@@ -178,7 +180,7 @@ export default function OverviewPage() {
               ))}
             </ul>
           ) : (
-            <EmptyState title="Bado hakuna ujumbe" text="Ujumbe kutoka fomu ya Contact utaonekana hapa." />
+            <EmptyState title="No messages yet" text="Messages from the contact form will appear here." />
           )}
         </section>
       </div>

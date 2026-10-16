@@ -12,13 +12,13 @@ export type NewsPost = {
 }
 
 export const NEWS_CATEGORIES: Record<NewsCategory, string> = {
-  announcement: "Tangazo",
-  project: "Project mpya",
-  article: "Makala",
-  "event-recap": "Matukio",
+  announcement: "Announcement",
+  project: "New project",
+  article: "Article",
+  "event-recap": "Event recap",
 }
 
-const dateFormatter = new Intl.DateTimeFormat("sw-TZ", { day: "numeric", month: "long", year: "numeric" })
+const dateFormatter = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric" })
 
 export function formatNewsDate(iso: string | null) {
   if (!iso) return ""
@@ -27,5 +27,5 @@ export function formatNewsDate(iso: string | null) {
 }
 
 export function newsUrl(slug: string) {
-  return `${window.location.origin}/#/habari/${slug}`
+  return `${window.location.origin}/#/news/${slug}`
 }

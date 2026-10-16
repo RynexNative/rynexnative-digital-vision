@@ -10,10 +10,10 @@ import { cn } from "@/lib/utils"
 type Scanner = { start: () => Promise<void>; stop: () => void; destroy: () => void }
 
 const RESULT_STYLE: Record<CheckInResult["result"], { className: string; icon: React.ReactNode; title: string }> = {
-  ok: { className: "bg-emerald-500/15 border-emerald-500/40", icon: <CheckCircle2 className="h-10 w-10 text-emerald-500" />, title: "Karibu!" },
-  already: { className: "bg-amber-500/15 border-amber-500/40", icon: <AlertTriangle className="h-10 w-10 text-amber-500" />, title: "Tayari ameingia" },
-  not_confirmed: { className: "bg-red-500/15 border-red-500/40", icon: <XCircle className="h-10 w-10 text-red-500" />, title: "Haijathibitishwa" },
-  not_found: { className: "bg-red-500/15 border-red-500/40", icon: <XCircle className="h-10 w-10 text-red-500" />, title: "Tiketi haipo" },
+  ok: { className: "bg-emerald-500/15 border-emerald-500/40", icon: <CheckCircle2 className="h-10 w-10 text-emerald-500" />, title: "Welcome!" },
+  already: { className: "bg-amber-500/15 border-amber-500/40", icon: <AlertTriangle className="h-10 w-10 text-amber-500" />, title: "Already checked in" },
+  not_confirmed: { className: "bg-red-500/15 border-red-500/40", icon: <XCircle className="h-10 w-10 text-red-500" />, title: "Not confirmed" },
+  not_found: { className: "bg-red-500/15 border-red-500/40", icon: <XCircle className="h-10 w-10 text-red-500" />, title: "Ticket not found" },
 }
 
 function feedback(ok: boolean) {
@@ -52,7 +52,7 @@ export default function CheckInPage() {
           )
         },
         onError: (error) =>
-          setResult({ result: "not_found", detail: errorMessage(error, "Imeshindikana kuunganisha na server.") }),
+          setResult({ result: "not_found", detail: errorMessage(error, "Could not reach the server.") }),
       })
     },
     [checkIn],
@@ -73,7 +73,7 @@ export default function CheckInPage() {
       await scanner.current.start()
       setCameraOn(true)
     } catch {
-      setCameraError("Kamera haikufunguka. Ruhusu kamera kwenye browser, au andika namba ya tiketi hapa chini.")
+      setCameraError("The camera did not open. Allow camera access in your browser, or type the ticket number below.")
       setCameraOn(false)
     }
   }
@@ -89,7 +89,7 @@ export default function CheckInPage() {
 
   return (
     <>
-      <PageHeader title="Scan tiketi" subtitle="Elekeza kamera kwenye QR code ya mshiriki, au andika namba ya tiketi." />
+      <PageHeader title="Scan tickets" subtitle="Point the camera at the participant's QR code, or type the ticket number." />
 
       <div className="grid lg:grid-cols-2 gap-6">
         <div className="space-y-4">
@@ -100,7 +100,7 @@ export default function CheckInPage() {
                 <Camera className="h-12 w-12 text-foreground/40" />
                 <button type="button" onClick={startCamera} className={buttonPrimary}>
                   <Camera className="h-4 w-4" />
-                  Washa kamera
+                  Turn on camera
                 </button>
                 {cameraError && <p className="text-sm text-red-400 max-w-xs">{cameraError}</p>}
               </div>
@@ -109,7 +109,7 @@ export default function CheckInPage() {
           {cameraOn && (
             <button type="button" onClick={stopCamera} className="w-full h-11 rounded-xl glass inline-flex items-center justify-center gap-2 text-sm">
               <CameraOff className="h-4 w-4" />
-              Zima kamera
+              Turn off camera
             </button>
           )}
           <form
@@ -124,12 +124,12 @@ export default function CheckInPage() {
             <input
               value={manual}
               onChange={(e) => setManual(e.target.value.toUpperCase())}
-              placeholder="Namba ya tiketi, mf. K7M2QX9P"
+              placeholder="Ticket number, e.g. K7M2QX9P"
               maxLength={20}
               className={cn(inputClass, "font-mono uppercase")}
-              aria-label="Namba ya tiketi"
+              aria-label="Ticket number"
             />
-            <button type="submit" disabled={checkIn.isPending} className={cn(buttonPrimary, "px-4")} aria-label="Hakiki">
+            <button type="submit" disabled={checkIn.isPending} className={cn(buttonPrimary, "px-4")} aria-label="Check">
               {checkIn.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
             </button>
           </form>
@@ -151,13 +151,13 @@ export default function CheckInPage() {
                 <p className="text-sm text-foreground/70 mt-3">{result.detail}</p>
               </div>
             ) : (
-              <div className="glass rounded-3xl p-10 text-center text-foreground/50">Matokeo ya scan yataonekana hapa</div>
+              <div className="glass rounded-3xl p-10 text-center text-foreground/50">Scan results will appear here</div>
             )}
           </div>
 
           {history.length > 0 && (
             <div>
-              <h2 className="font-semibold mb-2">Walioscaniwa sasa hivi</h2>
+              <h2 className="font-semibold mb-2">Recently scanned</h2>
               <ul className="glass rounded-2xl divide-y divide-foreground/10">
                 {history.map((h, i) => (
                   <li key={i} className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm">

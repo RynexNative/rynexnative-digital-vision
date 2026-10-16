@@ -6,6 +6,9 @@ import type {
   DashboardAlert,
   DashboardEvent,
   DashboardNews,
+  DashboardInquiry,
+  DashboardPackage,
+  InquiryStatus,
   DashboardRegistration,
   DashboardEstimate,
   DashboardMessage,
@@ -304,6 +307,61 @@ export function useCheckIn() {
       }
     },
     onSuccess: done,
+  })
+}
+
+/* ---------------- Packages ---------------- */
+
+export type PackageInput = Omit<DashboardPackage, "id" | "published_at" | "created_at" | "updated_at" | "inquiries">
+
+export const usePackagesAdmin = () => useDashboardQuery<DashboardPackage[]>(["dashboard", "packages"], "/packages/")
+
+function usePackageInvalidate() {
+  const invalidate = useInvalidate()
+  const queryClient = useQueryClient()
+  return () => {
+    invalidate("packages", "stats")
+    queryClient.invalidateQueries({ queryKey: ["packages"] })
+  }
+}
+
+export function useSavePackage() {
+  const done = usePackageInvalidate()
+  return useMutation({
+    mutationFn: ({ id, data }: { id?: string; data: PackageInput }) =>
+      id
+        ? dashboardRequest<DashboardPackage>(`/packages/${id}/`, { method: "PATCH", body: data })
+        : dashboardRequest<DashboardPackage>("/packages/", { method: "POST", body: data }),
+    onSuccess: done,
+  })
+}
+
+export function useSetPackagePublished() {
+  const done = usePackageInvalidate()
+  return useMutation({
+    mutationFn: ({ id, published }: { id: string; published: boolean }) =>
+      dashboardRequest<DashboardPackage>(`/packages/${id}/${published ? "publish" : "unpublish"}/`, { method: "POST" }),
+    onSuccess: done,
+  })
+}
+
+export function useDeletePackage() {
+  const done = usePackageInvalidate()
+  return useMutation({
+    mutationFn: (id: string) => dashboardRequest<void>(`/packages/${id}/`, { method: "DELETE" }),
+    onSuccess: done,
+  })
+}
+
+export const useInquiriesAdmin = (status: string, q: string) =>
+  useDashboardQuery<DashboardInquiry[]>(["dashboard", "inquiries", status, q], `/inquiries/${query({ status, q })}`)
+
+export function useSetInquiryStatus() {
+  const invalidate = useInvalidate()
+  return useMutation({
+    mutationFn: ({ id, status }: { id: string; status: InquiryStatus }) =>
+      dashboardRequest<DashboardInquiry>(`/inquiries/${id}/`, { method: "PATCH", body: { status } }),
+    onSuccess: () => invalidate("inquiries", "packages", "stats"),
   })
 }
 

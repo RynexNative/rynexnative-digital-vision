@@ -97,15 +97,15 @@ export function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="glass rounded-2xl p-8 text-center border-red-500/20">
       <AlertTriangle className="h-9 w-9 text-red-500 mx-auto mb-3" />
-      <p className="font-semibold">Imeshindikana kupakia data</p>
-      <p className="text-sm text-foreground/60 mt-1">Angalia internet yako kisha ujaribu tena.</p>
+      <p className="font-semibold">Could not load the data</p>
+      <p className="text-sm text-foreground/60 mt-1">Check your internet connection and try again.</p>
       <button
         type="button"
         onClick={onRetry}
         className="mt-5 h-10 px-4 rounded-xl glass inline-flex items-center gap-2 text-sm font-medium hover:text-primary"
       >
         <RefreshCw className="h-4 w-4" />
-        Jaribu tena
+        Try again
       </button>
     </div>
   )

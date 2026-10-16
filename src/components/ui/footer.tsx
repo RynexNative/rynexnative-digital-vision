@@ -70,9 +70,10 @@ export function Footer() {
       { label: "AI Solutions", target: "services" }
     ],
     resources: [
-      { label: "Matukio", to: "/matukio" },
-      { label: "Habari", to: "/habari" },
-      { label: "Tahadhari za Usalama", to: "/tahadhari" },
+      { label: "Service Packages", to: "/packages" },
+      { label: "Events", to: "/events" },
+      { label: "News", to: "/news" },
+      { label: "Security Alerts", to: "/alerts" },
       { label: "Project Estimator", to: "/estimate" },
       { label: "Case Studies", target: "portfolio" },
       { label: "Support", target: "contact" }
