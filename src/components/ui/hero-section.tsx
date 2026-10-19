@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Gem } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 import { useSectionNav } from "@/hooks/use-section-nav";
+import { NetworkBackground } from "@/components/ui/network-background";
 
 const stats = [
   { value: "50+", label: "Projects delivered" },
@@ -16,14 +17,18 @@ export function HeroSection() {
 
   return (
     <section className="surface-dark relative min-h-[100svh] flex flex-col overflow-hidden">
-      {/* Photo under a dark wash keeps the white text readable */}
+      {/* Photo under a dark wash keeps the white text readable; it slowly zooms and drifts */}
       <div
-        className="absolute inset-0 opacity-25 mix-blend-luminosity"
+        className="absolute inset-0 opacity-20 grayscale animate-ken-burns will-change-transform"
         style={{ backgroundImage: `url(${heroImage})`, backgroundSize: "cover", backgroundPosition: "center" }}
         aria-hidden="true"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/60 to-slate-950" aria-hidden="true" />
-      <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[520px] w-[820px] rounded-full bg-emerald-500/20 blur-[120px]" aria-hidden="true" />
+      {/* Soft green lights that wander behind the content */}
+      <div className="absolute -top-56 left-1/2 h-[720px] w-[1100px] rounded-full bg-[radial-gradient(closest-side,rgba(16,185,129,0.28),transparent)] animate-aurora will-change-transform" aria-hidden="true" />
+      <div className="absolute top-1/4 -left-60 h-[620px] w-[620px] rounded-full bg-[radial-gradient(closest-side,rgba(45,212,191,0.14),transparent)] animate-aurora-slow will-change-transform" aria-hidden="true" />
+      <div className="absolute -bottom-40 -right-52 h-[600px] w-[600px] rounded-full bg-[radial-gradient(closest-side,rgba(52,211,153,0.14),transparent)] animate-aurora-reverse will-change-transform" aria-hidden="true" />
+      <NetworkBackground className="absolute inset-0 w-full h-full" />
 
       <div className="relative z-10 flex-1 flex items-center">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 text-center animate-slide-up">
