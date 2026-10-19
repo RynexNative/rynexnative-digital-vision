@@ -1,96 +1,71 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Calculator, Calendar, MessageCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight, Calculator, CheckCircle2, Gem, MessageCircle } from "lucide-react";
+import { WHATSAPP_NUMBER } from "@/features/packages/types";
+
+const promises = ["A clear agreement before we start", "Support after launch", "Your data stays private"];
+
+const actions = [
+  {
+    icon: <MessageCircle className="h-5 w-5" />,
+    title: "Talk to a person",
+    text: "Chat with us on WhatsApp, usually within minutes",
+    href: `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hello RynexNative, I'd like to talk about a project.")}`,
+  },
+  { icon: <Gem className="h-5 w-5" />, title: "Choose a package", text: "Find the level that fits your business", to: "/packages" },
+  { icon: <Calculator className="h-5 w-5" />, title: "Know your budget", text: "An instant price range in 2 minutes", to: "/estimate" },
+];
+
 export function CTASection() {
-  return <section className="py-20 relative overflow-hidden" style={{
-    background: 'var(--gradient-cta)'
-  }}>
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-10 w-32 h-32 bg-primary rounded-full animate-float" style={{
-        animationDelay: '0s'
-      }} />
-        <div className="absolute bottom-20 right-20 w-24 h-24 bg-accent rounded-full animate-float" style={{
-        animationDelay: '2s'
-      }} />
-        <div className="absolute top-40 right-40 w-16 h-16 bg-electric-teal rounded-full animate-float" style={{
-        animationDelay: '1s'
-      }} />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center">
-          <h2 className="text-4xl md:text-6xl font-bold font-poppins mb-6 text-white">
-            Ready to Transform Your
-            <br />
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Digital Vision?
-            </span>
-          </h2>
-          
-          <p className="text-xl md:text-2xl text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Let's discuss how our expertise can accelerate your business growth through innovative technology solutions.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-            <Button size="lg" onClick={() => document.getElementById('contact')?.scrollIntoView({
-            behavior: 'smooth'
-          })} className="neu-button text-lg px-8 py-4 group border-primary/30 hover:border-primary/50 text-slate-800">
-              <Calendar className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
-              Schedule Consultation
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            
-            <Button variant="outline" size="lg" asChild className="glass text-lg px-8 py-4 group border-white/30 hover:border-white/50 text-white hover:text-white">
-              <Link to="/estimate">
-                <Calculator className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
-                Get Instant Estimate
-              </Link>
-            </Button>
+  return (
+    <section className="py-20 md:py-24 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-[2rem] p-8 md:p-14 grid lg:grid-cols-[1.1fr,1fr] gap-10 items-center" style={{ background: "var(--gradient-cta)" }}>
+          <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
+          <div className="relative text-white">
+            <h2 className="text-4xl md:text-5xl font-bold font-poppins leading-tight mb-5">
+              Ready to build something your clients will love?
+            </h2>
+            <p className="text-lg text-white/85 mb-8 max-w-lg">
+              Tell us where you want to go. We will listen, recommend the right path and walk with you from the first idea to launch.
+            </p>
+            <ul className="space-y-3">
+              {promises.map((item) => (
+                <li key={item} className="flex items-center gap-3 font-semibold">
+                  <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {/* Contact Methods */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="glass rounded-2xl p-6 text-center">
-              <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="h-6 w-6 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Quick Chat</h3>
-              <p className="text-white/70 text-sm mb-4">Get immediate answers on WhatsApp</p>
-              <Button variant="ghost" asChild className="text-primary hover:text-primary/80 hover:bg-primary/10">
-                <a href="https://wa.me/255687544999" target="_blank" rel="noopener noreferrer">
-                  Start Chat
-                </a>
-              </Button>
-            </div>
-
-            <div className="glass rounded-2xl p-6 text-center">
-              <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
-                <Calendar className="h-6 w-6 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Book a Call</h3>
-              <p className="text-white/70 text-sm mb-4">30-minute strategy session</p>
-              <Button variant="ghost" className="text-accent hover:text-accent/80 hover:bg-accent/10" onClick={() => document.getElementById('contact')?.scrollIntoView({
-              behavior: 'smooth'
-            })}>
-                Schedule Now
-              </Button>
-            </div>
-
-            <div className="glass rounded-2xl p-6 text-center">
-              <div className="w-12 h-12 bg-electric-teal rounded-full flex items-center justify-center mx-auto mb-4">
-                <ArrowRight className="h-6 w-6 text-white" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Know Your Budget</h3>
-              <p className="text-white/70 text-sm mb-4">Instant price range in 2 minutes</p>
-              <Button variant="ghost" asChild className="text-electric-teal hover:text-electric-teal/80 hover:bg-electric-teal/10">
-                <Link to="/estimate">
-                  Estimate Now
+          <div className="relative bg-white rounded-3xl p-3 shadow-2xl shadow-emerald-900/20">
+            {actions.map((action) => {
+              const inner = (
+                <>
+                  <span className="h-11 w-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                    {action.icon}
+                  </span>
+                  <span className="flex-1 min-w-0">
+                    <span className="block font-semibold text-slate-900">{action.title}</span>
+                    <span className="block text-sm text-slate-500">{action.text}</span>
+                  </span>
+                  <ArrowRight className="h-5 w-5 text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all" />
+                </>
+              );
+              const className = "group flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors";
+              return action.to ? (
+                <Link key={action.title} to={action.to} className={className}>
+                  {inner}
                 </Link>
-              </Button>
-            </div>
+              ) : (
+                <a key={action.title} href={action.href} target="_blank" rel="noopener noreferrer" className={className}>
+                  {inner}
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 }

@@ -13,7 +13,7 @@ export default function EventsPage() {
 
   return (
     <SiteLayout>
-      <section className="relative overflow-hidden border-b border-foreground/10" style={{ background: "var(--gradient-hero)" }}>
+      <section className="surface-dark page-hero relative overflow-hidden">
         <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
           <p className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-semibold mb-6">
@@ -22,7 +22,7 @@ export default function EventsPage() {
           </p>
           <h1 className="text-4xl md:text-6xl font-bold font-poppins text-white mb-5">
             Events by{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">RynexNative</span>
+            <span className="text-primary">RynexNative</span>
           </h1>
           <p className="text-lg md:text-xl text-slate-300 max-w-2xl">
             Learn ethical hacking, full-stack development and cybersecurity from practitioners. Register online and get

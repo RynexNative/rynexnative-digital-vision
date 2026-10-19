@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import type { ReactNode } from "react";
 import { Calculator, CalendarDays, Gem, Menu, Newspaper, ShieldAlert, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useSectionNav } from "@/hooks/use-section-nav";
 import { cn } from "@/lib/utils";
 
@@ -20,10 +18,11 @@ const navItems: NavItem[] = [
 ];
 
 const itemClassName =
-  "text-foreground/80 hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 hover:bg-primary/10";
+  "text-white/75 hover:text-white px-3 py-2 rounded-full text-[13px] font-semibold uppercase tracking-wider transition-colors duration-200 hover:bg-white/10";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const goToSection = useSectionNav();
   const { pathname } = useLocation();
 
@@ -32,8 +31,15 @@ export function Navigation() {
     setIsOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const renderItem = (item: NavItem, mobile: boolean) => {
-    const className = cn(itemClassName, mobile && "block w-full text-left text-base");
+    const className = cn(itemClassName, mobile && "flex w-full text-left text-sm py-3 rounded-xl");
     if ("to" in item) {
       const active = pathname.startsWith(item.to);
       return (
@@ -41,9 +47,9 @@ export function Navigation() {
           key={item.label}
           to={item.to}
           aria-current={active ? "page" : undefined}
-          className={cn(className, "inline-flex items-center gap-1.5", active && "text-primary bg-primary/10")}
+          className={cn(className, "inline-flex items-center gap-1.5", active && "text-emerald-300 bg-white/10")}
         >
-          {item.icon}
+          {mobile && item.icon}
           {item.label}
         </Link>
       );
@@ -63,62 +69,61 @@ export function Navigation() {
     );
   };
 
-  return <nav className="fixed top-0 w-full z-50 glass backdrop-blur-xl">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/" onClick={() => pathname === "/" && window.scrollTo({ top: 0, behavior: "smooth" })} className="flex-shrink-0 flex items-center space-x-3">
-            <img src="/uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" alt="RynexNative Logo" className="w-8 h-8 object-contain" />
-            <span className="text-xl font-bold font-poppins bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              RynexNative
+  return (
+    <nav className="fixed top-3 md:top-4 inset-x-0 z-50 px-3 md:px-6" aria-label="Main">
+      <div
+        className={cn(
+          "max-w-6xl mx-auto rounded-[28px] border border-white/10 backdrop-blur-xl transition-all duration-300",
+          scrolled || isOpen ? "bg-slate-900/90 shadow-2xl shadow-slate-900/20" : "bg-slate-900/55",
+        )}
+      >
+        <div className="flex justify-between items-center h-16 pl-2.5 pr-2.5 md:pl-3">
+          <Link
+            to="/"
+            onClick={() => pathname === "/" && window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="flex-shrink-0 flex items-center gap-2 h-11 pl-2 pr-4 rounded-full bg-white shadow-sm"
+          >
+            <img src="/uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" alt="" className="w-7 h-7 object-contain" />
+            <span className="text-base font-extrabold font-poppins tracking-tight text-slate-900">
+              Rynex<span className="text-emerald-600">Native</span>
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden xl:flex items-center space-x-1 ml-8">
-            {navItems.map(item => renderItem(item, false))}
-          </div>
+          <div className="hidden xl:flex items-center gap-0.5">{navItems.map((item) => renderItem(item, false))}</div>
 
-          {/* Desktop CTA & Theme Toggle */}
-          <div className="hidden xl:flex items-center space-x-4">
-            <ThemeToggle />
-            <Button asChild className="bg-gradient-primary text-white font-semibold hover:opacity-90 shadow-lg shadow-primary/20">
-              <Link to="/estimate">
-                <Calculator className="mr-2 h-4 w-4" />
-                Get Estimate
-              </Link>
-            </Button>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="xl:hidden flex items-center space-x-2">
-            <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <Link
+              to="/estimate"
+              className="hidden sm:inline-flex h-11 px-5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-bold uppercase tracking-wider items-center gap-2 transition-colors"
+            >
+              <Calculator className="h-4 w-4" />
+              Get estimate
+            </Link>
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
-              className="p-2 text-foreground hover:text-primary"
+              className="xl:hidden h-11 w-11 rounded-full text-white hover:bg-white/10 flex items-center justify-center"
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isOpen && <div className="xl:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background/95 backdrop-blur-xl rounded-lg mt-2 mb-3 border border-foreground/10">
-              {navItems.map(item => renderItem(item, true))}
-              <div className="pt-2">
-                <Button asChild className="w-full bg-gradient-primary text-white font-semibold hover:opacity-90">
-                  <Link to="/estimate">
-                    <Calculator className="mr-2 h-4 w-4" />
-                    Get Estimate
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </div>}
+        {isOpen && (
+          <div className="xl:hidden px-3 pb-4 space-y-1 border-t border-white/10 pt-3 max-h-[calc(100svh-6rem)] overflow-y-auto">
+            {navItems.map((item) => renderItem(item, true))}
+            <Link
+              to="/estimate"
+              className="sm:hidden mt-2 h-12 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center gap-2"
+            >
+              <Calculator className="h-4 w-4" />
+              Get estimate
+            </Link>
+          </div>
+        )}
       </div>
-    </nav>;
+    </nav>
+  );
 }

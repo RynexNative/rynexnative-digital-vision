@@ -25,11 +25,12 @@ export function AboutSection() {
   ]
 
   return (
-    <section id="about" className="py-20 bg-background/50">
+    <section id="about" className="py-20 md:py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
+          <p className="eyebrow">Who we are</p>
           <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-6">
-            About <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">RynexNative</span>
+            About <span className="text-primary">RynexNative</span>
           </h2>
           <p className="text-xl text-foreground/80 max-w-3xl mx-auto leading-relaxed">
             We build intelligent solutions for a connected world

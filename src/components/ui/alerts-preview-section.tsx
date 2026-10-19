@@ -8,7 +8,7 @@ export function AlertsPreviewSection() {
   const alerts = (data?.alerts ?? []).slice(0, 3)
 
   return (
-    <section id="alerts" className="py-20 bg-card/30 relative overflow-hidden">
+    <section id="alerts" className="py-20 md:py-24 section-muted relative overflow-hidden">
       <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-red-500/5 blur-3xl" aria-hidden="true" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -19,7 +19,7 @@ export function AlertsPreviewSection() {
             </div>
             <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-4">
               Protect yourself from{" "}
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">online scams</span>
+              <span className="text-primary">online scams</span>
             </h2>
             <p className="text-lg text-foreground/80 leading-relaxed">
               Clear alerts about scams spreading in Tanzania: how to spot them and what to do. From our cybersecurity team.

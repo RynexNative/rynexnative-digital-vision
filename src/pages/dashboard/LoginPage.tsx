@@ -18,7 +18,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10" style={{ background: "var(--gradient-hero)" }}>
+    <div className="surface-dark min-h-screen flex flex-col items-center justify-center px-4 py-10">
       <form
         onSubmit={(e) => {
           e.preventDefault()

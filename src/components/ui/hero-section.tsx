@@ -1,82 +1,95 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Play } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { FloatingShapes } from "@/components/ui/floating-shapes";
+import { ArrowRight, Gem } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
+import { useSectionNav } from "@/hooks/use-section-nav";
+
+const stats = [
+  { value: "50+", label: "Projects delivered" },
+  { value: "30+", label: "Happy clients" },
+  { value: "24/7", label: "Support" },
+];
+
+const stack = ["React", "Django", "Python", "React Native", "Node.js", "PostgreSQL", "FastAPI", "Docker", "AWS", "TensorFlow"];
+
 export function HeroSection() {
-  return <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{
-    background: 'var(--gradient-hero)'
-  }}>
-      <FloatingShapes />
-      
-      {/* Background Image Overlay */}
-      <div className="absolute inset-0 opacity-20" style={{
-      backgroundImage: `url(${heroImage})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }} />
-      
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="animate-slide-up">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-poppins mb-6">
-            <span className="bg-gradient-to-r from-white via-primary to-accent bg-clip-text text-transparent">
-              Empowering Digital
-            </span>
-            <br />
-            <span className="text-white">Innovation</span>
-          </h1>
-          
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed text-slate-300">
-            We build intelligent solutions for a connected world through cutting-edge 
-            <span className="text-primary font-semibold"> software development</span>, 
-            <span className="text-accent font-semibold"> mobile applications</span>, and 
-            <span className="text-electric-teal font-semibold"> cybersecurity</span>.
+  const goToSection = useSectionNav();
+
+  return (
+    <section className="surface-dark relative min-h-[100svh] flex flex-col overflow-hidden">
+      {/* Photo under a dark wash keeps the white text readable */}
+      <div
+        className="absolute inset-0 opacity-25 mix-blend-luminosity"
+        style={{ backgroundImage: `url(${heroImage})`, backgroundSize: "cover", backgroundPosition: "center" }}
+        aria-hidden="true"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/60 to-slate-950" aria-hidden="true" />
+      <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[520px] w-[820px] rounded-full bg-emerald-500/20 blur-[120px]" aria-hidden="true" />
+
+      <div className="relative z-10 flex-1 flex items-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16 text-center animate-slide-up">
+          <p className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/15 bg-white/5 text-emerald-300 text-xs font-bold uppercase tracking-[0.2em] mb-8">
+            Software · Mobile · Cybersecurity
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button size="lg" asChild className="neu-button text-lg px-8 py-4 group border-primary/20 hover:border-primary/40 text-slate-900">
-              <Link to="/estimate">
-                Estimate My Project
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" className="glass text-lg px-8 py-4 group border-accent/30 hover:border-accent/50" onClick={() => document.getElementById('portfolio')?.scrollIntoView({
-            behavior: 'smooth'
-          })}>
-              <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
-              View Our Work
-            </Button>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold font-poppins leading-[1.08] text-white mb-6">
+            Technology your business
+            <br className="hidden sm:block" /> can <span className="text-emerald-400">trust</span>
+          </h1>
+          <p className="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed text-slate-300 mb-10">
+            We design and build websites, apps and secure systems with care, so your clients feel the quality from the very first click.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <Link
+              to="/packages"
+              className="h-14 px-8 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white font-semibold inline-flex items-center gap-2 shadow-lg shadow-emerald-500/30 transition-colors group"
+            >
+              <Gem className="h-5 w-5" />
+              Explore our packages
+              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <button
+              type="button"
+              onClick={() => goToSection("portfolio")}
+              className="h-14 px-8 rounded-full border border-white/25 text-white font-semibold hover:bg-white/10 transition-colors"
+            >
+              See our work
+            </button>
           </div>
-          
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16">
-            <div className="glass rounded-2xl p-6 hover-lift">
-              <div className="text-3xl font-bold text-primary mb-2">50+</div>
-              <div className="text-sm text-foreground/70 text-slate-300">Projects Delivered</div>
-            </div>
-            <div className="glass rounded-2xl p-6 hover-lift">
-              <div className="text-3xl font-bold text-accent mb-2">5+</div>
-              <div className="text-sm text-foreground/70 text-slate-100">Years Experience</div>
-            </div>
-            <div className="glass rounded-2xl p-6 hover-lift">
-              <div className="text-3xl font-bold text-electric-teal mb-2">30+</div>
-              <div className="text-sm text-foreground/70 text-slate-300">Happy Clients</div>
-            </div>
-            <div className="glass rounded-2xl p-6 hover-lift">
-              <div className="text-3xl font-bold text-tech-purple mb-2">24/7</div>
-              <div className="text-sm text-foreground/70 text-slate-300">Support</div>
+
+          <dl className="mt-14 grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:justify-center sm:gap-x-12 sm:gap-y-6">
+            {stats.map((stat) => (
+              <div key={stat.label} className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+                <dt className="sr-only">{stat.label}</dt>
+                <dd className="text-3xl sm:text-4xl md:text-5xl font-bold font-poppins text-white">{stat.value}</dd>
+                <span className="hidden sm:block h-10 w-px bg-emerald-400" aria-hidden="true" />
+                <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 text-center sm:text-left sm:w-24 leading-tight" aria-hidden="true">
+                  {stat.label}
+                </span>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+
+      {/* Technologies strip */}
+      <div className="relative z-10 border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex items-center gap-6 overflow-hidden">
+          <p className="flex-shrink-0 text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 leading-tight border-r border-white/15 pr-6">
+            Built
+            <br />
+            with
+          </p>
+          <div className="flex-1 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
+            <div className="flex gap-10 w-max animate-marquee">
+              {[...stack, ...stack].map((name, i) => (
+                <span key={i} className="text-lg font-semibold text-slate-400/80 whitespace-nowrap" aria-hidden={i >= stack.length}>
+                  {name}
+                </span>
+              ))}
             </div>
           </div>
         </div>
       </div>
-      
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-primary/50 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-primary rounded-full mt-2 animate-pulse"></div>
-        </div>
-      </div>
-    </section>;
+    </section>
+  );
 }

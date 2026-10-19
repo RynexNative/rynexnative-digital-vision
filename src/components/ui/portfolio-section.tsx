@@ -80,11 +80,12 @@ export function PortfolioSection() {
   ]
 
   return (
-    <section id="portfolio" className="py-20 bg-background/50">
+    <section id="portfolio" className="py-20 md:py-24 section-muted">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
+          <p className="eyebrow">Our work</p>
           <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-6">
-            Featured <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Projects</span>
+            Featured <span className="text-primary">Projects</span>
           </h2>
           <p className="text-xl text-foreground/80 max-w-3xl mx-auto leading-relaxed">
             Showcasing our expertise through successful implementations across various industries

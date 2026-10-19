@@ -9,63 +9,62 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Core Brand Colors */
-    --deep-blue: 210 57% 11%;     /* #0A192F */
-    --electric-teal: 169 100% 39%; /* #00C9A7 */
-    --tech-purple: 250 84% 54%;    /* #6366F1 */
-    --cyber-blue: 217 91% 60%;     /* #3B82F6 */
-    
+    /* Core Brand Colors (green family) */
+    --deep-blue: 222 47% 11%;      /* Slate 900, for text and dark surfaces */
+    --electric-teal: 160 84% 39%;  /* Emerald 500 #10B981 */
+    --tech-purple: 175 84% 32%;    /* Teal 600 #0D9488 */
+    --cyber-blue: 161 94% 30%;     /* Emerald 600 #059669 */
+
     /* Extended Palette */
     --tech-gray: 215 25% 27%;      /* #374151 */
     --glass-white: 0 0% 100%;      /* Pure white for glassmorphism */
     --glass-overlay: 210 40% 98%;  /* Subtle overlay */
     
-    /* Semantic Tokens */
-    --background: 210 57% 11%;     /* Deep blue background */
-    --foreground: 0 0% 98%;        /* Light text */
+    /* Semantic Tokens: the site is light, with dark "surfaces" (hero, page headers) */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;          /* slate-900 */
 
-    --card: 210 50% 16%;           /* Slightly lighter than background */
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
 
-    --popover: 210 50% 16%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 169 100% 39%;       /* Electric teal */
-    --primary-foreground: 210 57% 11%;
+    --primary: 161 94% 30%;             /* Emerald 600 #059669 */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 215 25% 27%;      /* Tech gray */
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 210 50% 16%;
-    --muted-foreground: 215 15% 70%;
+    --muted: 210 40% 96%;               /* slate-100 */
+    --muted-foreground: 215 16% 40%;
 
-    --accent: 217 91% 60%;         /* Cyber blue */
-    --accent-foreground: 0 0% 98%;
+    --accent: 175 84% 32%;              /* Teal 600 #0D9488 */
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 215 25% 35%;
-    --input: 215 25% 35%;
-    --ring: 169 100% 39%;
+    --border: 214 32% 91%;              /* slate-200 */
+    --input: 214 32% 88%;
+    --ring: 161 94% 30%;
 
-    /* Gradients - Updated for cooler, less bright appearance */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--cyber-blue)));
-    --gradient-hero: linear-gradient(135deg, hsl(210 60% 8%), hsl(215 40% 12%));
-    --gradient-cta: linear-gradient(135deg, hsl(210 45% 15%), hsl(220 35% 18%));
-    --gradient-card: linear-gradient(145deg, hsl(210 50% 16% / 0.8), hsl(215 25% 27% / 0.4));
+    --gradient-primary: linear-gradient(135deg, hsl(160 84% 39%), hsl(161 94% 30%));
+    --gradient-hero: radial-gradient(ellipse 80% 60% at 50% 0%, hsl(160 70% 24% / 0.55), transparent 70%),
+      linear-gradient(180deg, hsl(215 28% 17%) 0%, hsl(222 47% 8%) 100%);
+    --gradient-cta: linear-gradient(135deg, hsl(158 64% 52%), hsl(161 94% 30%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(210 40% 98%));
     --gradient-glass: linear-gradient(145deg, hsl(0 0% 100% / 0.1), hsl(0 0% 100% / 0.05));
-    
-    /* Glassmorphism */
-    --glass-bg: hsl(0 0% 100% / 0.05);
-    --glass-border: hsl(0 0% 100% / 0.1);
-    --glass-shadow: 0 8px 32px hsl(0 0% 0% / 0.1);
-    
-    /* Neumorphism Shadows */
-    --neu-shadow-light: 0 8px 16px hsl(210 50% 8%);
-    --neu-shadow-dark: 0 8px 16px hsl(210 70% 5%);
-    --neu-shadow-inset: inset 0 2px 4px hsl(0 0% 100% / 0.1);
-    
+
+    /* Cards: white with a soft shadow */
+    --glass-bg: hsl(0 0% 100%);
+    --glass-border: hsl(214 32% 91%);
+    --glass-shadow: 0 1px 2px hsl(222 47% 11% / 0.04), 0 8px 24px hsl(222 47% 11% / 0.06);
+
+    --neu-shadow-light: 0 4px 12px hsl(222 47% 11% / 0.08);
+    --neu-shadow-dark: 0 1px 2px hsl(222 47% 11% / 0.06);
+    --neu-shadow-inset: inset 0 1px 2px hsl(222 47% 11% / 0.06);
+
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -89,30 +88,23 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .light {
-    /* Light mode overrides for better contrast */
-    --background: 0 0% 98%;
-    --foreground: 210 57% 11%;
-    --card: 0 0% 100%;
-    --card-foreground: 210 57% 11%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 57% 11%;
-    --primary: 169 100% 39%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 215 25% 90%;
-    --secondary-foreground: 210 57% 11%;
-    --muted: 215 25% 95%;
-    --muted-foreground: 215 25% 40%;
-    --accent: 217 91% 60%;
-    --accent-foreground: 0 0% 98%;
-    --border: 215 25% 85%;
-    --input: 215 25% 85%;
-    --ring: 169 100% 39%;
-    
-    /* Adjust gradients for light mode */
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100% / 0.8), hsl(215 25% 95% / 0.4));
-    --glass-bg: hsl(0 0% 0% / 0.05);
-    --glass-border: hsl(0 0% 0% / 0.1);
+  /* Dark surfaces: hero and page headers. Tokens flip so components inside stay readable */
+  .surface-dark {
+    --background: 222 47% 8%;
+    --foreground: 0 0% 100%;
+    --card: 217 33% 14%;
+    --card-foreground: 0 0% 100%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 72%;
+    --border: 217 25% 24%;
+    --input: 217 25% 28%;
+    --primary: 158 64% 52%;            /* Emerald 400 on dark */
+    --accent: 172 66% 50%;
+    --glass-bg: hsl(0 0% 100% / 0.06);
+    --glass-border: hsl(0 0% 100% / 0.12);
+    --glass-shadow: 0 8px 32px hsl(0 0% 0% / 0.2);
+    color: hsl(var(--foreground));
+    background: var(--gradient-hero);
   }
 }
 
@@ -131,7 +123,7 @@ All colors MUST be HSL.
   /* Glass morphism utilities */
   .glass {
     background: var(--glass-bg);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
   }
@@ -161,6 +153,22 @@ All colors MUST be HSL.
     background: var(--gradient-card);
   }
   
+  /* Dark page header that slides under the floating navigation */
+  .page-hero {
+    margin-top: -5.5rem;
+    padding-top: 5.5rem;
+  }
+
+  /* Small uppercase label above section titles */
+  .eyebrow {
+    @apply inline-block text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3;
+  }
+
+  /* Alternating light section background */
+  .section-muted {
+    background: hsl(210 40% 98%);
+  }
+
   /* Animation utilities */
   .animate-float {
     animation: float 6s ease-in-out infinite;
@@ -180,9 +188,13 @@ All colors MUST be HSL.
   }
   
   .hover-lift:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px hsl(0 0% 0% / 0.2);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px hsl(222 47% 11% / 0.10);
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee, .animate-float, .animate-bounce { animation: none; }
 }
 
 @layer utilities {

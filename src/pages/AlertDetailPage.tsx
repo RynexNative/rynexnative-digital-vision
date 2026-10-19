@@ -98,7 +98,7 @@ export default function AlertDetailPage() {
   return (
     <SiteLayout>
       <article>
-        <header className="relative overflow-hidden border-b border-foreground/10" style={{ background: "var(--gradient-hero)" }}>
+        <header className="surface-dark page-hero relative overflow-hidden">
           <div
             className={cn(
               "absolute -top-32 right-0 h-80 w-80 rounded-full blur-3xl",

@@ -62,7 +62,7 @@ export default function AlertsPage() {
   return (
     <SiteLayout>
       {/* Header */}
-      <section className="relative overflow-hidden border-b border-foreground/10" style={{ background: "var(--gradient-hero)" }}>
+      <section className="surface-dark page-hero relative overflow-hidden">
         <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-red-500/10 blur-3xl" aria-hidden="true" />
         <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
@@ -73,7 +73,7 @@ export default function AlertsPage() {
             </div>
             <h1 className="text-4xl md:text-6xl font-bold font-poppins mb-5 text-white">
               Online{" "}
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Safety Alerts</span>
+              <span className="text-primary">Safety Alerts</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-300 leading-relaxed">
               New scams spreading in Tanzania, how to spot them, and what to do if you are affected. Prepared by the

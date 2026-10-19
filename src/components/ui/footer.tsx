@@ -87,7 +87,7 @@ export function Footer() {
   ]
 
   return (
-    <footer className="bg-background border-t border-foreground/10">
+    <footer className="bg-background border-t border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer */}
         <div className="py-16">
@@ -100,8 +100,8 @@ export function Footer() {
                   alt="RynexNative Logo" 
                   className="w-8 h-8 object-contain"
                 />
-                <span className="text-xl font-bold font-poppins bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  RynexNative
+                <span className="text-2xl font-extrabold font-poppins tracking-tight text-foreground">
+                  Rynex<span className="text-primary">Native</span>
                 </span>
               </div>
               
@@ -117,7 +117,7 @@ export function Footer() {
                     href={social.href}
                     aria-label={social.label}
                     {...(social.href.startsWith('http') ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="w-10 h-10 bg-card hover:bg-primary/10 rounded-lg flex items-center justify-center transition-colors group"
+                    className="w-10 h-10 bg-muted hover:bg-primary/10 rounded-full flex items-center justify-center transition-colors group"
                   >
                     <div className="text-foreground/60 group-hover:text-primary transition-colors">
                       {social.icon}
@@ -134,7 +134,7 @@ export function Footer() {
               ["Resources", footerLinks.resources]
             ] as const).map(([title, links]) => (
               <div key={title}>
-                <h3 className="font-semibold text-foreground mb-4">{title}</h3>
+                <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-foreground mb-4">{title}</h3>
                 <ul className="space-y-3">
                   {links.map((link) => (
                     <li key={link.label}>
@@ -179,11 +179,11 @@ export function Footer() {
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="flex-1 min-w-0 px-4 py-2 bg-card border border-foreground/20 rounded-l-lg focus:outline-none focus:border-primary text-sm"
+                className="flex-1 min-w-0 px-4 py-2 bg-muted border border-border rounded-l-full focus:outline-none focus:border-primary text-sm"
                 onKeyDown={(e) => e.key === 'Enter' && handleSubscribe()}
               />
               <button 
-                className="flex-shrink-0 px-4 sm:px-6 py-2 bg-gradient-primary text-white rounded-r-lg hover:opacity-90 transition-opacity text-sm font-medium disabled:opacity-50 flex items-center space-x-2"
+                className="flex-shrink-0 px-4 sm:px-6 py-2 bg-primary text-primary-foreground rounded-r-full hover:opacity-90 transition-opacity text-sm font-medium disabled:opacity-50 flex items-center space-x-2"
                 onClick={handleSubscribe}
                 disabled={isSubscribing || !email}
               >
