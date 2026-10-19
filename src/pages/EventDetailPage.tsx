@@ -135,7 +135,7 @@ export default function EventDetailPage() {
 
   return (
     <SiteLayout>
-      <section className="relative overflow-hidden border-b border-foreground/10" style={{ background: "var(--gradient-hero)" }}>
+      <section className="surface-dark page-hero relative overflow-hidden">
         {event.cover_image && (
           <img src={imageUrl(event.cover_image, 1600)} alt="" className="absolute inset-0 w-full h-full object-cover opacity-20" />
         )}

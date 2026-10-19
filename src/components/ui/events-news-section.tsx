@@ -12,7 +12,7 @@ export function EventsNewsSection() {
   if (events.length === 0 && news.length === 0) return null
 
   return (
-    <section id="events" className="py-20 bg-background/50">
+    <section id="events" className="py-20 md:py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {events.length > 0 && (
           <div>
@@ -24,7 +24,7 @@ export function EventsNewsSection() {
                 </p>
                 <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-3">
                   Learn{" "}
-                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">with us</span>
+                  <span className="text-primary">with us</span>
                 </h2>
                 <p className="text-lg text-foreground/80">Training, workshops and webinars. Register and get your ticket online.</p>
               </div>

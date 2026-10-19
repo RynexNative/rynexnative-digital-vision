@@ -43,11 +43,12 @@ export function TestimonialsSection() {
 
 
   return (
-    <section id="testimonials" className="py-20 bg-background/50">
+    <section id="testimonials" className="py-20 md:py-24 section-muted">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
+          <p className="eyebrow">Testimonials</p>
           <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-6">
-            Client <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Testimonials</span>
+            Client <span className="text-primary">Testimonials</span>
           </h2>
           <p className="text-xl text-foreground/80 max-w-3xl mx-auto leading-relaxed">
             Don't just take our word for it - hear from the leaders who've experienced our impact firsthand
@@ -140,7 +141,7 @@ export function TestimonialsSection() {
 
 
           <div id="founder" className="text-center mb-16 p-10">
-            <h2 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent text-3xl font-bold p-4">
+            <h2 className="text-primary text-3xl font-bold p-4">
               Meet the Founder
             </h2>
 

@@ -606,12 +606,12 @@ export default function EstimatePage() {
 
   return (
     <SiteLayout className={cn(!isFinalStep && "pb-20 lg:pb-0")}>
-      <div className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
+      <div className="surface-dark page-hero relative overflow-hidden">
         <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-8 md:pt-14">
           <h1 className="text-3xl md:text-5xl font-bold font-poppins text-white mb-3">
             Estimate your{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">project</span>
+            <span className="text-primary">project</span>
           </h1>
           <p className="text-slate-300 text-lg mb-8 max-w-2xl">
             Get an instant price range in under 2 minutes. No sign-up, no obligation.

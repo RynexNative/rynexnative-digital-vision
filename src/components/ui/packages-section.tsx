@@ -27,7 +27,7 @@ export function PackagesSection() {
           </p>
           <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-4">
             Quality at{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">every level</span>
+            <span className="text-primary">every level</span>
           </h2>
           <p className="text-lg text-foreground/80">
             Choose the level that matches where your business is today. Every client gets the same care, honesty and attention to detail.

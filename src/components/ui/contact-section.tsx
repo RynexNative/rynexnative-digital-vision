@@ -55,13 +55,14 @@ export function ContactSection() {
       [e.target.name]: e.target.value
     }));
   };
-  return <section id="contact" className="py-20 bg-card/30">
+  return <section id="contact" className="py-20 md:py-24 section-muted">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
+          <p className="eyebrow">Get in touch</p>
           <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-6">
             Let's Start Building
             <br />
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <span className="text-primary">
               Something Amazing
             </span>
           </h2>
@@ -177,7 +178,7 @@ export function ContactSection() {
                 <Textarea name="message" value={formData.message} onChange={handleChange} placeholder="Tell us about your project, timeline, and goals..." rows={5} required maxLength={5000} className="glass border-foreground/20 focus:border-primary resize-none" />
               </div>
 
-              <Button type="submit" size="lg" disabled={isSubmitting} className="w-full neu-button text-lg py-4 group border-primary/20 text-slate-800">
+              <Button type="submit" size="lg" disabled={isSubmitting} className="w-full rounded-full h-12 text-base bg-primary text-primary-foreground hover:bg-primary/90 group">
                 {isSubmitting ? "Sending..." : "Send Message"}
                 <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>

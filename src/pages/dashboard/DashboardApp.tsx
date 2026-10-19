@@ -104,9 +104,9 @@ function Shell() {
     ) : null
 
   return (
-    <div className="min-h-screen bg-background font-inter lg:flex">
+    <div className="min-h-screen section-muted font-inter lg:flex">
       {/* Sidebar (desktop) */}
-      <aside className="hidden lg:flex lg:flex-col w-64 flex-shrink-0 border-r border-foreground/10 bg-card/30 sticky top-0 h-screen p-4">
+      <aside className="hidden lg:flex lg:flex-col w-64 flex-shrink-0 border-r border-border bg-background sticky top-0 h-screen p-4">
         <div className="flex items-center gap-2.5 px-2 mb-8 mt-2">
           <img src="/uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" alt="" className="w-8 h-8" />
           <div>

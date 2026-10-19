@@ -202,7 +202,7 @@ export default function PackageDetailPage() {
 
   return (
     <SiteLayout>
-      <section className="relative overflow-hidden border-b border-foreground/10" style={{ background: "var(--gradient-hero)" }}>
+      <section className="surface-dark page-hero relative overflow-hidden">
         {pkg.cover_image && <img src={imageUrl(pkg.cover_image, 1600)} alt="" className="absolute inset-0 w-full h-full object-cover opacity-20" />}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" aria-hidden="true" />
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">

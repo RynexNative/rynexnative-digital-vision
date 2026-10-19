@@ -20,7 +20,7 @@ export default function PackagesPage() {
 
   return (
     <SiteLayout>
-      <section className="relative overflow-hidden border-b border-foreground/10" style={{ background: "var(--gradient-hero)" }}>
+      <section className="surface-dark page-hero relative overflow-hidden">
         <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" aria-hidden="true" />
         <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl" aria-hidden="true" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 text-center">
@@ -30,7 +30,7 @@ export default function PackagesPage() {
           </p>
           <h1 className="text-4xl md:text-6xl font-bold font-poppins text-white mb-5">
             The right level for{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">where you are going</span>
+            <span className="text-primary">where you are going</span>
           </h1>
           <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto">
             Every business is at a different stage. Choose the level that fits yours. Whatever you choose, you get the same care, honesty and
