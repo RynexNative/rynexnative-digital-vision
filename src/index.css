@@ -194,7 +194,8 @@ All colors MUST be HSL.
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-marquee, .animate-float, .animate-bounce { animation: none; }
+  .animate-marquee, .animate-float, .animate-bounce, .animate-ken-burns,
+  .animate-aurora, .animate-aurora-slow, .animate-aurora-reverse { animation: none; }
 }
 
 @layer utilities {

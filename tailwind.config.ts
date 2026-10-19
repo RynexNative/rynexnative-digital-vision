@@ -82,6 +82,19 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			keyframes: {
+				'ken-burns': {
+					'0%': { transform: 'scale(1) translate(0, 0)' },
+					'100%': { transform: 'scale(1.15) translate(-2%, -2%)' }
+				},
+				aurora: {
+					'0%, 100%': { transform: 'translate(-50%, 0) scale(1)', opacity: '1' },
+					'50%': { transform: 'translate(-40%, 8%) scale(1.15)', opacity: '0.7' }
+				},
+				'aurora-drift': {
+					'0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+					'33%': { transform: 'translate(12%, -10%) scale(1.1)' },
+					'66%': { transform: 'translate(-8%, 8%) scale(0.95)' }
+				},
 				marquee: {
 					from: { transform: 'translateX(0)' },
 					to: { transform: 'translateX(-50%)' }
@@ -118,6 +131,10 @@ export default {
 			},
 			animation: {
 				marquee: 'marquee 40s linear infinite',
+				'ken-burns': 'ken-burns 30s ease-in-out infinite alternate',
+				aurora: 'aurora 14s ease-in-out infinite',
+				'aurora-slow': 'aurora-drift 22s ease-in-out infinite',
+				'aurora-reverse': 'aurora-drift 26s ease-in-out infinite reverse',
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'float': 'float 6s ease-in-out infinite',
