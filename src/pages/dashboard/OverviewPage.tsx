@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import { Link } from "react-router-dom"
-import { ArrowRight, Calculator, CalendarDays, Hourglass, Inbox, Mail, Plus, Trophy } from "lucide-react"
+import { AlertTriangle, ArrowRight, Calculator, CalendarDays, Hourglass, Inbox, Mail, Plus, Trophy } from "lucide-react"
 import { useCurrentUser, useStats } from "@/features/dashboard/api"
 import { ESTIMATE_STATUS, MESSAGE_STATUS, formatWhen } from "@/features/dashboard/types"
 import { EmptyState, ErrorState, PageHeader, Pill } from "@/features/dashboard/ui"
@@ -99,6 +99,19 @@ export default function OverviewPage() {
           hint={isLoading ? "…" : `${stats?.events?.registrations_week ?? 0} registrations this week`}
         />
       </div>
+
+      {Boolean(stats?.operations?.attention) && (
+        <Link
+          to="/admin/operations"
+          className="glass rounded-2xl p-4 mb-4 flex items-center gap-3 border-amber-500/40 hover:bg-amber-500/5 transition-colors"
+        >
+          <AlertTriangle className="h-5 w-5 text-amber-500 flex-shrink-0" />
+          <p className="text-sm flex-1">
+            <strong>{stats?.operations?.attention}</strong> item(s) in Operations need attention: renewals, payments or support ending soon.
+          </p>
+          <ArrowRight className="h-4 w-4 text-amber-500" />
+        </Link>
+      )}
 
       {Boolean(stats?.events?.to_verify) && (
         <Link
