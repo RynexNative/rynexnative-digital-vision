@@ -93,10 +93,12 @@ export default function CheckInPage() {
 
       <div className="grid lg:grid-cols-2 gap-6">
         <div className="space-y-4">
-          <div className="relative glass rounded-3xl overflow-hidden aspect-square bg-black/40">
-            <video ref={video} className={cn("w-full h-full object-cover", !cameraOn && "hidden")} muted playsInline />
+          <div className="relative glass rounded-3xl overflow-hidden aspect-square bg-slate-900">
+            {/* Never hide the video with display:none: qr-scanner then keeps it invisible
+                (opacity 0) for good. The start card covers it instead. */}
+            <video ref={video} className="absolute inset-0 w-full h-full object-cover" muted playsInline />
             {!cameraOn && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center">
+              <div className="absolute inset-0 z-10 bg-muted flex flex-col items-center justify-center gap-4 p-6 text-center">
                 <Camera className="h-12 w-12 text-foreground/40" />
                 <button type="button" onClick={startCamera} className={buttonPrimary}>
                   <Camera className="h-4 w-4" />
