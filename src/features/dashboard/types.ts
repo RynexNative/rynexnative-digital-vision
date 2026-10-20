@@ -61,6 +61,7 @@ export type DashboardStats = {
   events?: { upcoming: number; registrations_week: number; to_verify: number }
   news?: { published: number; drafts: number }
   packages?: { published: number; inquiries_new: number; inquiries_week: number }
+  operations?: { attention: number }
   estimates: { total: number; new: number; this_week: number; won: number }
   messages: { total: number; new: number }
   alerts: { total: number; published: number; drafts: number }

@@ -1,7 +1,13 @@
 import { Suspense, useEffect, useState, type ReactNode } from "react"
 import { NavLink, Route, Routes, useLocation } from "react-router-dom"
 import {
+  Activity,
+  Building2,
   Calculator,
+  CreditCard,
+  Globe,
+  LifeBuoy,
+  Server,
   CalendarDays,
   ExternalLink,
   Gem,
@@ -36,8 +42,14 @@ const EventRegistrationsPage = lazyWithReload(() => import("./EventRegistrations
 const CheckInPage = lazyWithReload(() => import("./CheckInPage"))
 const PackagesAdminPage = lazyWithReload(() => import("./PackagesAdminPage"))
 const PackageRequestsPage = lazyWithReload(() => import("./PackageRequestsPage"))
+const OperationsPage = lazyWithReload(() => import("./OperationsPage"))
+const ClientsPage = lazyWithReload(() => import("./ClientsPage"))
+const SupportPage = lazyWithReload(() => import("./SupportPage"))
+const DomainsPage = lazyWithReload(() => import("./DomainsPage"))
+const ServersPage = lazyWithReload(() => import("./ServersPage"))
+const SubscriptionsPage = lazyWithReload(() => import("./SubscriptionsPage"))
 
-type NavItem = { to: string; label: string; icon: ReactNode; badge?: number }
+type NavItem = { to: string; label: string; icon: ReactNode; badge?: number; group: string }
 
 function FullScreenSpinner() {
   return (
@@ -70,17 +82,26 @@ function Shell() {
   }, [pathname])
 
   const items: NavItem[] = [
-    { to: "/admin", label: "Overview", icon: <LayoutDashboard className="h-5 w-5" /> },
-    { to: "/admin/requests", label: "Requests", icon: <Inbox className="h-5 w-5" />, badge: stats?.packages?.inquiries_new },
-    { to: "/admin/events", label: "Events", icon: <CalendarDays className="h-5 w-5" />, badge: stats?.events?.to_verify },
-    { to: "/admin/estimates", label: "Estimates", icon: <Calculator className="h-5 w-5" />, badge: stats?.estimates.new },
-    { to: "/admin/messages", label: "Messages", icon: <Mail className="h-5 w-5" />, badge: stats?.messages.new },
-    { to: "/admin/packages", label: "Packages", icon: <Gem className="h-5 w-5" /> },
-    { to: "/admin/news", label: "News", icon: <Newspaper className="h-5 w-5" />, badge: stats?.news?.drafts },
-    { to: "/admin/alerts", label: "Alerts", icon: <ShieldAlert className="h-5 w-5" />, badge: stats?.alerts.drafts },
-    { to: "/admin/subscribers", label: "Subscribers", icon: <Users className="h-5 w-5" /> },
-    { to: "/admin/scan", label: "Scan tickets", icon: <ScanLine className="h-5 w-5" /> },
+    { group: "", to: "/admin", label: "Overview", icon: <LayoutDashboard className="h-5 w-5" /> },
+    { group: "Sales", to: "/admin/requests", label: "Requests", icon: <Inbox className="h-5 w-5" />, badge: stats?.packages?.inquiries_new },
+    { group: "Operations", to: "/admin/operations", label: "Operations", icon: <Activity className="h-5 w-5" />, badge: stats?.operations?.attention },
+    { group: "Content & events", to: "/admin/events", label: "Events", icon: <CalendarDays className="h-5 w-5" />, badge: stats?.events?.to_verify },
+    { group: "Sales", to: "/admin/estimates", label: "Estimates", icon: <Calculator className="h-5 w-5" />, badge: stats?.estimates.new },
+    { group: "Sales", to: "/admin/messages", label: "Messages", icon: <Mail className="h-5 w-5" />, badge: stats?.messages.new },
+    { group: "Sales", to: "/admin/packages", label: "Packages", icon: <Gem className="h-5 w-5" /> },
+    { group: "Operations", to: "/admin/clients", label: "Clients", icon: <Building2 className="h-5 w-5" /> },
+    { group: "Operations", to: "/admin/support", label: "Support", icon: <LifeBuoy className="h-5 w-5" /> },
+    { group: "Operations", to: "/admin/domains", label: "Domains", icon: <Globe className="h-5 w-5" /> },
+    { group: "Operations", to: "/admin/servers", label: "Servers", icon: <Server className="h-5 w-5" /> },
+    { group: "Operations", to: "/admin/subscriptions", label: "Subscriptions", icon: <CreditCard className="h-5 w-5" /> },
+    { group: "Content & events", to: "/admin/news", label: "News", icon: <Newspaper className="h-5 w-5" />, badge: stats?.news?.drafts },
+    { group: "Content & events", to: "/admin/alerts", label: "Alerts", icon: <ShieldAlert className="h-5 w-5" />, badge: stats?.alerts.drafts },
+    { group: "Content & events", to: "/admin/subscribers", label: "Subscribers", icon: <Users className="h-5 w-5" /> },
+    { group: "Content & events", to: "/admin/scan", label: "Scan tickets", icon: <ScanLine className="h-5 w-5" /> },
   ]
+  // The sidebar and the "More" sheet show the items grouped
+  const GROUPS = ["", "Sales", "Operations", "Content & events"]
+  const grouped = (list: NavItem[]) => GROUPS.map((g) => ({ group: g, items: list.filter((i) => i.group === g) })).filter((g) => g.items.length)
   // Mobile bottom bar shows the first four; the rest live under "More"
   const primaryItems = items.slice(0, 4)
   const moreItems = items.slice(4)
@@ -92,7 +113,7 @@ function Shell() {
 
   const navClass = ({ isActive }: { isActive: boolean }) =>
     cn(
-      "flex items-center gap-3 px-3 h-11 rounded-xl text-sm font-medium transition-colors",
+      "flex items-center gap-3 px-3 h-9 rounded-xl text-sm font-medium transition-colors",
       isActive ? "bg-primary/15 text-primary" : "text-foreground/70 hover:text-foreground hover:bg-foreground/5",
     )
 
@@ -107,32 +128,39 @@ function Shell() {
     <div className="min-h-screen section-muted font-inter lg:flex">
       {/* Sidebar (desktop) */}
       <aside className="hidden lg:flex lg:flex-col w-64 flex-shrink-0 border-r border-border bg-background sticky top-0 h-screen p-4">
-        <div className="flex items-center gap-2.5 px-2 mb-8 mt-2">
+        <div className="flex items-center gap-2.5 px-2 mb-5 mt-1">
           <img src="/logo-64.webp" alt="" className="w-8 h-8" />
           <div>
             <p className="font-bold font-poppins leading-tight">RynexNative</p>
             <p className="text-xs text-primary font-semibold">Dashboard</p>
           </div>
         </div>
-        <nav className="space-y-1 flex-1" aria-label="Dashboard">
-          {items.map((item) => (
-            <NavLink key={item.to} to={item.to} end={item.to === "/admin"} className={navClass}>
-              {item.icon}
-              {item.label}
-              {badge(item.badge)}
-            </NavLink>
+        <nav className="flex-1 overflow-y-auto -mx-1 px-1 space-y-3 pb-2" aria-label="Dashboard">
+          {grouped(items).map(({ group, items: groupItems }) => (
+            <div key={group || "main"} className="space-y-0.5">
+              {group && <p className="px-3 pb-1 text-[11px] font-bold uppercase tracking-[0.15em] text-foreground/40">{group}</p>}
+              {groupItems.map((item) => (
+                <NavLink key={item.to} to={item.to} end={item.to === "/admin"} className={navClass}>
+                  {item.icon}
+                  {item.label}
+                  {badge(item.badge)}
+                </NavLink>
+              ))}
+            </div>
           ))}
         </nav>
-        <div className="border-t border-foreground/10 pt-4 space-y-1">
-          <a href="/#/" target="_blank" rel="noopener" className={navClass({ isActive: false })}>
-            <ExternalLink className="h-5 w-5" />
-            Open website
-          </a>
-          <button type="button" onClick={() => logout.mutate()} className={cn(navClass({ isActive: false }), "w-full")}>
-            <LogOut className="h-5 w-5" />
-            Log out
-          </button>
-          <p className="px-3 pt-2 text-xs text-foreground/50 truncate">Signed in as {user?.name}</p>
+        <div className="border-t border-border pt-3">
+          <p className="px-3 pb-2 text-xs text-foreground/50 truncate">Signed in as {user?.name}</p>
+          <div className="grid grid-cols-2 gap-1">
+            <a href="/#/" target="_blank" rel="noopener" className={cn(navClass({ isActive: false }), "gap-2")}>
+              <ExternalLink className="h-4 w-4" />
+              Website
+            </a>
+            <button type="button" onClick={() => logout.mutate()} className={cn(navClass({ isActive: false }), "gap-2")}>
+              <LogOut className="h-4 w-4" />
+              Log out
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -171,6 +199,12 @@ function Shell() {
               <Route path="scan" element={<CheckInPage />} />
               <Route path="packages" element={<PackagesAdminPage />} />
               <Route path="requests" element={<PackageRequestsPage />} />
+              <Route path="operations" element={<OperationsPage />} />
+              <Route path="clients" element={<ClientsPage />} />
+              <Route path="support" element={<SupportPage />} />
+              <Route path="domains" element={<DomainsPage />} />
+              <Route path="servers" element={<ServersPage />} />
+              <Route path="subscriptions" element={<SubscriptionsPage />} />
               <Route path="*" element={<OverviewPage />} />
             </Routes>
           </Suspense>
@@ -223,27 +257,32 @@ function Shell() {
       </nav>
 
       <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
-        <SheetContent side="bottom" className="lg:hidden rounded-t-3xl pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+        <SheetContent side="bottom" className="lg:hidden rounded-t-3xl max-h-[85svh] overflow-y-auto pb-[max(1.5rem,env(safe-area-inset-bottom))]">
           <SheetHeader className="text-left mb-4">
             <SheetTitle>More</SheetTitle>
           </SheetHeader>
           <nav className="grid grid-cols-2 gap-2" aria-label="More">
-            {moreItems.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={({ isActive }) =>
-                  cn("flex items-center gap-3 h-14 px-4 rounded-2xl glass text-sm font-medium", isActive && "text-primary border-primary/40")
-                }
-              >
-                {item.icon}
-                <span className="flex-1">{item.label}</span>
-                {item.badge ? (
-                  <span className="min-w-5 h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-[11px] font-bold flex items-center justify-center">
-                    {item.badge}
-                  </span>
-                ) : null}
-              </NavLink>
+            {grouped(moreItems).map(({ group, items: groupItems }) => (
+              <div key={group} className="col-span-2 grid grid-cols-2 gap-2">
+                <p className="col-span-2 pt-1 text-[11px] font-bold uppercase tracking-[0.15em] text-foreground/40">{group}</p>
+                {groupItems.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    className={({ isActive }) =>
+                      cn("flex items-center gap-3 h-14 px-4 rounded-2xl glass text-sm font-medium", isActive && "text-primary border-primary/40")
+                    }
+                  >
+                    {item.icon}
+                    <span className="flex-1">{item.label}</span>
+                    {item.badge ? (
+                      <span className="min-w-5 h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-[11px] font-bold flex items-center justify-center">
+                        {item.badge}
+                      </span>
+                    ) : null}
+                  </NavLink>
+                ))}
+              </div>
             ))}
             <a href="/#/" target="_blank" rel="noopener" className="flex items-center gap-3 h-14 px-4 rounded-2xl glass text-sm font-medium">
               <ExternalLink className="h-5 w-5" />

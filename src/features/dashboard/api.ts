@@ -28,7 +28,7 @@ export const dashboardKeys = {
   subscribers: (q: string) => ["dashboard", "subscribers", q] as const,
 }
 
-function query(params: Record<string, string>) {
+export function query(params: Record<string, string>) {
   const search = new URLSearchParams(Object.entries(params).filter(([, v]) => v))
   const text = search.toString()
   return text ? `?${text}` : ""
@@ -93,10 +93,11 @@ function useSessionGuard() {
 
 const isAuthError = (error: unknown) => error instanceof ApiError && (error.status === 401 || error.status === 403)
 
-function useDashboardQuery<T>(key: readonly unknown[], path: string) {
+export function useDashboardQuery<T>(key: readonly unknown[], path: string, enabled = true) {
   const onAuthError = useSessionGuard()
   return useQuery({
     queryKey: key,
+    enabled,
     queryFn: async () => {
       try {
         return await dashboardRequest<T>(path)
@@ -124,7 +125,7 @@ export const useSubscribersAdmin = (q: string) =>
 
 export type AlertInput = Omit<DashboardAlert, "id" | "published_at" | "created_at" | "updated_at">
 
-function useInvalidate() {
+export function useInvalidate() {
   const queryClient = useQueryClient()
   return (...prefixes: string[]) => {
     for (const prefix of prefixes) queryClient.invalidateQueries({ queryKey: ["dashboard", prefix] })
