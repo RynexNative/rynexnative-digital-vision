@@ -27,7 +27,7 @@ export default function LoginPage() {
         className="glass rounded-3xl p-8 w-full max-w-sm space-y-5 animate-fade-in"
       >
         <div className="text-center">
-          <img src="/uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" alt="" className="w-12 h-12 mx-auto mb-4" />
+          <img src="/logo-128.webp" alt="" className="w-12 h-12 mx-auto mb-4" />
           <h1 className="text-2xl font-bold font-poppins text-white">RynexNative Dashboard</h1>
           <p className="text-sm text-slate-400 mt-1">Sign in to manage content and clients</p>
         </div>

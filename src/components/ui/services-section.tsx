@@ -1,5 +1,6 @@
 import { Code, Smartphone, Shield, Brain, Cloud, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { scrollToSection } from "@/hooks/use-section-nav"
 export function ServicesSection() {
   const services = [{
     icon: <Code className="h-7 w-7" />,
@@ -72,9 +73,7 @@ export function ServicesSection() {
                 </div>
 
                 {/* CTA */}
-                <Button variant="outline" className="w-full rounded-full border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground" onClick={() => document.getElementById('contact')?.scrollIntoView({
-              behavior: 'smooth'
-            })}>
+                <Button variant="outline" className="w-full rounded-full border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground" onClick={() => scrollToSection('contact')}>
                   Learn More
                 </Button>
               </div>
@@ -86,9 +85,7 @@ export function ServicesSection() {
           <p className="text-lg text-foreground/80 mb-6">
             Don't see what you're looking for? We create custom solutions for unique challenges.
           </p>
-          <Button size="lg" onClick={() => document.getElementById('contact')?.scrollIntoView({
-          behavior: 'smooth'
-        })} className="rounded-full h-12 px-8 bg-primary text-primary-foreground hover:bg-primary/90">
+          <Button size="lg" onClick={() => scrollToSection('contact')} className="rounded-full h-12 px-8 bg-primary text-primary-foreground hover:bg-primary/90">
             Discuss Your Project
           </Button>
         </div>

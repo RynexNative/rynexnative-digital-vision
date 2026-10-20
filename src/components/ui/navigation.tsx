@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import type { ReactNode } from "react";
 import { Calculator, CalendarDays, Gem, Menu, Newspaper, ShieldAlert, X } from "lucide-react";
@@ -31,11 +31,15 @@ export function Navigation() {
     setIsOpen(false);
   }, [pathname]);
 
+  // A marker at the top of the page tells us when the visitor has scrolled. An observer
+  // reports this after layout, so unlike reading window.scrollY it never forces a reflow.
+  const topMarker = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const marker = topMarker.current;
+    if (!marker) return;
+    const observer = new IntersectionObserver(([entry]) => setScrolled(!entry.isIntersecting));
+    observer.observe(marker);
+    return () => observer.disconnect();
   }, []);
 
   const renderItem = (item: NavItem, mobile: boolean) => {
@@ -70,6 +74,8 @@ export function Navigation() {
   };
 
   return (
+    <>
+    <div ref={topMarker} className="absolute top-0 left-0 h-6 w-px pointer-events-none" aria-hidden="true" />
     <nav className="fixed top-3 md:top-4 inset-x-0 z-50 px-3 md:px-6" aria-label="Main">
       <div
         className={cn(
@@ -83,7 +89,7 @@ export function Navigation() {
             onClick={() => pathname === "/" && window.scrollTo({ top: 0, behavior: "smooth" })}
             className="flex-shrink-0 flex items-center gap-2 h-11 pl-2 pr-4 rounded-full bg-white shadow-sm"
           >
-            <img src="/uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" alt="" className="w-7 h-7 object-contain" />
+            <img src="/logo-64.webp" alt="" width={28} height={28} className="w-7 h-7 object-contain" />
             <span className="text-base font-extrabold font-poppins tracking-tight text-slate-900">
               Rynex<span className="text-emerald-600">Native</span>
             </span>
@@ -125,5 +131,6 @@ export function Navigation() {
         )}
       </div>
     </nav>
+    </>
   );
 }

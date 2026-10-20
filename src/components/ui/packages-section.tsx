@@ -4,14 +4,17 @@ import { ArrowRight, Gem } from "lucide-react"
 import { usePackages } from "@/features/packages/api"
 import { CategoryTabs, PackageCard, TrustPromises } from "@/features/packages/components"
 import { usedCategories, type PackageCategory } from "@/features/packages/types"
+import { useNearViewport } from "@/hooks/use-near-viewport"
 import { cn } from "@/lib/utils"
 
 /** Service packages on the home page. Hidden until at least one package is published. */
 export function PackagesSection() {
-  const { data = [] } = usePackages()
+  const [ref, near] = useNearViewport<HTMLDivElement>()
+  const { data = [] } = usePackages({ enabled: near })
   const categories = usedCategories(data)
   const [picked, setPicked] = useState<PackageCategory | null>(null)
-  if (data.length === 0) return null
+  // An empty marker until the visitor scrolls close, so the request waits until then
+  if (data.length === 0) return <div ref={ref} aria-hidden="true" />
 
   const category = picked && categories.includes(picked) ? picked : categories[0]
   const packages = data.filter((p) => p.category === category).slice(0, 3)

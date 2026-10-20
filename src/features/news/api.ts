@@ -2,10 +2,11 @@ import { useQuery } from "@tanstack/react-query"
 import { apiGet } from "@/lib/api"
 import type { NewsPost } from "./types"
 
-export function useNewsList() {
+export function useNewsList({ enabled = true }: { enabled?: boolean } = {}) {
   return useQuery({
     queryKey: ["news", "list"],
     queryFn: () => apiGet<NewsPost[]>("/api/news/"),
+    enabled,
     staleTime: 60 * 1000,
   })
 }

@@ -1,8 +1,8 @@
 import { Star, Quote } from "lucide-react"
-import FounderImage from '../../assets/founder1-opt.jpg'
-import Julio from '../../assets/Julio-opt.jpg'
-import Yiiti from '../../assets/Yiiti.jpg'
-import Kingu from '../../assets/kingu.jpg'
+import FounderImage from '../../assets/founder-384.webp'
+import Julio from '../../assets/julio-96.webp'
+import Yiiti from '../../assets/yiiti-96.webp'
+import Kingu from '../../assets/kingu-96.webp'
 
 export function TestimonialsSection() {
   const testimonials = [
@@ -90,6 +90,10 @@ export function TestimonialsSection() {
                 <img
                   src={testimonial.image}
                   alt={testimonial.name}
+                  width={48}
+                  height={48}
+                  loading="lazy"
+                  decoding="async"
                   className="w-12 h-12 rounded-full object-cover mr-4 border-2 border-primary/20"
                 />
                 <div>
@@ -152,6 +156,10 @@ export function TestimonialsSection() {
                 <img
                   src={FounderImage}
                   alt="Founder of RynexNative"
+                  width={192}
+                  height={192}
+                  loading="lazy"
+                  decoding="async"
                   className="w-48 h-48 rounded-full object-cover border-2 border-primary/20"
                 />
                 

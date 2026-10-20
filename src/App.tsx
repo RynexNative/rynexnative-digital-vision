@@ -1,6 +1,4 @@
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HashRouter, Navigate, Routes, Route, useParams } from "react-router-dom";
 import { Suspense, useEffect } from "react";
@@ -45,9 +43,7 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
         <Toaster />
-        <Sonner />
         <HashRouter>
           <ScrollToTop />
           <FloatingWhatsApp />
@@ -76,7 +72,6 @@ const App = () => {
           </Suspense>
           </ErrorBoundary>
         </HashRouter>
-      </TooltipProvider>
     </QueryClientProvider>
   );
 };

@@ -96,7 +96,7 @@ export function Footer() {
             <div className="sm:col-span-3 lg:col-span-2">
               <div className="flex items-center space-x-3 mb-6">
                 <img 
-                  src="/uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" 
+                  src="/logo-64.webp" 
                   alt="RynexNative Logo" 
                   className="w-8 h-8 object-contain"
                 />

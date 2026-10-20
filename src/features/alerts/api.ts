@@ -20,10 +20,11 @@ async function fetchPublishedAlerts(): Promise<AlertsResult> {
   }
 }
 
-export function usePublishedAlerts() {
+export function usePublishedAlerts({ enabled = true }: { enabled?: boolean } = {}) {
   return useQuery({
     queryKey: ["security-alerts", "published"],
     queryFn: fetchPublishedAlerts,
+    enabled,
     staleTime: 5 * 60 * 1000,
   })
 }

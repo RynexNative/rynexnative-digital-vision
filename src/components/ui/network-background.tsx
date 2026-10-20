@@ -26,23 +26,29 @@ export function NetworkBackground({ className }: { className?: string }) {
     let visible = true
     const mouse = { x: -9999, y: -9999 }
 
-    const resize = () => {
+    // Sizes come from a ResizeObserver, which reports after layout instead of forcing one
+    const resize = (nextWidth: number, nextHeight: number) => {
+      const widthChanged = Math.round(nextWidth) !== Math.round(width)
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      width = canvas.clientWidth
-      height = canvas.clientHeight
+      width = nextWidth
+      height = nextHeight
       canvas.width = width * dpr
       canvas.height = height * dpr
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      // About one point per 14,000 px², capped so phones stay smooth
-      const count = Math.min(Math.round((width * height) / 14000), width < 640 ? 36 : 80)
-      nodes = Array.from({ length: count }, () => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        r: Math.random() * 1.6 + 0.8,
-      }))
+      // Phones change height while scrolling (address bar); keep the points then
+      if (widthChanged || nodes.length === 0) {
+        // About one point per 14,000 px², capped so phones stay smooth
+        const count = Math.min(Math.round((width * height) / 14000), width < 640 ? 36 : 80)
+        nodes = Array.from({ length: count }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
+          r: Math.random() * 1.6 + 0.8,
+        }))
+      }
       draw()
+      start()
     }
 
     // Lines are grouped into a few opacity levels so each level is one stroke() call
@@ -120,7 +126,7 @@ export function NetworkBackground({ className }: { className?: string }) {
     }
 
     const start = () => {
-      if (!reduceMotion && visible && !document.hidden && !frame) frame = requestAnimationFrame(step)
+      if (!reduceMotion && visible && width && !document.hidden && !frame) frame = requestAnimationFrame(step)
     }
     const stop = () => {
       cancelAnimationFrame(frame)
@@ -146,9 +152,8 @@ export function NetworkBackground({ className }: { className?: string }) {
       mouse.y = -9999
     }
 
-    resize()
-    start()
-    window.addEventListener("resize", resize)
+    const sizeObserver = new ResizeObserver(([entry]) => resize(entry.contentRect.width, entry.contentRect.height))
+    sizeObserver.observe(canvas)
     document.addEventListener("visibilitychange", onVisibility)
     const section = canvas.parentElement
     section?.addEventListener("pointermove", onMove)
@@ -157,7 +162,7 @@ export function NetworkBackground({ className }: { className?: string }) {
     return () => {
       stop()
       observer.disconnect()
-      window.removeEventListener("resize", resize)
+      sizeObserver.disconnect()
       document.removeEventListener("visibilitychange", onVisibility)
       section?.removeEventListener("pointermove", onMove)
       section?.removeEventListener("pointerleave", onLeave)

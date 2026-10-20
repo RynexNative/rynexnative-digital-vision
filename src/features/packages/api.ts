@@ -2,10 +2,11 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { apiGet, apiPost } from "@/lib/api"
 import type { InquiryInput, ServicePackage } from "./types"
 
-export function usePackages() {
+export function usePackages({ enabled = true }: { enabled?: boolean } = {}) {
   return useQuery({
     queryKey: ["packages", "list"],
     queryFn: () => apiGet<ServicePackage[]>("/api/packages/"),
+    enabled,
     staleTime: 60 * 1000,
   })
 }

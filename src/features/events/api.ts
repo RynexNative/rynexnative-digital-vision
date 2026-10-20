@@ -4,10 +4,11 @@ import type { EventDetail, EventSummary, Ticket } from "./types"
 
 const notFound = (error: unknown) => error instanceof ApiError && error.status === 404
 
-export function useEvents(when: "upcoming" | "past") {
+export function useEvents(when: "upcoming" | "past", { enabled = true }: { enabled?: boolean } = {}) {
   return useQuery({
     queryKey: ["events", when],
     queryFn: () => apiGet<EventSummary[]>(`/api/events/?when=${when}`),
+    enabled,
     staleTime: 60 * 1000,
   })
 }

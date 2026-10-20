@@ -2,13 +2,15 @@ import { Link } from "react-router-dom"
 import { ArrowRight, ShieldAlert } from "lucide-react"
 import { usePublishedAlerts } from "@/features/alerts/api"
 import { AlertCard, AlertCardSkeleton } from "@/features/alerts/components"
+import { useNearViewport } from "@/hooks/use-near-viewport"
 
 export function AlertsPreviewSection() {
-  const { data, isLoading } = usePublishedAlerts()
+  const [ref, near] = useNearViewport<HTMLElement>()
+  const { data, isLoading } = usePublishedAlerts({ enabled: near })
   const alerts = (data?.alerts ?? []).slice(0, 3)
 
   return (
-    <section id="alerts" className="py-20 md:py-24 section-muted relative overflow-hidden">
+    <section ref={ref} id="alerts" className="py-20 md:py-24 section-muted relative overflow-hidden">
       <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-red-500/5 blur-3xl" aria-hidden="true" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -35,7 +37,7 @@ export function AlertsPreviewSection() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {isLoading
+          {isLoading || !near
             ? Array.from({ length: 3 }, (_, i) => <AlertCardSkeleton key={i} />)
             : alerts.map((alert) => <AlertCard key={alert.id} alert={alert} />)}
         </div>
