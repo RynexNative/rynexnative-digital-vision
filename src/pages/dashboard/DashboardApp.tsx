@@ -108,7 +108,7 @@ function Shell() {
       {/* Sidebar (desktop) */}
       <aside className="hidden lg:flex lg:flex-col w-64 flex-shrink-0 border-r border-border bg-background sticky top-0 h-screen p-4">
         <div className="flex items-center gap-2.5 px-2 mb-8 mt-2">
-          <img src="/uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" alt="" className="w-8 h-8" />
+          <img src="/logo-64.webp" alt="" className="w-8 h-8" />
           <div>
             <p className="font-bold font-poppins leading-tight">RynexNative</p>
             <p className="text-xs text-primary font-semibold">Dashboard</p>
@@ -139,7 +139,7 @@ function Shell() {
       {/* Top bar (mobile) */}
       <header className="lg:hidden sticky top-0 z-30 glass backdrop-blur-xl flex items-center justify-between h-14 px-4">
         <div className="flex items-center gap-2">
-          <img src="/uploads/0851ce38-9e9d-4f8c-9adc-2b4ebef6b80c.png" alt="" className="w-7 h-7" />
+          <img src="/logo-64.webp" alt="" className="w-7 h-7" />
           <span className="font-bold font-poppins">Dashboard</span>
         </div>
         <button type="button" onClick={() => logout.mutate()} className="h-9 px-3 rounded-lg glass inline-flex items-center gap-1.5 text-sm">

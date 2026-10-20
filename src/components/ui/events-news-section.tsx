@@ -4,12 +4,15 @@ import { useEvents } from "@/features/events/api"
 import { EventCard } from "@/features/events/components"
 import { useNewsList } from "@/features/news/api"
 import { NewsCard } from "@/features/news/components"
+import { useNearViewport } from "@/hooks/use-near-viewport"
 
 /** Upcoming events and latest news on the home page. Hidden while there is nothing to show. */
 export function EventsNewsSection() {
-  const { data: events = [] } = useEvents("upcoming")
-  const { data: news = [] } = useNewsList()
-  if (events.length === 0 && news.length === 0) return null
+  const [ref, near] = useNearViewport<HTMLDivElement>()
+  const { data: events = [] } = useEvents("upcoming", { enabled: near })
+  const { data: news = [] } = useNewsList({ enabled: near })
+  // An empty marker until the visitor scrolls close, so the requests wait until then
+  if (events.length === 0 && news.length === 0) return <div ref={ref} aria-hidden="true" />
 
   return (
     <section id="events" className="py-20 md:py-24 bg-background">

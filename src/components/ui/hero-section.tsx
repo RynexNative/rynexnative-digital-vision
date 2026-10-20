@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Gem } from "lucide-react";
-import heroImage from "@/assets/hero-image.jpg";
+import hero800 from "@/assets/hero-800.webp";
+import hero1600 from "@/assets/hero-1600.webp";
 import { useSectionNav } from "@/hooks/use-section-nav";
 import { NetworkBackground } from "@/components/ui/network-background";
 
@@ -18,9 +19,13 @@ export function HeroSection() {
   return (
     <section className="surface-dark relative min-h-[100svh] flex flex-col overflow-hidden">
       {/* Photo under a dark wash keeps the white text readable; it slowly zooms and drifts */}
-      <div
-        className="absolute inset-0 opacity-20 grayscale animate-ken-burns will-change-transform"
-        style={{ backgroundImage: `url(${heroImage})`, backgroundSize: "cover", backgroundPosition: "center" }}
+      <img
+        src={hero1600}
+        srcSet={`${hero800} 800w, ${hero1600} 1600w`}
+        sizes="100vw"
+        alt=""
+        decoding="async"
+        className="absolute inset-0 h-full w-full object-cover opacity-20 animate-ken-burns will-change-transform"
         aria-hidden="true"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/60 to-slate-950" aria-hidden="true" />

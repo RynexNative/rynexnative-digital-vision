@@ -1,6 +1,8 @@
 import { ExternalLink, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import yiit from "@/assets/yiit-opt.png";
+import yiit800 from "@/assets/yiit-800.webp";
+import yiit480 from "@/assets/yiit-480.webp";
+import { scrollToSection } from "@/hooks/use-section-nav"
 
 type Project = {
   title: string
@@ -8,6 +10,8 @@ type Project = {
   description: string
   tech: string[]
   image: string
+  /** Responsive sources, e.g. "a.webp 480w, b.webp 800w" */
+  srcSet?: string
   link: string
   // Optional public source code URL; the "Code" button is shown only when set
   repo?: string
@@ -22,7 +26,8 @@ export function PortfolioSection() {
       category: "School Management System",
       description: "Comprehensive school management system covering student records, attendance, exams, results and fee management.",
       tech: ["React + vite", "Django", "PostgreSQL", "FastAPI"],
-      image: yiit,
+      image: yiit800,
+      srcSet: `${yiit480} 480w, ${yiit800} 800w`,
       link: 'school.rynexnative.com',
       gradient: "from-tech-purple to-cyber-blue",
       privacy: 'Public - Complete',
@@ -32,7 +37,8 @@ export function PortfolioSection() {
       category: "Mobile Development",
       description: "A secure financial application with biometric authentication, real-time transactions, and advanced analytics.",
       tech: ["React Native", "Node.js", "MongoDB", "AWS"],
-      image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop",
+      image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=400&fit=crop&auto=format&q=60",
+      srcSet: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=480&h=240&fit=crop&auto=format&q=60 480w, https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=400&fit=crop&auto=format&q=60 800w",
       link: '#',
       gradient: "from-primary to-accent",
       privacy: 'Private - Complete',
@@ -42,7 +48,8 @@ export function PortfolioSection() {
       category: "Web Development",
       description: "Scalable e-commerce solution with AI-powered recommendations and integrated payment processing.",
       tech: ["React", "Python", "PostgreSQL", "Stripe"],
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop",
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=400&fit=crop&auto=format&q=60",
+      srcSet: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=480&h=240&fit=crop&auto=format&q=60 480w, https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=400&fit=crop&auto=format&q=60 800w",
       link: '#',
       gradient: "from-accent to-electric-teal",
       privacy: 'Private - In Progress',
@@ -52,7 +59,8 @@ export function PortfolioSection() {
       category: "Security Solutions",
       description: "Real-time threat monitoring dashboard with AI-powered anomaly detection and automated response systems.",
       tech: ["Vue.js", "Python", "TensorFlow", "Docker"],
-      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=600&fit=crop",
+      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&auto=format&q=60",
+      srcSet: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=480&h=240&fit=crop&auto=format&q=60 480w, https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&auto=format&q=60 800w",
       link: '#',
       gradient: "from-electric-teal to-tech-purple",
       privacy: 'Private - Complete',
@@ -72,7 +80,8 @@ export function PortfolioSection() {
       category: "Cloud Solutions",
       description: "Enterprise cloud migration toolkit with automated deployment and monitoring capabilities.",
       tech: ["Terraform", "Kubernetes", "AWS", "Jenkins"],
-      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop",
+      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=400&fit=crop&auto=format&q=60",
+      srcSet: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=480&h=240&fit=crop&auto=format&q=60 480w, https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=400&fit=crop&auto=format&q=60 800w",
       link: '#',
       gradient: "from-primary to-tech-purple",
       privacy: 'Public - Complete',
@@ -100,9 +109,15 @@ export function PortfolioSection() {
             >
               {/* Project Image */}
               <div className="relative h-48 overflow-hidden">
-                <img 
+                <img
                   src={project.image}
+                  srcSet={project.srcSet}
+                  sizes="(min-width: 1024px) 384px, (min-width: 768px) 50vw, 100vw"
                   alt={project.title}
+                  width={800}
+                  height={400}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className={`absolute inset-0 bg-gradient-to-t ${project.gradient} opacity-60 group-hover:opacity-40 transition-opacity duration-300`}></div>
@@ -181,7 +196,7 @@ export function PortfolioSection() {
             size="lg" 
             variant="outline" 
             className="glass border-primary/30 px-8 py-4"
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => scrollToSection('contact')}
           >
             View Full Portfolio
           </Button>
