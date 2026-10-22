@@ -27,5 +27,5 @@ export function formatNewsDate(iso: string | null) {
 }
 
 export function newsUrl(slug: string) {
-  return `${window.location.origin}/#/news/${slug}`
+  return `${window.location.origin}/news/${slug}/`
 }

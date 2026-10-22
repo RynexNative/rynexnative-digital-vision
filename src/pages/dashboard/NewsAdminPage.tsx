@@ -55,7 +55,11 @@ function NewsEditor({ initial, onDone }: { initial: Draft; onDone: () => void })
       }}
       className="space-y-5 pb-4"
     >
-      <ImageField value={draft.cover_image} onChange={(url) => set("cover_image", url)} />
+      <ImageField
+        value={draft.cover_image}
+        onChange={(url) => set("cover_image", url)}
+        label="Cover image · landscape, at least 1200px wide (Google and social previews show it large)"
+      />
       <label className="block">
         <span className="block text-sm font-medium mb-1.5">Title *</span>
         <input
@@ -94,7 +98,7 @@ function NewsEditor({ initial, onDone }: { initial: Draft; onDone: () => void })
       <details className="rounded-xl border border-foreground/10 px-4 py-3">
         <summary className="text-sm font-medium cursor-pointer">Link settings</summary>
         <label className="block mt-3">
-          <span className="block text-xs text-foreground/60 mb-1.5">rynexnative.com/#/news/</span>
+          <span className="block text-xs text-foreground/60 mb-1.5">rynexnative.com/news/</span>
           <input
             required
             pattern="[a-z0-9]+(-[a-z0-9]+)*"

@@ -95,11 +95,11 @@ export function formatPrice(price: number) {
 }
 
 export function eventUrl(slug: string) {
-  return `${window.location.origin}/#/events/${slug}`
+  return `${window.location.origin}/events/${slug}/`
 }
 
 export function ticketUrl(id: string) {
-  return `${window.location.origin}/#/ticket/${id}`
+  return `${window.location.origin}/ticket/${id}`
 }
 
 /** Text encoded in the ticket QR code (read by the dashboard scanner) */

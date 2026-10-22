@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HashRouter, Navigate, Routes, Route, useParams } from "react-router-dom";
-import { Suspense, useEffect } from "react";
+import { BrowserRouter, Navigate, Routes, Route, useParams } from "react-router-dom";
+import { Suspense } from "react";
 import { PageLoader } from "@/components/ui/loading-spinner";
 import { ScrollToTop } from "@/components/layout/scroll-to-top";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
@@ -23,7 +23,7 @@ const TicketPage = lazyWithReload(() => import("./pages/TicketPage"));
 const PackagesPage = lazyWithReload(() => import("./pages/PackagesPage"));
 const PackageDetailPage = lazyWithReload(() => import("./pages/PackageDetailPage"));
 
-// Links shared before the site moved to English paths (e.g. #/matukio/...) keep working
+// Links shared before the site moved to English paths (e.g. /matukio/...) keep working
 function LegacyRedirect({ to }: { to: string }) {
   const { slug } = useParams();
   return <Navigate to={slug ? `${to}/${slug}` : to} replace />;
@@ -32,19 +32,10 @@ function LegacyRedirect({ to }: { to: string }) {
 const queryClient = new QueryClient();
 
 const App = () => {
-  useEffect(() => {
-    // Remove plain anchors (e.g. "#contact") from the URL to prevent auto-scrolling,
-    // but keep router paths like "#/alerts" which the HashRouter depends on
-    const { hash } = window.location;
-    if (hash && !hash.startsWith('#/')) {
-      window.history.replaceState(null, '', window.location.pathname + window.location.search);
-    }
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
         <Toaster />
-        <HashRouter>
+        <BrowserRouter>
           <ScrollToTop />
           <FloatingWhatsApp />
           <ErrorBoundary>
@@ -71,7 +62,7 @@ const App = () => {
             </Routes>
           </Suspense>
           </ErrorBoundary>
-        </HashRouter>
+        </BrowserRouter>
     </QueryClientProvider>
   );
 };

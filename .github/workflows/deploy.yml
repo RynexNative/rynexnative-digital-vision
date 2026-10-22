@@ -1,0 +1,75 @@
+name: Build and deploy the website
+
+# Builds the site (with a static, indexable page for every news post, event,
+# alert and package) and publishes it to the gh-pages branch that GitHub Pages
+# serves at rynexnative.com.
+on:
+  push:
+    branches: [main]
+  # Sent by the backend when news, events, alerts or packages are published or changed
+  repository_dispatch:
+    types: [content-updated]
+  # "Run workflow" button in the Actions tab
+  workflow_dispatch:
+  # Safety net: refresh the pages every 6 hours even if a notification was missed
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+
+# A newer change replaces a build that is still running
+concurrency:
+  group: deploy-site
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # The API may be asleep (Render free plan); wake it before the build reads it
+      - name: Wake up the API
+        run: |
+          for i in $(seq 1 12); do
+            if curl -fsS --max-time 20 https://api.rynexnative.com/api/health/ > /dev/null; then echo "API is up"; exit 0; fi
+            echo "Waiting for the API ($i)..."; sleep 10
+          done
+          echo "API did not answer"; exit 1
+
+      - name: Build
+        run: npm run build
+        env:
+          VITE_API_URL: https://api.rynexnative.com
+          # Fail instead of publishing a site without its news pages
+          PRERENDER_STRICT: "1"
+
+      # Pages are replaced so unpublished posts disappear; old files in assets/ are
+      # kept so visitors with an open tab can still load the code they started with.
+      - name: Publish to gh-pages
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REASON: ${{ github.event_name }}${{ github.event.client_payload.reason && format(' ({0})', github.event.client_payload.reason) || '' }}
+        run: |
+          REMOTE="https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git clone --depth 1 --branch gh-pages "$REMOTE" site; then
+            mkdir site && git -C site init -b gh-pages && git -C site remote add origin "$REMOTE"
+          fi
+          find site -mindepth 1 -maxdepth 1 ! -name .git ! -name assets -exec rm -rf {} +
+          cp -r dist/. site/
+          cd site
+          git add -A
+          if git diff --cached --quiet; then echo "Nothing changed"; exit 0; fi
+          git commit -m "Deploy ${GITHUB_SHA::7}: ${REASON}"
+          git push origin gh-pages
