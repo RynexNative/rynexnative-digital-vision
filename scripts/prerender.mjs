@@ -414,9 +414,14 @@ ${sitemap
 `,
 )
 
-// Google News sitemap: only articles from the last two days belong in it
+// Google News sitemap: articles from the last two days belong in it. On quiet days
+// that would leave it empty, which Search Console reports as an error ("missing
+// url tag"), so it then lists the latest posts instead; Google simply skips old ones.
 const twoDaysAgo = Date.now() - 2 * 24 * 3600 * 1000
-const recent = news.filter((p) => p.published_at && new Date(p.published_at).getTime() >= twoDaysAgo)
+const published = news.filter((p) => p.published_at)
+const lastTwoDays = published.filter((p) => new Date(p.published_at).getTime() >= twoDaysAgo)
+const recent = lastTwoDays.length ? lastTwoDays : published.slice(0, 5)
+if (!recent.length) console.warn("prerender: no published news yet, news-sitemap.xml is empty")
 await writeFile(
   path.join(DIST, "news-sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>
