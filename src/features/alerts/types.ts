@@ -46,7 +46,7 @@ export function formatAlertDate(iso: string | null) {
 
 /** Public, shareable URL of an alert (the site uses hash routing). */
 export function alertUrl(slug: string) {
-  return `${window.location.origin}/#/alerts/${slug}`
+  return `${window.location.origin}/alerts/${slug}/`
 }
 
 export function slugify(text: string) {

@@ -197,7 +197,7 @@ function AlertEditor({ initial, categories, onDone }: { initial: Draft; categori
       <details className="rounded-xl border border-foreground/10 px-4 py-3">
         <summary className="text-sm font-medium cursor-pointer">Link settings</summary>
         <label className="block mt-3">
-          <span className="block text-xs text-foreground/60 mb-1.5">rynexnative.com/#/alerts/</span>
+          <span className="block text-xs text-foreground/60 mb-1.5">rynexnative.com/alerts/</span>
           <input
             required
             pattern="[a-z0-9]+(-[a-z0-9]+)*"

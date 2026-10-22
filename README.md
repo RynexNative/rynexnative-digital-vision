@@ -62,18 +62,32 @@ This project is built with:
 
 ## How can I deploy this project?
 
-The site is deployed to GitHub Pages from the `gh-pages` branch:
+Deploys are automatic. The **Build and deploy the website** workflow
+(`.github/workflows/deploy.yml`) builds the site and publishes it to the `gh-pages` branch,
+which GitHub Pages serves at rynexnative.com. It runs:
 
-```sh
-npm run deploy
-```
+- on every push to `main`;
+- when the backend publishes or changes news, events, alerts or packages
+  (it sends a `content-updated` event; needs `SITE_REBUILD_TOKEN` on the backend);
+- every 6 hours as a safety net;
+- by hand: Actions → *Build and deploy the website* → *Run workflow*.
 
-This builds the app into `dist/` and pushes it to the `gh-pages` branch. Files from earlier
-deploys are kept (`--add`), so a browser still running an older version can keep loading its
-pages instead of failing until the GitHub Pages cache (about 10 minutes) expires. The custom domain
-file lives in `public/CNAME`, so it is copied into every build and `rynexnative.com` is kept
-after each deploy. In the repository settings, Pages should be set to
-"Deploy from a branch" → `gh-pages` / `(root)`.
+In the repository settings, Pages should be set to "Deploy from a branch" → `gh-pages` /
+`(root)`, and Actions → General → Workflow permissions must allow "Read and write".
+
+### Pages search engines can read
+
+`npm run build` runs `vite build` and then `scripts/prerender.mjs`, which reads the public API
+and writes a real HTML page for every news post, event, alert and package (title, description,
+social preview image, schema.org structured data and the content itself), plus `sitemap.xml`,
+`news-sitemap.xml` (Google News), `rss.xml`, `robots.txt` and `404.html` (the app shell that
+GitHub Pages serves for other paths such as `/admin`). The site uses real paths
+(`/news/<slug>/`); old `/#/...` links are redirected in the browser.
+
+Each publish replaces the pages, so unpublished posts disappear, but keeps old files in
+`assets/` so a browser still running an older version can keep loading its code.
+`npm run deploy` still works for a manual deploy, but it keeps every old page (`--add`),
+so prefer the workflow.
 
 ## Backend (Django API)
 

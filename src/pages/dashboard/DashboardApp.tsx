@@ -152,7 +152,7 @@ function Shell() {
         <div className="border-t border-border pt-3">
           <p className="px-3 pb-2 text-xs text-foreground/50 truncate">Signed in as {user?.name}</p>
           <div className="grid grid-cols-2 gap-1">
-            <a href="/#/" target="_blank" rel="noopener" className={cn(navClass({ isActive: false }), "gap-2")}>
+            <a href="/" target="_blank" rel="noopener" className={cn(navClass({ isActive: false }), "gap-2")}>
               <ExternalLink className="h-4 w-4" />
               Website
             </a>
@@ -284,7 +284,7 @@ function Shell() {
                 ))}
               </div>
             ))}
-            <a href="/#/" target="_blank" rel="noopener" className="flex items-center gap-3 h-14 px-4 rounded-2xl glass text-sm font-medium">
+            <a href="/" target="_blank" rel="noopener" className="flex items-center gap-3 h-14 px-4 rounded-2xl glass text-sm font-medium">
               <ExternalLink className="h-5 w-5" />
               Website
             </a>
