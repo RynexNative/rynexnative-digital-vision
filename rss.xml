@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+<channel>
+  <title>RynexNative News</title>
+  <link>https://rynexnative.com/news/</link>
+  <atom:link href="https://rynexnative.com/rss.xml" rel="self" type="application/rss+xml"/>
+  <description>Projects, announcements and articles about technology in Tanzania from RynexNative.</description>
+  <language>en</language>
+  <lastBuildDate>Fri, 02 Oct 2026 19:39:36 GMT</lastBuildDate>
+  <item>
+    <title>&quot;Yams&quot; - Hautateseka tena kusimamia Shuhuli yoyote katika Shule yako.</title>
+    <link>https://rynexnative.com/news/yams/</link>
+    <guid isPermaLink="true">https://rynexnative.com/news/yams/</guid>
+    <pubDate>Fri, 02 Oct 2026 19:39:36 GMT</pubDate>
+    <category>New project</category>
+    <description>Kutana na Mfumo mpya wa kusimamia Shuhuli zote za shule yako
+ 1. Lesson Planning
+ 2. Scheme of Work
+ 3. Durties
+ 4. Resources and So On...</description>
+    <media:content url="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1790969554/rynexnative/zeldccbdm1hhtsycta2f.png" medium="image"/>
+  </item>
+</channel>
+</rss>

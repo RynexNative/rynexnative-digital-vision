@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- # Ownership & legal issures -->
+  <meta name="author" content="Casto S Shirima">
+  <meta name="copyright" content="2024 rynexnative">
+
+  <!-- Fonts are served from this site (no extra connection to Google before the first paint).
+       Inter is one variable file for every weight; Poppins only in the weights headings use. -->
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/poppins-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 100 900; src: url(/fonts/inter-latin-wght-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 600; src: url(/fonts/poppins-latin-600-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 700; src: url(/fonts/poppins-latin-700-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 800; src: url(/fonts/poppins-latin-800-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  </style>
+
+  <!-- The API serves the home page sections; open the connection early -->
+  <link rel="preconnect" href="https://api.rynexnative.com" crossorigin>
+
+  <!-- # Favicon main ico -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <!-- PNG fallback for modern browsers -->
+  <link rel="icon" type="image/png" href="/logo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/logo.png" sizes="192x192">
+  
+  <!-- Apple devices -->
+  <link rel="apple-touch-icon" href="/logo.png">
+
+
+  <!-- # http-equiv -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none';"> -->
+
+
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+
+  <!-- Meta Description -->
+  
+
+  <!-- Meta Keywords -->
+  <meta name="keywords" content="Web development in Tanzania, 
+    Full-stack developer Africa,
+    Modern website development,
+    Custom software solutions,    
+    Tech company in East Africa,    
+    Scalable digital platforms,    
+    Secure web applications,
+    Ethical hacking training Tanzania,
+    Learn ethical hacking online,
+    Cybersecurity experts in Africa,
+    Penetration testing services,
+    Secure coding practices,
+    Ethical hacker for hire,
+    Digital security consulting,
+    Professional website design,
+    Software system development,    
+    IT consulting Tanzania,    
+    Custom tech solutions,    
+    Business automation software,    
+    Web app design and development,    
+    Cloud-based systems for businesses,
+    Coding for youth in Africa,
+    Programming mentorship Tanzania,    
+    Digital skills empowerment,    
+    Learn full-stack development,    
+    IT training programs in East Africa,
+    RynexNative company,
+    RynexNative services,    
+    Future of tech in Africa,    
+    Innovative tech company,    
+    Tech for Africa's growth,
+    rynex, Tanzania, Kenya, Uganda, Yiiti">
+
+  <!-- Robots -->
+  
+
+  <!-- News feed for readers and Google -->
+  <link rel="alternate" type="application/rss+xml" title="RynexNative News" href="/rss.xml">
+
+  <!-- Canonical URL -->
+  
+
+  <!-- # Open Graph for social sharing -->
+  
+  
+  
+  
+  
+
+  
+
+  <!-- # Twitter Card -->
+  
+  
+  
+  
+  <!--  -->
+
+  <!-- # Custom Meta -->
+  <meta name="app-version" content="2.1.1">
+
+  <!-- # JSON-LD Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "Rynexnative",
+          "url": "https://rynexnative.com",
+          "logo": "https://rynexnative.com/logo.png",
+          "image":"https://rynexnative.com/logo.png",
+          "sameAs": [
+            "https://www.instagram.com/rynexnative"
+          ],
+          "description": "Your product deserves better. Work with RynexNative for clean, efficient, and user-focused software development. Let RynexNative handle your code while you focus on growth. Get cutting-edge apps, modern designs & expert tech support now. RynexNative is where creativity meets logic.",
+          "founder": {
+            "@type": "Person",
+            "name": "Casto S. Shirima"
+          },
+          "foundingDate": "2021-05-01",
+          "foundingLocation": {
+            "@type": "Place",
+            "name": "Dodoma, Tanzania"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Dodoma mjini, miyuji, mwatano center",
+            "addressLocality": "Dodoma",
+            "addressRegion": "Dodoma",
+            "postalCode": "",
+            "addressCountry": "TZ"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+255687544999",
+            "contactType": "Customer Support",
+            "areaServed": "TZ",
+            "availableLanguage": ["en", "sw"]
+          },
+          "email": "info@rynexnative.com",
+          "telephone": "+255687544999",
+          "legalName": "Rynexnative",
+          "numberOfEmployees": 15,
+          "slogan": "Innovation and Security at Every Step — The Mark of a Nation."
+        },
+        {
+          "@type": "WebSite",
+          "name": "Rynexnative",
+          "alternateName": [
+            "RynexNative Technologies",
+            "RynexNative",
+            "RynexNative Lab",
+            "RynexNative Systems"
+          ],
+          "url": "https://rynexnative.com/"
+        },
+        {
+          "@type": "ImageObject",
+          "@id": "https://rynexnative.com/logo.png",
+          "url": "https://rynexnative.com/logo.png",
+          "width": 500,
+          "height": 500,
+          "caption": "Rynexnative Logo"
+        }
+      ]
+    }
+    </script>
+    
+  <script type="module" crossorigin src="/assets/index-HLJdmhy3.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DUIT-5IB.css">
+
+  <title>&quot;You&#39;ve won free data&quot; links spreading on WhatsApp | RynexNative Security Alert</title>
+  <meta name="description" content="A message says a mobile network is giving away free GBs or an anniversary gift if you share it with 10 people. These links collect your details.">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://rynexnative.com/alerts/zawadi-feki-za-bando/">
+  <meta property="og:site_name" content="RynexNative">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="&quot;You&#39;ve won free data&quot; links spreading on WhatsApp | RynexNative Security Alert">
+  <meta property="og:description" content="A message says a mobile network is giving away free GBs or an anniversary gift if you share it with 10 people. These links collect your details.">
+  <meta property="og:url" content="https://rynexnative.com/alerts/zawadi-feki-za-bando/">
+  <meta property="og:image" content="https://rynexnative.com/preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="&quot;You&#39;ve won free data&quot; links spreading on WhatsApp | RynexNative Security Alert">
+  <meta name="twitter:description" content="A message says a mobile network is giving away free GBs or an anniversary gift if you share it with 10 people. These links collect your details.">
+  <meta name="twitter:image" content="https://rynexnative.com/preview.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","mainEntityOfPage":{"@type":"WebPage","@id":"https://rynexnative.com/alerts/zawadi-feki-za-bando/"},"headline":"\"You've won free data\" links spreading on WhatsApp","description":"A message says a mobile network is giving away free GBs or an anniversary gift if you share it with 10 people. These links collect your details.","image":["https://rynexnative.com/preview.png"],"datePublished":"2026-09-16T15:29:29.256186+03:00","author":{"@type":"Organization","name":"RynexNative","url":"https://rynexnative.com"},"publisher":{"@type":"Organization","name":"RynexNative","url":"https://rynexnative.com","logo":{"@type":"ImageObject","url":"https://rynexnative.com/logo.png"}}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rynexnative.com/"},{"@type":"ListItem","position":2,"name":"Alerts","item":"https://rynexnative.com/alerts/"},{"@type":"ListItem","position":3,"name":"\"You've won free data\" links spreading on WhatsApp","item":"https://rynexnative.com/alerts/zawadi-feki-za-bando/"}]}</script>
+</head>
+
+<body>
+  <div id="root"><div class="prerendered max-w-3xl mx-auto px-4 pt-32 pb-16"><article>
+<p><a href="/alerts/">Security alerts</a> · WhatsApp &amp; Telegram</p>
+<h1>&quot;You&#39;ve won free data&quot; links spreading on WhatsApp</h1>
+<p><strong>A message says a mobile network is giving away free GBs or an anniversary gift if you share it with 10 people. These links collect your details.</strong></p>
+<p>Friends and family forward this message without knowing it&#39;s a scam: &quot;Vodacom/Yas/Airtel is celebrating 25 years, get 50GB free! Click here.&quot;</p>
+<p>The link asks you a few questions, then tells you to share the message with 10 people or 5 groups to &quot;receive your gift&quot;. The gift never arrives, but the link collects your number, may sign you up for paid services, or sends you to ads that carry malware.</p>
+<h2>Warning signs</h2><ul><li>You are told to share with many people to get the prize</li><li>The link is not on the network&#39;s official website</li><li>The message has many spelling mistakes or lots of emoji</li><li>The offer looks too good to be true</li></ul>
+<h2>How to protect yourself</h2><ul><li>Check the offer on the company&#39;s official website or pages</li><li>Don&#39;t forward unverified prize messages, even if a friend sent them</li><li>Never enter your phone number, PIN or personal details on these links</li></ul>
+<h2>If you are affected</h2><ul><li>If you entered your number, check whether you were subscribed to paid services and unsubscribe</li><li>If you downloaded an app or file, remove it and scan your phone</li><li>Tell the people you forwarded it to that the message is a scam</li></ul>
+</article></div></div>
+</body>
+
+</html>
