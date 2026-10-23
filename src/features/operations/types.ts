@@ -184,7 +184,7 @@ export type OpsSubscription = Recurring & {
 export type CountRow = { key: string; label: string; count: number }
 
 export type AttentionItem = {
-  kind: "domain" | "server" | "subscription" | "service"
+  kind: "domain" | "server" | "subscription" | "service" | "invoice" | "quote"
   id: string
   title: string
   detail: string
@@ -199,6 +199,16 @@ export type OpsSummary = {
   domains: { total: number; managed: number; not_managed: number; expiring_soon: number; expired: number; not_managed_by_reason: CountRow[] }
   servers: { total: number; running: number; not_needed: number; cancelled: number; due_soon: number; monthly_cost: Record<string, number> }
   subscriptions: { total: number; running: number; stopped: number; due_soon: number; monthly_cost: Record<string, number> }
+  billing?: {
+    unpaid_invoices: number
+    overdue_invoices: number
+    outstanding: Record<string, number>
+    overdue: Record<string, number>
+    paid_this_month: Record<string, number>
+    open_quotes: number
+    open_quotes_value: Record<string, number>
+    draft_documents: number
+  }
   attention: AttentionItem[]
   attention_count: number
 }

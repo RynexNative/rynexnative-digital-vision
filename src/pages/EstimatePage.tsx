@@ -21,6 +21,7 @@ import { SiteLayout } from "@/components/layout/site-layout"
 import { useDocumentTitle } from "@/hooks/use-document-title"
 import { useToast } from "@/hooks/use-toast"
 import { apiPost, errorMessage } from "@/lib/api"
+import { attribution } from "@/lib/track"
 import { cn } from "@/lib/utils"
 import {
   CARE_PLAN,
@@ -308,6 +309,7 @@ export default function EstimatePage() {
         estimate_max: estimate.max,
         weeks_min: estimate.weeksMin,
         weeks_max: estimate.weeksMax,
+        attribution: attribution(),
       })
       setReference(reference)
       try {

@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ApiError, apiGet, apiPost } from "@/lib/api"
+import { attribution } from "@/lib/track"
 import type { EventDetail, EventSummary, Ticket } from "./types"
 
 const notFound = (error: unknown) => error instanceof ApiError && error.status === 404
@@ -39,7 +40,7 @@ export type RegistrationInput = { name: string; phone: string; email: string; or
 export function useRegister(slug: string) {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (input: RegistrationInput) => apiPost<Ticket>(`/api/events/${slug}/register/`, input),
+    mutationFn: (input: RegistrationInput) => apiPost<Ticket>(`/api/events/${slug}/register/`, { ...input, attribution: attribution() }),
     onSuccess: (ticket) => {
       queryClient.setQueryData(["ticket", ticket.id], ticket)
       queryClient.invalidateQueries({ queryKey: ["events"] })
