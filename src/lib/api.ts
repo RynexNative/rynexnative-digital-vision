@@ -76,7 +76,7 @@ function isCsrfFailure(error: unknown) {
   return detail.toLowerCase().includes("csrf")
 }
 
-type DashboardInit = { method?: "GET" | "POST" | "PATCH" | "DELETE"; body?: unknown }
+type DashboardInit = { method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"; body?: unknown }
 
 /** Calls /api/dashboard/<path> with the login cookie; unsafe methods send the CSRF token. */
 export async function dashboardRequest<T>(path: string, { method = "GET", body }: DashboardInit = {}, retried = false): Promise<T> {
@@ -97,6 +97,19 @@ export async function dashboardRequest<T>(path: string, { method = "GET", body }
     }
     throw error
   }
+}
+
+/** Downloads a file (e.g. a PDF) from /api/dashboard/<path> with the login cookie. */
+export async function dashboardFile(path: string): Promise<Blob> {
+  const response = await fetch(`${API_URL}/api/dashboard${path}`, { credentials: "include" })
+  if (!response.ok) throw new ApiError(response.status, await response.json().catch(() => null))
+  return response.blob()
+}
+
+/** The server's own explanation ({"detail": "..."}) when there is one, else `errorMessage` */
+export function serverMessage(error: unknown, fallback: string) {
+  const detail = error instanceof ApiError ? (error.data as { detail?: unknown } | null)?.detail : undefined
+  return typeof detail === "string" && !(error as ApiError).isRateLimited ? detail : validationMessage(error) ?? errorMessage(error, fallback)
 }
 
 /** First validation message from a DRF 400 response, if any */

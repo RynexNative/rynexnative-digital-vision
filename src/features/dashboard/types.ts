@@ -193,6 +193,11 @@ export type DashboardInquiry = {
   message: string
   preferred_contact: PreferredContact
   status: InquiryStatus
+  /** Where the visitor came from (Google, WhatsApp...) and the first page they opened */
+  source: string
+  landing_page: string
+  /** The quote made from this request, if any */
+  quote: { id: string; number: string } | null
   created_at: string
 }
 

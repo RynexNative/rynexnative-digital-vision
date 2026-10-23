@@ -1,14 +1,15 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
-import { Building2, Clock, Gem, Mail, MessageCircle, Phone } from "lucide-react"
+import { Link, useNavigate } from "react-router-dom"
+import { Building2, Clock, FileText, Gem, Loader2, Mail, MessageCircle, Phone, Signpost } from "lucide-react"
+import { useQuoteFromRequest } from "@/features/billing/api"
 import { useInquiriesAdmin, useSetInquiryStatus } from "@/features/dashboard/api"
 import { INQUIRY_STATUS, formatWhen, whatsappNumber, type DashboardInquiry, type InquiryStatus } from "@/features/dashboard/types"
 import { EmptyState, ErrorState, FilterTabs, ListSkeleton, PageHeader, SearchInput } from "@/features/dashboard/ui"
-import { buttonGhost } from "@/features/dashboard/styles"
+import { buttonGhost, buttonPrimary } from "@/features/dashboard/styles"
 import { CONTACT_OPTIONS } from "@/features/packages/types"
 import { useDebouncedValue } from "@/hooks/use-debounced-value"
 import { useToast } from "@/hooks/use-toast"
-import { errorMessage } from "@/lib/api"
+import { serverMessage } from "@/lib/api"
 import { cn } from "@/lib/utils"
 
 type Filter = InquiryStatus | "all"
@@ -16,6 +17,8 @@ type Filter = InquiryStatus | "all"
 function RequestCard({ inquiry }: { inquiry: DashboardInquiry }) {
   const { toast } = useToast()
   const setStatus = useSetInquiryStatus()
+  const createQuote = useQuoteFromRequest()
+  const navigate = useNavigate()
   const first = inquiry.name.split(" ")[0]
   const whatsappText = `Hi ${first}, this is RynexNative. Thank you for your interest in our ${inquiry.package_name} package. When is a good time to talk about your goals?`
 
@@ -24,10 +27,17 @@ function RequestCard({ inquiry }: { inquiry: DashboardInquiry }) {
       { id: inquiry.id, status },
       {
         onSuccess: () => toast({ title: `Status: ${INQUIRY_STATUS[status].label}` }),
-        onError: (error) => toast({ variant: "destructive", title: "Something went wrong", description: errorMessage(error, "Please try again.") }),
+        onError: (error) => toast({ variant: "destructive", title: "Something went wrong", description: serverMessage(error, "Please try again.") }),
       },
     )
   const markContacted = () => inquiry.status === "new" && changeStatus("contacted")
+
+  // One click: finds or creates the client and opens a quote with this package on it
+  const quote = () =>
+    createQuote.mutate(inquiry.id, {
+      onSuccess: (doc) => navigate(`/admin/billing/${doc.id}`),
+      onError: (error) => toast({ variant: "destructive", title: "Could not create the quote", description: serverMessage(error, "Please try again.") }),
+    })
 
   return (
     <li className={cn("glass rounded-2xl p-5", inquiry.status === "new" && "border-primary/30")}>
@@ -44,6 +54,13 @@ function RequestCard({ inquiry }: { inquiry: DashboardInquiry }) {
             <Clock className="h-3.5 w-3.5" />
             {formatWhen(inquiry.created_at)} · prefers {CONTACT_OPTIONS[inquiry.preferred_contact]}
           </p>
+          {inquiry.source && (
+            <p className="text-xs text-foreground/50 mt-0.5 flex items-center gap-1.5">
+              <Signpost className="h-3.5 w-3.5" />
+              Came from {inquiry.source}
+              {inquiry.landing_page && ` · first page ${inquiry.landing_page}`}
+            </p>
+          )}
         </div>
         <select
           value={inquiry.status}
@@ -79,6 +96,17 @@ function RequestCard({ inquiry }: { inquiry: DashboardInquiry }) {
       )}
 
       <div className="mt-4 flex flex-wrap gap-2">
+        {inquiry.quote ? (
+          <Link to={`/admin/billing/${inquiry.quote.id}`} className={cn(buttonGhost, "text-primary")}>
+            <FileText className="h-4 w-4" />
+            Quote {inquiry.quote.number}
+          </Link>
+        ) : (
+          <button type="button" onClick={quote} disabled={createQuote.isPending} className={cn(buttonPrimary, "h-9 px-3 text-sm rounded-lg")}>
+            {createQuote.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileText className="h-4 w-4" />}
+            Create quote
+          </button>
+        )}
         <a
           href={`https://wa.me/${whatsappNumber(inquiry.phone)}?text=${encodeURIComponent(whatsappText)}`}
           target="_blank"

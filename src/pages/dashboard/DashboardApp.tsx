@@ -2,6 +2,9 @@ import { Suspense, useEffect, useState, type ReactNode } from "react"
 import { NavLink, Route, Routes, useLocation } from "react-router-dom"
 import {
   Activity,
+  BarChart3,
+  FileText,
+  Settings,
   Building2,
   Calculator,
   CreditCard,
@@ -29,6 +32,7 @@ import { ErrorBoundary } from "@/components/layout/error-boundary"
 import { useDocumentTitle } from "@/hooks/use-document-title"
 import { lazyWithReload } from "@/lib/lazy-with-reload"
 import { cn } from "@/lib/utils"
+import { excludeThisBrowser } from "@/lib/track"
 import LoginPage from "./LoginPage"
 
 const OverviewPage = lazyWithReload(() => import("./OverviewPage"))
@@ -48,8 +52,12 @@ const SupportPage = lazyWithReload(() => import("./SupportPage"))
 const DomainsPage = lazyWithReload(() => import("./DomainsPage"))
 const ServersPage = lazyWithReload(() => import("./ServersPage"))
 const SubscriptionsPage = lazyWithReload(() => import("./SubscriptionsPage"))
+const BillingPage = lazyWithReload(() => import("./BillingPage"))
+const DocumentPage = lazyWithReload(() => import("./DocumentPage"))
+const InsightsPage = lazyWithReload(() => import("./InsightsPage"))
+const SettingsPage = lazyWithReload(() => import("./SettingsPage"))
 
-type NavItem = { to: string; label: string; icon: ReactNode; badge?: number; group: string }
+type NavItem = { to: string; label: string; icon: ReactNode; badge?: number; group: string; /** For the narrow mobile bar */ short?: string }
 
 function FullScreenSpinner() {
   return (
@@ -81,10 +89,17 @@ function Shell() {
     window.scrollTo(0, 0)
   }, [pathname])
 
+  // The team's own visits to the website should not count in Insights
+  useEffect(() => {
+    excludeThisBrowser()
+  }, [])
+
   const items: NavItem[] = [
     { group: "", to: "/admin", label: "Overview", icon: <LayoutDashboard className="h-5 w-5" /> },
     { group: "Sales", to: "/admin/requests", label: "Requests", icon: <Inbox className="h-5 w-5" />, badge: stats?.packages?.inquiries_new },
+    { group: "Sales", to: "/admin/billing", label: "Quotes & invoices", short: "Invoices", icon: <FileText className="h-5 w-5" /> },
     { group: "Operations", to: "/admin/operations", label: "Operations", icon: <Activity className="h-5 w-5" />, badge: stats?.operations?.attention },
+    { group: "", to: "/admin/insights", label: "Insights", icon: <BarChart3 className="h-5 w-5" /> },
     { group: "Content & events", to: "/admin/events", label: "Events", icon: <CalendarDays className="h-5 w-5" />, badge: stats?.events?.to_verify },
     { group: "Sales", to: "/admin/estimates", label: "Estimates", icon: <Calculator className="h-5 w-5" />, badge: stats?.estimates.new },
     { group: "Sales", to: "/admin/messages", label: "Messages", icon: <Mail className="h-5 w-5" />, badge: stats?.messages.new },
@@ -98,9 +113,10 @@ function Shell() {
     { group: "Content & events", to: "/admin/alerts", label: "Alerts", icon: <ShieldAlert className="h-5 w-5" />, badge: stats?.alerts.drafts },
     { group: "Content & events", to: "/admin/subscribers", label: "Subscribers", icon: <Users className="h-5 w-5" /> },
     { group: "Content & events", to: "/admin/scan", label: "Scan tickets", icon: <ScanLine className="h-5 w-5" /> },
+    { group: "Settings", to: "/admin/settings", label: "Settings", icon: <Settings className="h-5 w-5" /> },
   ]
   // The sidebar and the "More" sheet show the items grouped
-  const GROUPS = ["", "Sales", "Operations", "Content & events"]
+  const GROUPS = ["", "Sales", "Operations", "Content & events", "Settings"]
   const grouped = (list: NavItem[]) => GROUPS.map((g) => ({ group: g, items: list.filter((i) => i.group === g) })).filter((g) => g.items.length)
   // Mobile bottom bar shows the first four; the rest live under "More"
   const primaryItems = items.slice(0, 4)
@@ -205,6 +221,10 @@ function Shell() {
               <Route path="domains" element={<DomainsPage />} />
               <Route path="servers" element={<ServersPage />} />
               <Route path="subscriptions" element={<SubscriptionsPage />} />
+              <Route path="billing" element={<BillingPage />} />
+              <Route path="billing/:id" element={<DocumentPage />} />
+              <Route path="insights" element={<InsightsPage />} />
+              <Route path="settings" element={<SettingsPage />} />
               <Route path="*" element={<OverviewPage />} />
             </Routes>
           </Suspense>
@@ -230,7 +250,7 @@ function Shell() {
             }
           >
             {item.icon}
-            {item.label}
+            {item.short ?? item.label}
             {item.badge ? (
               <span className="absolute top-2 left-1/2 ml-2 min-w-4 h-4 px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
                 {item.badge > 9 ? "9+" : item.badge}

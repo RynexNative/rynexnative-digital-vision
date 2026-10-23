@@ -1,6 +1,7 @@
 import type { ReactNode } from "react"
 import { Link } from "react-router-dom"
-import { AlertTriangle, ArrowRight, Building2, CheckCircle2, CreditCard, Globe, LifeBuoy, Server as ServerIcon } from "lucide-react"
+import { AlertTriangle, ArrowRight, Building2, CheckCircle2, CreditCard, FileText, Globe, LifeBuoy, Receipt, Server as ServerIcon } from "lucide-react"
+import { moneyMap } from "@/features/billing/types"
 import { EmptyState, ErrorState, ListSkeleton, PageHeader } from "@/features/dashboard/ui"
 import { useOpsSummary } from "@/features/operations/api"
 import { formatDate, formatMoney, type AttentionItem, type CountRow } from "@/features/operations/types"
@@ -11,6 +12,8 @@ const KIND_LINK: Record<AttentionItem["kind"], { to: string; icon: ReactNode; la
   server: { to: "/admin/servers", icon: <ServerIcon className="h-4 w-4" />, label: "Server" },
   subscription: { to: "/admin/subscriptions", icon: <CreditCard className="h-4 w-4" />, label: "Subscription" },
   service: { to: "/admin/support", icon: <LifeBuoy className="h-4 w-4" />, label: "Support" },
+  invoice: { to: "/admin/billing", icon: <Receipt className="h-4 w-4" />, label: "Invoice" },
+  quote: { to: "/admin/billing", icon: <FileText className="h-4 w-4" />, label: "Quote" },
 }
 
 const SEVERITY: Record<AttentionItem["severity"], string> = {
@@ -75,12 +78,38 @@ export default function OperationsPage() {
 
   return (
     <>
-      <PageHeader title="Operations" subtitle="Clients, support, domains, servers and subscriptions at a glance, and what needs action soon." />
+      <PageHeader title="Operations" subtitle="Clients, payments, support, domains, servers and subscriptions at a glance, and what needs action soon." />
 
       {isLoading || !data ? (
         <ListSkeleton rows={3} />
       ) : (
         <>
+          {data.billing && (
+            <Link
+              to="/admin/billing?tab=invoices"
+              className={cn(
+                "glass rounded-2xl p-5 mb-4 grid sm:grid-cols-3 gap-4 hover:border-primary/40 transition-colors",
+                data.billing.overdue_invoices > 0 && "border-red-500/40",
+              )}
+            >
+              <span>
+                <span className="block text-sm text-foreground/60">Clients owe us</span>
+                <span className="block text-xl font-bold font-poppins">{moneyMap(data.billing.outstanding)}</span>
+                <span className="block text-xs text-foreground/55">{data.billing.unpaid_invoices} unpaid invoice(s)</span>
+              </span>
+              <span>
+                <span className="block text-sm text-foreground/60">Overdue</span>
+                <span className={cn("block text-xl font-bold font-poppins", data.billing.overdue_invoices > 0 && "text-red-700")}>{moneyMap(data.billing.overdue)}</span>
+                <span className="block text-xs text-foreground/55">{data.billing.overdue_invoices} invoice(s) past the due date</span>
+              </span>
+              <span>
+                <span className="block text-sm text-foreground/60">Paid this month</span>
+                <span className="block text-xl font-bold font-poppins text-emerald-700">{moneyMap(data.billing.paid_this_month)}</span>
+                <span className="block text-xs text-foreground/55">{data.billing.open_quotes} quote(s) waiting for an answer</span>
+              </span>
+            </Link>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4 mb-8">
             <Stat
               to="/admin/clients"
@@ -151,7 +180,7 @@ export default function OperationsPage() {
                   return (
                     <li key={`${item.kind}-${item.id}`}>
                       <Link
-                        to={kind.to}
+                        to={item.kind === "invoice" || item.kind === "quote" ? `/admin/billing/${item.id}` : kind.to}
                         className={cn("glass rounded-xl p-4 flex items-center gap-3 border-l-4 hover:bg-muted/50 transition-colors", SEVERITY[item.severity])}
                       >
                         <span className="h-9 w-9 rounded-lg bg-muted text-foreground/70 flex items-center justify-center flex-shrink-0">{kind.icon}</span>

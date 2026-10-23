@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { apiPost, errorMessage } from "@/lib/api";
+import { attribution } from "@/lib/track";
 export function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
@@ -25,7 +26,8 @@ export function ContactSection() {
         name: formData.name.trim(),
         email: formData.email.trim(),
         company: formData.company.trim(),
-        message: formData.message.trim()
+        message: formData.message.trim(),
+        attribution: attribution()
       });
       toast({
         title: "Message Sent!",

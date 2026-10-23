@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Routes, Route, useParams } from "react-router-dom";
 import { Suspense } from "react";
 import { PageLoader } from "@/components/ui/loading-spinner";
-import { ScrollToTop } from "@/components/layout/scroll-to-top";
+import { PageViewTracker, ScrollToTop } from "@/components/layout/scroll-to-top";
 import { FloatingWhatsApp } from "@/components/layout/floating-whatsapp";
 import { ErrorBoundary } from "@/components/layout/error-boundary";
 import { lazyWithReload } from "@/lib/lazy-with-reload";
@@ -37,6 +37,7 @@ const App = () => {
         <Toaster />
         <BrowserRouter>
           <ScrollToTop />
+          <PageViewTracker />
           <FloatingWhatsApp />
           <ErrorBoundary>
           <Suspense fallback={<PageLoader />}>

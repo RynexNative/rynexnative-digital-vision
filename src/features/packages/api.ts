@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { apiGet, apiPost } from "@/lib/api"
+import { attribution } from "@/lib/track"
 import type { InquiryInput, ServicePackage } from "./types"
 
 export function usePackages({ enabled = true }: { enabled?: boolean } = {}) {
@@ -23,6 +24,6 @@ export function usePackage(slug: string | undefined) {
 
 export function useRequestPackage(slug: string) {
   return useMutation({
-    mutationFn: (data: InquiryInput) => apiPost<{ status: string }>(`/api/packages/${slug}/inquire/`, data),
+    mutationFn: (data: InquiryInput) => apiPost<{ status: string }>(`/api/packages/${slug}/inquire/`, { ...data, attribution: attribution() }),
   })
 }
