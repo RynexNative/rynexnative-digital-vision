@@ -176,6 +176,7 @@ const past = await getJson("/api/events/?when=past", [])
 const events = (await Promise.all([...upcoming, ...past].map((e) => getJson(`/api/events/${e.slug}/`, null)))).filter(Boolean)
 const alerts = await getJson("/api/alerts/", [])
 const packages = await getJson("/api/packages/", [])
+const projects = await getJson("/api/projects/", [])
 
 if (apiFailed && STRICT) {
   console.error("prerender: the API could not be reached; failing so an incomplete site is not deployed")
@@ -199,7 +200,7 @@ await writePage("/", {
     "RynexNative designs and builds websites, apps and secure systems in Tanzania: software development, mobile apps, cybersecurity and training.",
   body: `<h1>Technology your business can trust</h1>
 <p>We design and build websites, apps and secure systems with care, so your clients feel the quality from the very first click.</p>
-<p><a href="/packages/">Service packages</a> · <a href="/estimate/">Get an estimate</a> · <a href="/events/">Events</a> · <a href="/news/">News</a> · <a href="/alerts/">Security alerts</a></p>
+<p><a href="/packages/">Service packages</a> · <a href="/projects/">Our work</a> · <a href="/estimate/">Get an estimate</a> · <a href="/events/">Events</a> · <a href="/news/">News</a> · <a href="/alerts/">Security alerts</a></p>
 ${news.length ? `<h2>Latest news</h2>${newsLinks(news.slice(0, 6))}` : ""}`,
   lastmod: news[0]?.updated_at,
   sitemapPriority: "1.0",
@@ -392,6 +393,52 @@ ${richText(pkg.description)}
   })
 }
 
+const PROJECT_CATEGORY = { website: "Website", system: "Management system", mobile: "Mobile app", security: "Cybersecurity", ai: "AI & data", cloud: "Cloud & infrastructure", other: "Project" }
+// Confidential projects never carry a client name; describe the client instead
+const projectClient = (p) => (p.visibility === "public" ? p.client_name || p.sector : p.client_description) || ""
+
+await writePage("/projects/", {
+  title: "Our Work | RynexNative",
+  description: "Systems, websites and apps RynexNative has built for schools, businesses and institutions in Tanzania, including confidential client work.",
+  body: `<h1>Our work</h1><ul>${projects.map((p) => `<li><a href="/projects/${p.slug}/">${escapeHtml(p.title)}</a> (${escapeHtml(projectClient(p))})<br>${escapeHtml(p.summary)}</li>`).join("")}</ul>`,
+  sitemapPriority: "0.8",
+  jsonLd: [breadcrumbs([["Home", `${SITE}/`], ["Our work", `${SITE}/projects/`]])],
+})
+
+for (const project of projects) {
+  const url = `${SITE}/projects/${project.slug}/`
+  const isPublic = project.visibility === "public"
+  await writePage(`/projects/${project.slug}/`, {
+    title: `${project.title} | RynexNative Work`,
+    description: truncate(project.summary),
+    image: (isPublic && imageUrl(project.cover_image, 1200)) || DEFAULT_IMAGE,
+    sitemapPriority: "0.7",
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        name: project.title,
+        description: truncate(project.summary, 300),
+        about: PROJECT_CATEGORY[project.category] || "Project",
+        creator: { "@type": "Organization", name: ORG, url: SITE },
+        ...(project.year ? { dateCreated: String(project.year) } : {}),
+        ...(isPublic && project.cover_image ? { image: imageUrl(project.cover_image, 1200) } : {}),
+      },
+      breadcrumbs([["Home", `${SITE}/`], ["Our work", `${SITE}/projects/`], [project.title, url]]),
+    ],
+    body: `<article>
+<p><a href="/projects/">Our work</a> · ${escapeHtml(PROJECT_CATEGORY[project.category] || "Project")}</p>
+<h1>${escapeHtml(project.title)}</h1>
+<p><strong>${escapeHtml(project.summary)}</strong></p>
+<p>${escapeHtml([projectClient(project), project.location].filter(Boolean).join(" · "))}</p>
+${project.challenge ? `<h2>The challenge</h2>${richText(project.challenge)}` : ""}
+${project.solution ? `<h2>What we built</h2>${richText(project.solution)}` : ""}
+${project.results?.length ? `<h2>The result</h2>${listHtml(project.results)}` : ""}
+${project.testimonial ? `<blockquote>${escapeHtml(project.testimonial)}${project.testimonial_author ? ` — ${escapeHtml(project.testimonial_author)}` : ""}</blockquote>` : ""}
+</article>`,
+  })
+}
+
 await writePage("/estimate/", {
   title: "Estimate Your Project | RynexNative",
   description: "Get an instant price range for your website, app or system in under 2 minutes. No sign-up, no obligation.",
@@ -491,6 +538,6 @@ await writeFile(
 )
 
 console.log(
-  `prerender: ${sitemap.length} pages (${news.length} news, ${events.length} events, ${alerts.length} alerts, ${packages.length} packages), ` +
+  `prerender: ${sitemap.length} pages (${news.length} news, ${events.length} events, ${alerts.length} alerts, ${packages.length} packages, ${projects.length} projects), ` +
     `${recent.length} in the news sitemap${apiFailed ? " — some data could not be loaded" : ""}`,
 )

@@ -1,205 +1,81 @@
-import { ExternalLink, Github } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import yiit800 from "@/assets/yiit-800.webp";
-import yiit480 from "@/assets/yiit-480.webp";
-import { scrollToSection } from "@/hooks/use-section-nav"
+import { Link } from "react-router-dom"
+import { ArrowRight, MessageCircle } from "lucide-react"
+import { useProjects } from "@/features/projects/api"
+import { ConfidentialProjectCard, ConfidentialityNote, PublicProjectCard } from "@/features/projects/components"
+import { FALLBACK_PROJECTS } from "@/features/projects/types"
+import { WHATSAPP_NUMBER } from "@/features/packages/types"
 
-type Project = {
-  title: string
-  category: string
-  description: string
-  tech: string[]
-  image: string
-  /** Responsive sources, e.g. "a.webp 480w, b.webp 800w" */
-  srcSet?: string
-  link: string
-  // Optional public source code URL; the "Code" button is shown only when set
-  repo?: string
-  gradient: string
-  privacy: string
-}
+const WALKTHROUGH = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+  "Hello RynexNative, I would like a private walkthrough of a system similar to what I need.",
+)}`
 
 export function PortfolioSection() {
-  const projects: Project[] = [
-    {
-      title: "School Management System",
-      category: "School Management System",
-      description: "Comprehensive school management system covering student records, attendance, exams, results and fee management.",
-      tech: ["React + vite", "Django", "PostgreSQL", "FastAPI"],
-      image: yiit800,
-      srcSet: `${yiit480} 480w, ${yiit800} 800w`,
-      link: 'school.rynexnative.com',
-      gradient: "from-tech-purple to-cyber-blue",
-      privacy: 'Public - Complete',
-    },
-    {
-      title: "FinTech Mobile App",
-      category: "Mobile Development",
-      description: "A secure financial application with biometric authentication, real-time transactions, and advanced analytics.",
-      tech: ["React Native", "Node.js", "MongoDB", "AWS"],
-      image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=400&fit=crop&auto=format&q=60",
-      srcSet: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=480&h=240&fit=crop&auto=format&q=60 480w, https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=400&fit=crop&auto=format&q=60 800w",
-      link: '#',
-      gradient: "from-primary to-accent",
-      privacy: 'Private - Complete',
-    },
-    {
-      title: "E-Commerce Platform",
-      category: "Web Development",
-      description: "Scalable e-commerce solution with AI-powered recommendations and integrated payment processing.",
-      tech: ["React", "Python", "PostgreSQL", "Stripe"],
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=400&fit=crop&auto=format&q=60",
-      srcSet: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=480&h=240&fit=crop&auto=format&q=60 480w, https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=400&fit=crop&auto=format&q=60 800w",
-      link: '#',
-      gradient: "from-accent to-electric-teal",
-      privacy: 'Private - In Progress',
-    },
-    {
-      title: "Cybersecurity Dashboard",
-      category: "Security Solutions",
-      description: "Real-time threat monitoring dashboard with AI-powered anomaly detection and automated response systems.",
-      tech: ["Vue.js", "Python", "TensorFlow", "Docker"],
-      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&auto=format&q=60",
-      srcSet: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=480&h=240&fit=crop&auto=format&q=60 480w, https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&h=400&fit=crop&auto=format&q=60 800w",
-      link: '#',
-      gradient: "from-electric-teal to-tech-purple",
-      privacy: 'Private - Complete',
-    },
-    {
-      title: "Healthcare AI Platform",
-      category: "AI & Machine Learning",
-      description: "Medical diagnosis assistance platform using machine learning for pattern recognition and decision support.",
-      tech: ["React", "TensorFlow", "Python", "GCP"],
-      image: "https://respiratory-therapy.com/wp-content/uploads/2024/10/AI-lung-software-1280x640.jpg",
-      link: '#',
-      gradient: "from-cyber-blue to-primary",
-      privacy: 'Public - Complete',
-    },
-    {
-      title: "Cloud Migration Suite",
-      category: "Cloud Solutions",
-      description: "Enterprise cloud migration toolkit with automated deployment and monitoring capabilities.",
-      tech: ["Terraform", "Kubernetes", "AWS", "Jenkins"],
-      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=400&fit=crop&auto=format&q=60",
-      srcSet: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=480&h=240&fit=crop&auto=format&q=60 480w, https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=400&fit=crop&auto=format&q=60 800w",
-      link: '#',
-      gradient: "from-primary to-tech-purple",
-      privacy: 'Public - Complete',
-    }
-  ]
+  const { data, isError } = useProjects()
+  const projects = data ?? (isError ? FALLBACK_PROJECTS : [])
+  const shown = projects.filter((p) => p.visibility === "public")
+  const confidential = projects.filter((p) => p.visibility === "confidential")
 
   return (
     <section id="portfolio" className="py-20 md:py-24 section-muted">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-14">
           <p className="eyebrow">Our work</p>
           <h2 className="text-4xl md:text-5xl font-bold font-poppins mb-6">
-            Featured <span className="text-primary">Projects</span>
+            Work we are <span className="text-primary">proud of</span>
           </h2>
           <p className="text-xl text-foreground/80 max-w-3xl mx-auto leading-relaxed">
-            Showcasing our expertise through successful implementations across various industries
+            Real systems running for schools, businesses and institutions in Tanzania. Some we can show you; most we keep private for our clients.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <div 
-              key={index}
-              className="group glass rounded-3xl overflow-hidden hover-lift cursor-pointer"
-            >
-              {/* Project Image */}
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={project.image}
-                  srcSet={project.srcSet}
-                  sizes="(min-width: 1024px) 384px, (min-width: 768px) 50vw, 100vw"
-                  alt={project.title}
-                  width={800}
-                  height={400}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className={`absolute inset-0 bg-gradient-to-t ${project.gradient} opacity-60 group-hover:opacity-40 transition-opacity duration-300`}></div>
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-background/80 backdrop-blur-sm rounded-full text-xs font-semibold text-foreground">
-                    {project.category}
-                  </span>
-                </div>
+        {data === undefined && !isError ? (
+          <div className="grid lg:grid-cols-2 gap-6" aria-hidden="true">
+            {[0, 1].map((i) => (
+              <div key={i} className="glass rounded-3xl h-[420px] animate-pulse" />
+            ))}
+          </div>
+        ) : (
+          <>
+            {shown.length > 0 && (
+              <div className={shown.length === 1 ? "" : "grid lg:grid-cols-2 gap-6"}>
+                {shown.slice(0, 2).map((project) => (
+                  <PublicProjectCard key={project.slug} project={project} large={shown.length === 1} />
+                ))}
               </div>
+            )}
 
-              {/* Project Content */}
-              <div className="p-6">
-                <h3 className="text-xl font-bold font-poppins mb-3 text-foreground group-hover:text-primary transition-colors">
-                  {project.title}
-                </h3>
-                <div className="flex flex-wrap gap-2 mb-6">
-                  <span className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-md border border-primary/20">
-                    {project.privacy}
-                  </span>
-                </div>
-                
-                <p className="text-foreground/80 text-sm leading-relaxed mb-4">
-                  {project.description}
-                </p>
-
-                {/* Tech Stack */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.tech.map((tech, idx) => (
-                    <span 
-                      key={idx}
-                      className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-md border border-primary/20"
-                    >
-                      {tech}
-                    </span>
+            {confidential.length > 0 && (
+              <>
+                <h3 className="text-xl font-bold font-poppins mt-14 mb-5">More of our work, shared without client names</h3>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {confidential.slice(0, 6).map((project) => (
+                    <ConfidentialProjectCard key={project.slug} project={project} />
                   ))}
                 </div>
+              </>
+            )}
 
-                {/* Action Buttons */}
-                <div className="flex gap-3">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="flex-1 glass border-primary/30"
-                    disabled={project.link === '#'}
-                    onClick={() => {
-                      const link = project.link.startsWith('http') ? project.link : `https://${project.link}`;
-                      window.open(link, '_blank', 'noopener,noreferrer');
-                    }}
-                  >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    View
-                  </Button>
-                  {project.repo && (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="flex-1 glass border-accent/30"
-                      onClick={() => window.open(project.repo, '_blank', 'noopener,noreferrer')}
-                    >
-                      <Github className="w-4 h-4 mr-2" />
-                      Code
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+            <ConfidentialityNote className="mt-10" />
+          </>
+        )}
 
-        {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <p className="text-lg text-foreground/80 mb-6">
-            Interested in seeing more of our work?
-          </p>
-          <Button 
-            size="lg" 
-            variant="outline" 
-            className="glass border-primary/30 px-8 py-4"
-            onClick={() => scrollToSection('contact')}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center mt-10">
+          <Link
+            to="/projects"
+            className="h-12 px-6 rounded-xl bg-gradient-primary text-white font-semibold inline-flex items-center justify-center gap-2 hover:opacity-90"
           >
-            View Full Portfolio
-          </Button>
+            See all projects
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <a
+            href={WALKTHROUGH}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="h-12 px-6 rounded-xl glass border-primary/30 font-semibold inline-flex items-center justify-center gap-2 hover:text-primary"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Ask for a private walkthrough
+          </a>
         </div>
       </div>
     </section>

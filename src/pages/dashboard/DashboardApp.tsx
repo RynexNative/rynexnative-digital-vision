@@ -3,6 +3,7 @@ import { NavLink, Route, Routes, useLocation } from "react-router-dom"
 import {
   Activity,
   BarChart3,
+  Briefcase,
   FileText,
   Settings,
   Building2,
@@ -56,6 +57,7 @@ const BillingPage = lazyWithReload(() => import("./BillingPage"))
 const DocumentPage = lazyWithReload(() => import("./DocumentPage"))
 const InsightsPage = lazyWithReload(() => import("./InsightsPage"))
 const SettingsPage = lazyWithReload(() => import("./SettingsPage"))
+const ProjectsAdminPage = lazyWithReload(() => import("./ProjectsAdminPage"))
 
 type NavItem = { to: string; label: string; icon: ReactNode; badge?: number; group: string; /** For the narrow mobile bar */ short?: string }
 
@@ -109,6 +111,7 @@ function Shell() {
     { group: "Operations", to: "/admin/domains", label: "Domains", icon: <Globe className="h-5 w-5" /> },
     { group: "Operations", to: "/admin/servers", label: "Servers", icon: <Server className="h-5 w-5" /> },
     { group: "Operations", to: "/admin/subscriptions", label: "Subscriptions", icon: <CreditCard className="h-5 w-5" /> },
+    { group: "Content & events", to: "/admin/projects", label: "Projects", icon: <Briefcase className="h-5 w-5" /> },
     { group: "Content & events", to: "/admin/news", label: "News", icon: <Newspaper className="h-5 w-5" />, badge: stats?.news?.drafts },
     { group: "Content & events", to: "/admin/alerts", label: "Alerts", icon: <ShieldAlert className="h-5 w-5" />, badge: stats?.alerts.drafts },
     { group: "Content & events", to: "/admin/subscribers", label: "Subscribers", icon: <Users className="h-5 w-5" /> },
@@ -225,6 +228,7 @@ function Shell() {
               <Route path="billing/:id" element={<DocumentPage />} />
               <Route path="insights" element={<InsightsPage />} />
               <Route path="settings" element={<SettingsPage />} />
+              <Route path="projects" element={<ProjectsAdminPage />} />
               <Route path="*" element={<OverviewPage />} />
             </Routes>
           </Suspense>
