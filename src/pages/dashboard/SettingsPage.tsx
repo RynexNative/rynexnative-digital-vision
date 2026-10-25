@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react"
-import { AlertTriangle, BellRing, Building, CheckCircle2, Loader2, Mail, MessageCircle, Save, Send, XCircle } from "lucide-react"
+import { AlertTriangle, BellRing, Building, CalendarClock, CheckCircle2, Eye, Loader2, Mail, MessageCircle, Save, Send, XCircle } from "lucide-react"
 import { useMutation } from "@tanstack/react-query"
 import { Switch } from "@/components/ui/switch"
 import { useBusinessProfile, useSaveProfile } from "@/features/billing/api"
@@ -9,12 +9,110 @@ import { formatWhen } from "@/features/dashboard/types"
 import { ErrorState, ListSkeleton, PageHeader } from "@/features/dashboard/ui"
 import { buttonGhost, buttonPrimary, inputClass } from "@/features/dashboard/styles"
 import { useToast } from "@/hooks/use-toast"
-import { dashboardRequest, serverMessage } from "@/lib/api"
+import { dashboardFile, dashboardRequest, serverMessage } from "@/lib/api"
 import { cn } from "@/lib/utils"
 
 type ChannelStatus = { configured: boolean; recipients: string[]; issues: string[]; server?: string; sender?: string; template?: string }
 type LogEntry = { id: number; created_at: string; event: string; channel: string; recipient: string; subject: string; ok: boolean; error: string }
 type NotificationsStatus = { email: ChannelStatus; whatsapp: ChannelStatus; log: LogEntry[] }
+
+type DigestStatus = {
+  recipients: string[]
+  scheduled: boolean
+  when_clear: boolean
+  today: { subject: string; counts: { overdue: number; week: number; later: number; check: number } }
+  runs: { date: string; status: string; items: number; detail: string; at: string }[]
+}
+
+const RUN_STATUS: Record<string, { label: string; className: string }> = {
+  sent: { label: "Sent", className: "text-emerald-700" },
+  skipped: { label: "Nothing to report", className: "text-foreground/55" },
+  failed: { label: "Failed", className: "text-red-700" },
+  sending: { label: "Sending", className: "text-foreground/55" },
+}
+
+function DailyDigest() {
+  const { toast } = useToast()
+  const invalidate = useInvalidate()
+  const { data, isLoading, isError, refetch } = useDashboardQuery<DigestStatus>(["dashboard", "ops", "digest"], "/ops/digest/")
+  const [previewing, setPreviewing] = useState(false)
+  const sendNow = useMutation({
+    mutationFn: () => dashboardRequest<{ status: string; subject?: string }>("/ops/digest/", { method: "POST" }),
+    onSuccess: (result) => {
+      toast({ title: result.status === "sent" ? "Sent ✅" : "Not sent", description: result.subject })
+      invalidate("ops", "notifications")
+    },
+    onError: (error) => toast({ variant: "destructive", title: "Not sent", description: serverMessage(error, "Please try again.") }),
+  })
+
+  const preview = async () => {
+    // Open the tab first: browsers block pop-ups opened after an await
+    const tab = window.open("", "_blank")
+    setPreviewing(true)
+    try {
+      const url = URL.createObjectURL(await dashboardFile("/ops/digest/preview/"))
+      if (tab) tab.location.href = url
+      window.setTimeout(() => URL.revokeObjectURL(url), 60_000)
+    } catch (error) {
+      tab?.close()
+      toast({ variant: "destructive", title: "Could not open the preview", description: serverMessage(error, "Please try again.") })
+    } finally {
+      setPreviewing(false)
+    }
+  }
+
+  if (isError) return <ErrorState onRetry={() => refetch()} />
+  if (isLoading || !data) return <ListSkeleton rows={1} />
+
+  const { counts } = data.today
+  return (
+    <div className={cn("glass rounded-2xl p-5", data.scheduled ? "border-emerald-500/30" : "border-amber-500/40")}>
+      <p className="text-sm text-foreground/70">
+        Every morning (around 07:30), the team gets one email with what is overdue, due this week and coming up: domains, server and
+        subscription payments, support periods, unpaid invoices and quotes about to expire.
+        {!data.when_clear && " On days with nothing to report, no email is sent."}
+      </p>
+      <p className="text-sm mt-2">
+        Goes to: {data.recipients.length ? data.recipients.join(", ") : <span className="text-amber-700">nobody yet (set NOTIFY_EMAILS)</span>}
+      </p>
+      {!data.scheduled && (
+        <p className="mt-3 text-sm text-amber-800 bg-amber-500/10 rounded-xl p-3 flex gap-2">
+          <AlertTriangle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+          The daily schedule is not connected yet: set OPS_DIGEST_TOKEN on Render and the same value as the GitHub secret OPS_DIGEST_TOKEN in the
+          backend repository. “Send now” works already.
+        </p>
+      )}
+      <div className="mt-4 rounded-xl bg-card/60 border border-border p-3 text-sm">
+        <span className="text-foreground/55">Today: </span>
+        <b>{counts.overdue}</b> overdue · <b>{counts.week}</b> due this week · <b>{counts.later}</b> coming up
+      </div>
+      <div className="flex flex-wrap gap-2 mt-4">
+        <button type="button" onClick={preview} disabled={previewing} className={cn(buttonGhost, "h-11 px-4")}>
+          {previewing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
+          Preview today’s email
+        </button>
+        <button type="button" onClick={() => sendNow.mutate()} disabled={sendNow.isPending} className={cn(buttonGhost, "h-11 px-4")}>
+          {sendNow.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+          Send now
+        </button>
+      </div>
+      {data.runs.length > 0 && (
+        <ul className="mt-4 divide-y divide-border text-sm">
+          {data.runs.map((run) => {
+            const status = RUN_STATUS[run.status] ?? { label: run.status, className: "" }
+            return (
+              <li key={run.date} className="py-2 flex flex-wrap gap-x-3 gap-y-0.5">
+                <span className="w-24 text-foreground/60">{run.date}</span>
+                <span className={cn("font-semibold", status.className)}>{status.label}</span>
+                <span className="text-foreground/55 min-w-0 break-words">{run.detail}</span>
+              </li>
+            )
+          })}
+        </ul>
+      )}
+    </div>
+  )
+}
 
 function Field({ label, hint, wide, children }: { label: string; hint?: string; wide?: boolean; children: ReactNode }) {
   return (
@@ -212,6 +310,13 @@ export default function SettingsPage() {
           <BellRing className="h-5 w-5 text-primary" /> Team notifications
         </h2>
         <Notifications />
+      </section>
+
+      <section className="mb-10">
+        <h2 className="font-semibold text-lg mb-3 flex items-center gap-2">
+          <CalendarClock className="h-5 w-5 text-primary" /> Daily operations email
+        </h2>
+        <DailyDigest />
       </section>
 
       <section>

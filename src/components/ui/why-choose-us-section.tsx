@@ -1,6 +1,18 @@
 import { Award, Clock, Users, Lightbulb, Shield, Rocket } from "lucide-react"
+import { useTrackRecord } from "@/features/projects/api"
+
+const TONES = ["text-primary", "text-accent", "text-electric-teal", "text-tech-purple"]
+const COLUMNS: Record<number, string> = { 1: "md:grid-cols-1", 2: "md:grid-cols-2", 3: "md:grid-cols-3", 4: "md:grid-cols-4" }
 
 export function WhyChooseUsSection() {
+  // The same honest totals as the Our work section, plus round-the-clock support
+  const { data: record } = useTrackRecord()
+  const picked = ["projects", "clients", "team", "supported"].flatMap((key) => record?.totals.filter((t) => t.key === key) ?? []).slice(0, 3)
+  const stats = [...picked, { key: "support", display: "24/7", label: "Support available" }].map((t, i) => ({
+    value: t.display,
+    label: t.label,
+    tone: TONES[i % TONES.length],
+  }))
   const strengths = [
     {
       icon: <Award className="h-8 w-8" />,
@@ -92,23 +104,13 @@ export function WhyChooseUsSection() {
 
         {/* Bottom Stats */}
         <div className="mt-20 glass rounded-3xl p-8">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl font-bold text-primary mb-2">50+</div>
-              <div className="text-foreground/70">Successful Projects</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-accent mb-2">30+</div>
-              <div className="text-foreground/70">Happy Clients</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-electric-teal mb-2">15+</div>
-              <div className="text-foreground/70">Team Members</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold text-tech-purple mb-2">24/7</div>
-              <div className="text-foreground/70">Support Available</div>
-            </div>
+          <div className={`grid grid-cols-2 gap-8 text-center ${COLUMNS[stats.length] ?? "md:grid-cols-4"}`}>
+            {stats.map((stat) => (
+              <div key={stat.label}>
+                <div className={`text-4xl font-bold mb-2 ${stat.tone}`}>{stat.value}</div>
+                <div className="text-foreground/70">{stat.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

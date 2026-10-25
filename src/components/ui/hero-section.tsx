@@ -4,17 +4,21 @@ import hero800 from "@/assets/hero-800.webp";
 import hero1600 from "@/assets/hero-1600.webp";
 import { useSectionNav } from "@/hooks/use-section-nav";
 import { NetworkBackground } from "@/components/ui/network-background";
+import { useTrackRecord } from "@/features/projects/api";
 
-const stats = [
-  { value: "50+", label: "Projects delivered" },
-  { value: "30+", label: "Happy clients" },
-  { value: "24/7", label: "Support" },
-];
 
 const stack = ["React", "Django", "Python", "React Native", "Node.js", "PostgreSQL", "FastAPI", "Docker", "AWS", "TensorFlow"];
 
 export function HeroSection() {
   const goToSection = useSectionNav();
+  // Real totals from our client records (rounded down by the server); never a made-up number
+  const { data: record, isLoading } = useTrackRecord();
+  const total = (key: string) => record?.totals.find((t) => t.key === key)?.display;
+  const stats = [
+    { value: total("projects"), label: "Projects delivered" },
+    { value: total("clients"), label: "Organisations served" },
+    { value: "24/7", label: "Support" },
+  ].filter((stat) => stat.value || isLoading);
 
   return (
     <section className="surface-dark relative min-h-[100svh] flex flex-col overflow-hidden">
@@ -70,7 +74,7 @@ export function HeroSection() {
             {stats.map((stat) => (
               <div key={stat.label} className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
                 <dt className="sr-only">{stat.label}</dt>
-                <dd className="text-3xl sm:text-4xl md:text-5xl font-bold font-poppins text-white">{stat.value}</dd>
+                <dd className="text-3xl sm:text-4xl md:text-5xl font-bold font-poppins text-white min-w-[2ch] text-center">{stat.value ?? "\u00a0"}</dd>
                 <span className="hidden sm:block h-10 w-px bg-emerald-400" aria-hidden="true" />
                 <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 text-center sm:text-left sm:w-24 leading-tight" aria-hidden="true">
                   {stat.label}

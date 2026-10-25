@@ -22,6 +22,8 @@ const EventDetailPage = lazyWithReload(() => import("./pages/EventDetailPage"));
 const TicketPage = lazyWithReload(() => import("./pages/TicketPage"));
 const PackagesPage = lazyWithReload(() => import("./pages/PackagesPage"));
 const PackageDetailPage = lazyWithReload(() => import("./pages/PackageDetailPage"));
+const ProjectsPage = lazyWithReload(() => import("./pages/ProjectsPage"));
+const ProjectDetailPage = lazyWithReload(() => import("./pages/ProjectDetailPage"));
 
 // Links shared before the site moved to English paths (e.g. /matukio/...) keep working
 function LegacyRedirect({ to }: { to: string }) {
@@ -48,6 +50,8 @@ const App = () => {
               <Route path="/estimate" element={<EstimatePage />} />
               <Route path="/packages" element={<PackagesPage />} />
               <Route path="/packages/:slug" element={<PackageDetailPage />} />
+              <Route path="/projects" element={<ProjectsPage />} />
+              <Route path="/projects/:slug" element={<ProjectDetailPage />} />
               <Route path="/news" element={<NewsPage />} />
               <Route path="/news/:slug" element={<NewsDetailPage />} />
               <Route path="/events" element={<EventsPage />} />

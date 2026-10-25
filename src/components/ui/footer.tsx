@@ -75,7 +75,7 @@ export function Footer() {
       { label: "News", to: "/news" },
       { label: "Security Alerts", to: "/alerts" },
       { label: "Project Estimator", to: "/estimate" },
-      { label: "Case Studies", target: "portfolio" },
+      { label: "Our Work", to: "/projects" },
       { label: "Support", target: "contact" }
     ]
   }
