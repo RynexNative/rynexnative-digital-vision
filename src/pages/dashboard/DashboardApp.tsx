@@ -4,6 +4,7 @@ import {
   Activity,
   BarChart3,
   Briefcase,
+  HeartHandshake,
   FileText,
   Settings,
   Building2,
@@ -58,6 +59,7 @@ const DocumentPage = lazyWithReload(() => import("./DocumentPage"))
 const InsightsPage = lazyWithReload(() => import("./InsightsPage"))
 const SettingsPage = lazyWithReload(() => import("./SettingsPage"))
 const ProjectsAdminPage = lazyWithReload(() => import("./ProjectsAdminPage"))
+const WhyChooseUsAdminPage = lazyWithReload(() => import("./WhyChooseUsAdminPage"))
 
 type NavItem = { to: string; label: string; icon: ReactNode; badge?: number; group: string; /** For the narrow mobile bar */ short?: string }
 
@@ -112,6 +114,7 @@ function Shell() {
     { group: "Operations", to: "/admin/servers", label: "Servers", icon: <Server className="h-5 w-5" /> },
     { group: "Operations", to: "/admin/subscriptions", label: "Subscriptions", icon: <CreditCard className="h-5 w-5" /> },
     { group: "Content & events", to: "/admin/projects", label: "Projects", icon: <Briefcase className="h-5 w-5" /> },
+    { group: "Content & events", to: "/admin/why-choose-us", label: "Why choose us", icon: <HeartHandshake className="h-5 w-5" /> },
     { group: "Content & events", to: "/admin/news", label: "News", icon: <Newspaper className="h-5 w-5" />, badge: stats?.news?.drafts },
     { group: "Content & events", to: "/admin/alerts", label: "Alerts", icon: <ShieldAlert className="h-5 w-5" />, badge: stats?.alerts.drafts },
     { group: "Content & events", to: "/admin/subscribers", label: "Subscribers", icon: <Users className="h-5 w-5" /> },
@@ -229,6 +232,7 @@ function Shell() {
               <Route path="insights" element={<InsightsPage />} />
               <Route path="settings" element={<SettingsPage />} />
               <Route path="projects" element={<ProjectsAdminPage />} />
+              <Route path="why-choose-us" element={<WhyChooseUsAdminPage />} />
               <Route path="*" element={<OverviewPage />} />
             </Routes>
           </Suspense>
