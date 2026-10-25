@@ -14,6 +14,7 @@ import {
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Switch } from "@/components/ui/switch"
 import { useDashboardQuery, useInvalidate } from "@/features/dashboard/api"
+import { CLIENT_KINDS, SERVICE_TYPES } from "@/features/operations/types"
 import { ImageField } from "@/features/dashboard/ImageField"
 import { EmptyState, ErrorState, ListSkeleton, PageHeader, Pill } from "@/features/dashboard/ui"
 import { buttonGhost, buttonPrimary, inputClass } from "@/features/dashboard/styles"
@@ -96,7 +97,206 @@ function useProjectsDone() {
   }
 }
 
-type PortfolioSettings = { show_projects: boolean; show_track_record: boolean; projects_before: number; clients_before: number; team_size: number }
+type PortfolioSettings = { show_projects: boolean; show_track_record: boolean; team_size: number }
+type EarlierWork = {
+  id: number
+  service_type: string
+  service_label: string
+  client_kind: string
+  client_label: string
+  sector: string
+  projects: number
+  clients: number
+  still_supported: number
+  note: string
+}
+const EMPTY_ROW = { service_type: "software", client_kind: "school", sector: "", projects: "", clients: "", still_supported: "", note: "" }
+
+/**
+ * Work that is not in Operations, entered as groups ("software for schools: 18 projects for 15 schools")
+ * so the website's numbers and breakdowns are complete without entering each client.
+ */
+function EarlierWorkTable() {
+  const { toast } = useToast()
+  const invalidate = useInvalidate()
+  const queryClient = useQueryClient()
+  const { data: rows = [], isLoading } = useDashboardQuery<EarlierWork[]>(["dashboard", "earlier-work"], "/earlier-work/")
+  const [row, setRow] = useState(EMPTY_ROW)
+  const [editingId, setEditingId] = useState<number | null>(null)
+  const done = () => {
+    invalidate("earlier-work", "portfolio")
+    queryClient.invalidateQueries({ queryKey: ["projects", "track-record"] })
+  }
+  const save = useMutation({
+    mutationFn: (body: Record<string, unknown>) =>
+      editingId
+        ? dashboardRequest<EarlierWork>(`/earlier-work/${editingId}/`, { method: "PATCH", body })
+        : dashboardRequest<EarlierWork>("/earlier-work/", { method: "POST", body }),
+    onSuccess: () => {
+      done()
+      setRow(EMPTY_ROW)
+      setEditingId(null)
+      toast({ title: "Saved ✅" })
+    },
+    onError: (error) => toast({ variant: "destructive", title: "Could not save", description: serverMessage(error, "Please try again.") }),
+  })
+  const remove = useMutation({
+    mutationFn: (id: number) => dashboardRequest<void>(`/earlier-work/${id}/`, { method: "DELETE" }),
+    onSuccess: () => {
+      done()
+      toast({ title: "Removed" })
+    },
+  })
+  const set = (key: keyof typeof EMPTY_ROW) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setRow((r) => ({ ...r, [key]: e.target.value }))
+  const total = rows.reduce((sum, r) => ({ projects: sum.projects + r.projects, clients: sum.clients + r.clients }), { projects: 0, clients: 0 })
+
+  return (
+    <div className="mt-6 border-t border-border pt-5">
+      <h3 className="font-semibold">Earlier work not in Operations</h3>
+      <p className="text-xs text-foreground/60 mb-3">
+        Enter it in groups, not client by client, e.g. “Software & web systems · School · Education · 18 projects for 15 schools”. It is added to the
+        numbers and to “What we have built” and “Who we work with”. Notes are for the team only.
+      </p>
+
+      {isLoading ? null : rows.length > 0 ? (
+        <div className="overflow-x-auto -mx-1 mb-4">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-left text-xs text-foreground/55">
+                <th className="font-semibold py-2 px-1">Service</th>
+                <th className="font-semibold py-2 px-1">Client type</th>
+                <th className="font-semibold py-2 px-1">Sector</th>
+                <th className="font-semibold py-2 px-1 text-right">Projects</th>
+                <th className="font-semibold py-2 px-1 text-right">Clients</th>
+                <th className="font-semibold py-2 px-1 text-right">Supported</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {rows.map((r) => (
+                <tr key={r.id} className={cn(editingId === r.id && "bg-primary/5")}>
+                  <td className="py-2 px-1">
+                    {r.service_label}
+                    {r.note && <span className="block text-xs text-foreground/50">{r.note}</span>}
+                  </td>
+                  <td className="py-2 px-1">{r.client_label}</td>
+                  <td className="py-2 px-1">{r.sector || "—"}</td>
+                  <td className="py-2 px-1 text-right tabular-nums">{r.projects}</td>
+                  <td className="py-2 px-1 text-right tabular-nums">{r.clients}</td>
+                  <td className="py-2 px-1 text-right tabular-nums">{r.still_supported}</td>
+                  <td className="py-2 px-1 text-right whitespace-nowrap">
+                    <button
+                      type="button"
+                      aria-label="Edit"
+                      onClick={() => {
+                        setEditingId(r.id)
+                        setRow({
+                          service_type: r.service_type,
+                          client_kind: r.client_kind,
+                          sector: r.sector,
+                          projects: String(r.projects),
+                          clients: String(r.clients),
+                          still_supported: String(r.still_supported),
+                          note: r.note,
+                        })
+                      }}
+                      className="h-8 w-8 rounded-lg text-foreground/50 hover:text-primary inline-flex items-center justify-center"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Remove"
+                      onClick={() => remove.mutate(r.id)}
+                      className="h-8 w-8 rounded-lg text-foreground/50 hover:text-red-600 inline-flex items-center justify-center"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              <tr className="font-semibold">
+                <td className="py-2 px-1" colSpan={3}>
+                  Total
+                </td>
+                <td className="py-2 px-1 text-right tabular-nums">{total.projects}</td>
+                <td className="py-2 px-1 text-right tabular-nums">{total.clients}</td>
+                <td colSpan={2} />
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      ) : null}
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          save.mutate({
+            ...row,
+            sector: row.sector.trim(),
+            note: row.note.trim(),
+            projects: Number(row.projects),
+            clients: Number(row.clients),
+            still_supported: Number(row.still_supported || 0),
+          })
+        }}
+        className="rounded-xl border border-foreground/10 p-3 grid grid-cols-2 lg:grid-cols-[1.3fr_1.1fr_1fr_80px_80px_90px] gap-2 items-end"
+      >
+        <Field label="Service">
+          <select value={row.service_type} onChange={set("service_type")} className={inputClass}>
+            {Object.entries(SERVICE_TYPES).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label="Client type">
+          <select value={row.client_kind} onChange={set("client_kind")} className={inputClass}>
+            {Object.entries(CLIENT_KINDS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label="Sector">
+          <input value={row.sector} onChange={set("sector")} maxLength={80} placeholder="Education" className={inputClass} />
+        </Field>
+        <Field label="Projects">
+          <input required type="number" min={1} value={row.projects} onChange={set("projects")} className={inputClass} />
+        </Field>
+        <Field label="Clients">
+          <input required type="number" min={1} value={row.clients} onChange={set("clients")} className={inputClass} />
+        </Field>
+        <Field label="Supported">
+          <input type="number" min={0} value={row.still_supported} onChange={set("still_supported")} placeholder="0" className={inputClass} />
+        </Field>
+        <div className="col-span-2 lg:col-span-6 flex flex-col sm:flex-row gap-2">
+          <input value={row.note} onChange={set("note")} maxLength={200} placeholder="Note for the team (optional, never shown)" className={cn(inputClass, "flex-1")} />
+          <div className="flex gap-2">
+            {editingId && (
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingId(null)
+                  setRow(EMPTY_ROW)
+                }}
+                className="h-[46px] px-4 rounded-xl glass font-medium"
+              >
+                Cancel
+              </button>
+            )}
+            <button type="submit" disabled={save.isPending} className={cn(buttonPrimary, "h-[46px]")}>
+              {save.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : editingId ? <Save className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+              {editingId ? "Save" : "Add group"}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  )
+}
 type PortfolioStatus = { settings: PortfolioSettings; exact: { projects: number; clients: number; supported: number }; website: TrackRecord }
 
 /** What the website shows about our work: the two switches, and the numbers as visitors will see them. */
@@ -105,7 +305,7 @@ function WebsiteDisplay() {
   const invalidate = useInvalidate()
   const queryClient = useQueryClient()
   const { data, isLoading, isError, refetch } = useDashboardQuery<PortfolioStatus>(["dashboard", "portfolio"], "/portfolio/")
-  const [numbers, setNumbers] = useState<Pick<PortfolioSettings, "projects_before" | "clients_before" | "team_size"> | null>(null)
+  const [teamSize, setTeamSize] = useState<number | null>(null)
   const save = useMutation({
     mutationFn: (body: Partial<PortfolioSettings>) => dashboardRequest<PortfolioStatus>("/portfolio/", { method: "PUT", body }),
     onSuccess: (status) => {
@@ -119,7 +319,6 @@ function WebsiteDisplay() {
   if (isError) return <ErrorState onRetry={() => refetch()} />
   if (isLoading || !data) return <ListSkeleton rows={1} />
   const { settings, exact, website } = data
-  const values = numbers ?? { projects_before: settings.projects_before, clients_before: settings.clients_before, team_size: settings.team_size }
   const toggle = (key: "show_projects" | "show_track_record", value: boolean, message: string) =>
     save.mutate({ [key]: value }, { onSuccess: () => toast({ title: message, description: "The website updates in a few minutes." }) })
 
@@ -181,29 +380,28 @@ function WebsiteDisplay() {
       <form
         onSubmit={(e) => {
           e.preventDefault()
-          save.mutate(values, {
-            onSuccess: () => {
-              setNumbers(null)
-              toast({ title: "Saved ✅" })
+          save.mutate(
+            { team_size: teamSize ?? settings.team_size },
+            {
+              onSuccess: () => {
+                setTeamSize(null)
+                toast({ title: "Saved ✅" })
+              },
             },
-          })
+          )
         }}
-        className="grid sm:grid-cols-[1fr_1fr_1fr_auto] gap-3 items-end"
+        className="flex items-end gap-3 max-w-sm"
       >
-        <Field label="Earlier projects" hint="Delivered but not entered in Operations">
-          <input type="number" min={0} value={values.projects_before} onChange={(e) => setNumbers({ ...values, projects_before: Number(e.target.value) })} className={inputClass} />
-        </Field>
-        <Field label="Earlier clients" hint="Served but not entered in Operations">
-          <input type="number" min={0} value={values.clients_before} onChange={(e) => setNumbers({ ...values, clients_before: Number(e.target.value) })} className={inputClass} />
-        </Field>
         <Field label="Team members" hint="0 hides it">
-          <input type="number" min={0} value={values.team_size} onChange={(e) => setNumbers({ ...values, team_size: Number(e.target.value) })} className={inputClass} />
+          <input type="number" min={0} value={teamSize ?? settings.team_size} onChange={(e) => setTeamSize(Number(e.target.value))} className={inputClass} />
         </Field>
-        <button type="submit" disabled={save.isPending || numbers === null} className={cn(buttonPrimary, "h-[46px]")}>
+        <button type="submit" disabled={save.isPending || teamSize === null} className={cn(buttonPrimary, "h-[46px]")}>
           {save.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
           Save
         </button>
       </form>
+
+      <EarlierWorkTable />
     </section>
   )
 }
