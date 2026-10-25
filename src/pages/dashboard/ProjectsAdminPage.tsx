@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { ExternalLink, Eye, EyeOff, Globe, Loader2, Lock, Pencil, Plus, Star, Trash2 } from "lucide-react"
+import { BarChart3, ExternalLink, Eye, EyeOff, Globe, Loader2, Lock, Pencil, Plus, Save, Star, Trash2 } from "lucide-react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,6 +24,7 @@ import {
   type ProjectCategory,
   type ProjectStatus,
   type ProjectVisibility,
+  type TrackRecord,
 } from "@/features/projects/types"
 import { useToast } from "@/hooks/use-toast"
 import { dashboardRequest, serverMessage } from "@/lib/api"
@@ -93,6 +94,118 @@ function useProjectsDone() {
     invalidate("projects")
     queryClient.invalidateQueries({ queryKey: ["projects"] })
   }
+}
+
+type PortfolioSettings = { show_projects: boolean; show_track_record: boolean; projects_before: number; clients_before: number; team_size: number }
+type PortfolioStatus = { settings: PortfolioSettings; exact: { projects: number; clients: number; supported: number }; website: TrackRecord }
+
+/** What the website shows about our work: the two switches, and the numbers as visitors will see them. */
+function WebsiteDisplay() {
+  const { toast } = useToast()
+  const invalidate = useInvalidate()
+  const queryClient = useQueryClient()
+  const { data, isLoading, isError, refetch } = useDashboardQuery<PortfolioStatus>(["dashboard", "portfolio"], "/portfolio/")
+  const [numbers, setNumbers] = useState<Pick<PortfolioSettings, "projects_before" | "clients_before" | "team_size"> | null>(null)
+  const save = useMutation({
+    mutationFn: (body: Partial<PortfolioSettings>) => dashboardRequest<PortfolioStatus>("/portfolio/", { method: "PUT", body }),
+    onSuccess: (status) => {
+      queryClient.setQueryData(["dashboard", "portfolio"], status)
+      invalidate("portfolio")
+      queryClient.invalidateQueries({ queryKey: ["projects"] })
+    },
+    onError: (error) => toast({ variant: "destructive", title: "Could not save", description: serverMessage(error, "Please try again.") }),
+  })
+
+  if (isError) return <ErrorState onRetry={() => refetch()} />
+  if (isLoading || !data) return <ListSkeleton rows={1} />
+  const { settings, exact, website } = data
+  const values = numbers ?? { projects_before: settings.projects_before, clients_before: settings.clients_before, team_size: settings.team_size }
+  const toggle = (key: "show_projects" | "show_track_record", value: boolean, message: string) =>
+    save.mutate({ [key]: value }, { onSuccess: () => toast({ title: message, description: "The website updates in a few minutes." }) })
+
+  return (
+    <section className="glass rounded-2xl p-5 mb-6">
+      <h2 className="font-semibold text-lg mb-4">On the website</h2>
+      <div className="grid sm:grid-cols-2 gap-3 mb-5">
+        <label className="flex items-start justify-between gap-3 rounded-xl border border-foreground/10 p-4 cursor-pointer">
+          <span>
+            <span className="block font-medium flex items-center gap-2">
+              <BarChart3 className="h-4 w-4 text-primary" /> Show our numbers
+            </span>
+            <span className="block text-xs text-foreground/60 mt-0.5">Totals counted from Operations, rounded down. Small groups are never listed.</span>
+          </span>
+          <Switch
+            checked={settings.show_track_record}
+            disabled={save.isPending}
+            onCheckedChange={(v) => toggle("show_track_record", v, v ? "Numbers shown" : "Numbers hidden")}
+            aria-label="Show our numbers"
+          />
+        </label>
+        <label className="flex items-start justify-between gap-3 rounded-xl border border-foreground/10 p-4 cursor-pointer">
+          <span>
+            <span className="block font-medium flex items-center gap-2">
+              <Eye className="h-4 w-4 text-primary" /> Show projects
+            </span>
+            <span className="block text-xs text-foreground/60 mt-0.5">
+              Off: no project is sent to the website at all, even published ones. They stay here for later.
+            </span>
+          </span>
+          <Switch
+            checked={settings.show_projects}
+            disabled={save.isPending}
+            onCheckedChange={(v) => toggle("show_projects", v, v ? "Published projects are now shown" : "Projects hidden from the website")}
+            aria-label="Show projects"
+          />
+        </label>
+      </div>
+
+      <p className="text-sm font-medium mb-2">What visitors see</p>
+      {website.totals.length ? (
+        <div className="flex flex-wrap gap-2 mb-2">
+          {website.totals.map((t) => (
+            <span key={t.key} className="rounded-xl bg-primary/10 border border-primary/20 px-3 py-2 text-sm">
+              <b className="text-primary">{t.display}</b> {t.label.toLowerCase()}
+            </span>
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm text-amber-800 bg-amber-500/10 rounded-xl p-3 mb-2">
+          Nothing to show yet: add your clients and their services in Operations, or enter the earlier work below.
+        </p>
+      )}
+      <p className="text-xs text-foreground/55 mb-5">
+        Exact counts (only you see these): {exact.projects} projects · {exact.clients} clients · {exact.supported} still supported.
+        {!settings.show_track_record && " Numbers are switched off, so none of this is on the website."}
+      </p>
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          save.mutate(values, {
+            onSuccess: () => {
+              setNumbers(null)
+              toast({ title: "Saved ✅" })
+            },
+          })
+        }}
+        className="grid sm:grid-cols-[1fr_1fr_1fr_auto] gap-3 items-end"
+      >
+        <Field label="Earlier projects" hint="Delivered but not entered in Operations">
+          <input type="number" min={0} value={values.projects_before} onChange={(e) => setNumbers({ ...values, projects_before: Number(e.target.value) })} className={inputClass} />
+        </Field>
+        <Field label="Earlier clients" hint="Served but not entered in Operations">
+          <input type="number" min={0} value={values.clients_before} onChange={(e) => setNumbers({ ...values, clients_before: Number(e.target.value) })} className={inputClass} />
+        </Field>
+        <Field label="Team members" hint="0 hides it">
+          <input type="number" min={0} value={values.team_size} onChange={(e) => setNumbers({ ...values, team_size: Number(e.target.value) })} className={inputClass} />
+        </Field>
+        <button type="submit" disabled={save.isPending || numbers === null} className={cn(buttonPrimary, "h-[46px]")}>
+          {save.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+          Save
+        </button>
+      </form>
+    </section>
+  )
 }
 
 function Field({ label, hint, children, wide }: { label: string; hint?: string; children: React.ReactNode; wide?: boolean }) {
@@ -355,7 +468,7 @@ export default function ProjectsAdminPage() {
     <>
       <PageHeader
         title="Projects"
-        subtitle="Our work on the website. Name a client only with their written permission; tell the rest as confidential work."
+        subtitle="Choose what the website shows about our work. Projects stay here even when they are hidden."
         action={
           <button type="button" onClick={() => setEditing(EMPTY)} className={buttonPrimary}>
             <Plus className="h-4 w-4" />
@@ -364,6 +477,9 @@ export default function ProjectsAdminPage() {
         }
       />
 
+      <WebsiteDisplay />
+
+      <h2 className="font-semibold text-lg mb-3">Projects</h2>
       {isLoading ? (
         <ListSkeleton />
       ) : isError ? (

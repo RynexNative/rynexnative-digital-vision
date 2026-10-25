@@ -53,31 +53,13 @@ export function clientLine(project: Project) {
   return project.client_description || `A client in ${project.sector || "Tanzania"}`
 }
 
-/** The school system, shown if the API cannot be reached so the section is never empty */
-export const FALLBACK_PROJECTS: Project[] = [
-  {
-    slug: "school-management-system",
-    title: "School Management System",
-    visibility: "public",
-    category: "system",
-    status: "live",
-    sector: "Education",
-    location: "Tanzania",
-    year: null,
-    client_name: "",
-    client_description: "",
-    link: "https://school.rynexnative.com",
-    gallery: [],
-    summary: "One system for student records, attendance, exams, results and school fees.",
-    challenge: "",
-    solution: "",
-    results: [],
-    highlights: [],
-    tech: ["React + Vite", "Django", "PostgreSQL", "FastAPI"],
-    testimonial: "",
-    testimonial_author: "",
-    cover_image: "/projects/school-management-system.webp",
-    is_featured: true,
-    published_at: null,
-  },
-]
+export type TrackRecord = {
+  show_projects: boolean
+  show_track_record: boolean
+  /** Already rounded down by the server, e.g. "50+" */
+  totals: { key: string; label: string; display: string }[]
+  by_service: { label: string; display: string; count: number }[]
+  by_client_type: { label: string; display: string; count: number }[]
+  sectors: string[]
+  min_group: number
+}

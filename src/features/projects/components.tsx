@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"
-import { ArrowRight, Building2, CheckCircle2, ExternalLink, Lock, MapPin, ShieldCheck } from "lucide-react"
+import { ArrowRight, Building2, CheckCircle2, ExternalLink, Info, Lock, MapPin, ShieldCheck } from "lucide-react"
 import { imageUrl } from "@/lib/media"
 import { cn } from "@/lib/utils"
-import { PROJECT_CATEGORIES, PROJECT_STATUS, clientLine, type Project } from "./types"
+import { PROJECT_CATEGORIES, PROJECT_STATUS, clientLine, type Project, type TrackRecord } from "./types"
 
 function StatusDot({ project }: { project: Project }) {
   const live = project.status !== "in_development"
@@ -168,6 +168,64 @@ export function ConfidentialityNote({ className }: { className?: string }) {
           reference.
         </p>
       </div>
+    </div>
+  )
+}
+
+function Breakdown({ title, rows }: { title: string; rows: TrackRecord["by_service"] }) {
+  if (rows.length === 0) return null
+  const max = Math.max(...rows.map((r) => r.count))
+  return (
+    <div className="glass rounded-3xl p-6">
+      <h3 className="font-semibold mb-4">{title}</h3>
+      <ul className="space-y-3">
+        {rows.map((row) => (
+          <li key={row.label}>
+            <div className="flex justify-between gap-3 text-sm mb-1">
+              <span>{row.label}</span>
+              <span className="font-semibold tabular-nums">{row.display}</span>
+            </div>
+            <div className="h-2 rounded-full bg-muted overflow-hidden">
+              <div className="h-full rounded-full bg-primary" style={{ width: `${Math.max(4, (row.count / max) * 100)}%` }} />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+/** Our work in honest totals: nothing that points to one client. */
+export function TrackRecordPanel({ record, className }: { record: TrackRecord; className?: string }) {
+  if (record.totals.length === 0) return null
+  return (
+    <div className={className}>
+      <dl className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        {record.totals.slice(0, 4).map((t) => (
+          // Label first in the markup (valid <dl>), number shown on top
+          <div key={t.key} className="glass rounded-3xl p-5 md:p-6 text-center flex flex-col-reverse">
+            <dt className="text-sm text-foreground/70 mt-1">{t.label}</dt>
+            <dd className="text-3xl md:text-4xl font-bold font-poppins text-primary">{t.display}</dd>
+          </div>
+        ))}
+      </dl>
+      {(record.by_service.length > 0 || record.by_client_type.length > 0) && (
+        <div className="grid md:grid-cols-2 gap-4 mt-4">
+          <Breakdown title="What we have built" rows={record.by_service} />
+          <Breakdown title="Who we work with" rows={record.by_client_type} />
+        </div>
+      )}
+      {record.sectors.length > 0 && (
+        <p className="text-sm text-foreground/70 mt-4 text-center">
+          <span className="font-semibold text-foreground">Sectors: </span>
+          {record.sectors.join(" · ")}
+        </p>
+      )}
+      <p className="text-xs text-foreground/55 mt-3 flex items-start justify-center gap-1.5 text-center">
+        <Info className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
+        Counted from our client records and rounded down. Groups with fewer than {record.min_group} clients are not listed, so no client can be
+        identified.
+      </p>
     </div>
   )
 }
