@@ -3,7 +3,16 @@ import type { NewsCategory } from "@/features/news/types"
 import type { EventMode, EventType, RegistrationStatus } from "@/features/events/types"
 import type { PreferredContact, ServicePackage } from "@/features/packages/types"
 
-export type DashboardUser = { username: string; email: string; name: string; is_superuser: boolean }
+export type DashboardUser = {
+  username: string
+  email: string
+  name: string
+  is_superuser: boolean
+  /** "Owner" for owners, otherwise the role's name ("" when none) */
+  role: string
+  /** What the role allows, e.g. "billing.view"; the server checks every request anyway */
+  permissions: string[]
+}
 
 export type DashboardAlert = {
   id: string
@@ -60,14 +69,15 @@ export type DashboardStats = {
   // Optional: an older backend without events/news must not crash the dashboard
   events?: { upcoming: number; registrations_week: number; to_verify: number }
   news?: { published: number; drafts: number }
-  packages?: { published: number; inquiries_new: number; inquiries_week: number }
+  packages?: { published?: number; inquiries_new?: number; inquiries_week?: number }
   operations?: { attention: number }
-  estimates: { total: number; new: number; this_week: number; won: number }
-  messages: { total: number; new: number }
-  alerts: { total: number; published: number; drafts: number }
-  subscribers: { total: number; this_week: number }
-  recent_estimates: DashboardEstimate[]
-  recent_messages: DashboardMessage[]
+  // Each part is only sent when the person's role may see it
+  estimates?: { total: number; new: number; this_week: number; won: number }
+  messages?: { total: number; new: number }
+  alerts?: { total: number; published: number; drafts: number }
+  subscribers?: { total: number; this_week: number }
+  recent_estimates?: DashboardEstimate[]
+  recent_messages?: DashboardMessage[]
 }
 
 export const ESTIMATE_STATUS: Record<EstimateStatus, { label: string; className: string }> = {

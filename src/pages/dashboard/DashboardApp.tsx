@@ -5,6 +5,10 @@ import {
   BarChart3,
   Briefcase,
   HeartHandshake,
+  History,
+  KeyRound,
+  Quote,
+  UserCog,
   FileText,
   Settings,
   Building2,
@@ -29,6 +33,7 @@ import {
 } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { useCurrentUser, useLogout, useStats } from "@/features/dashboard/api"
+import { usePermissions } from "@/features/dashboard/access"
 import { ErrorState } from "@/features/dashboard/ui"
 import { ErrorBoundary } from "@/components/layout/error-boundary"
 import { useDocumentTitle } from "@/hooks/use-document-title"
@@ -62,8 +67,12 @@ const InsightsPage = lazyWithReload(() => import("./InsightsPage"))
 const SettingsPage = lazyWithReload(() => import("./SettingsPage"))
 const ProjectsAdminPage = lazyWithReload(() => import("./ProjectsAdminPage"))
 const WhyChooseUsAdminPage = lazyWithReload(() => import("./WhyChooseUsAdminPage"))
+const TestimonialsAdminPage = lazyWithReload(() => import("./TestimonialsAdminPage"))
+const UsersPage = lazyWithReload(() => import("./UsersPage"))
+const ActivityPage = lazyWithReload(() => import("./ActivityPage"))
+const AccountPage = lazyWithReload(() => import("./AccountPage"))
 
-type NavItem = { to: string; label: string; icon: ReactNode; badge?: number; group: string; /** For the narrow mobile bar */ short?: string }
+type NavItem = { to: string; label: string; icon: ReactNode; badge?: number; group: string; /** For the narrow mobile bar */ short?: string; /** Permission needed to see it */ perm?: string }
 
 function FullScreenSpinner() {
   return (
@@ -83,9 +92,25 @@ function useNoIndex() {
   }, [])
 }
 
+/** A page the role does not cover: say so instead of showing errors (the server refuses its data anyway). */
+function Guard({ perm, children }: { perm: string; children: ReactNode }) {
+  const { can, user } = usePermissions()
+  if (can(perm)) return <>{children}</>
+  return (
+    <div className="max-w-md mx-auto text-center py-20">
+      <ShieldAlert className="h-12 w-12 text-foreground/30 mx-auto mb-4" />
+      <h1 className="text-2xl font-bold font-poppins mb-2">No access</h1>
+      <p className="text-foreground/65">
+        Your role{user?.role ? ` (${user.role})` : ""} does not include this part of the dashboard. Ask an administrator if you need it.
+      </p>
+    </div>
+  )
+}
+
 function Shell() {
   const { data: user } = useCurrentUser()
   const { data: stats } = useStats()
+  const { can } = usePermissions()
   const logout = useLogout()
   const { pathname } = useLocation()
 
@@ -103,31 +128,37 @@ function Shell() {
     excludeThisBrowser()
   }, [])
 
-  const items: NavItem[] = [
+  const allItems: NavItem[] = [
     { group: "", to: "/admin", label: "Overview", icon: <LayoutDashboard className="h-5 w-5" /> },
-    { group: "Sales", to: "/admin/requests", label: "Requests", icon: <Inbox className="h-5 w-5" />, badge: stats?.packages?.inquiries_new },
-    { group: "Sales", to: "/admin/billing", label: "Quotes & invoices", short: "Invoices", icon: <FileText className="h-5 w-5" /> },
-    { group: "Operations", to: "/admin/operations", label: "Operations", icon: <Activity className="h-5 w-5" />, badge: stats?.operations?.attention },
-    { group: "", to: "/admin/insights", label: "Insights", icon: <BarChart3 className="h-5 w-5" /> },
-    { group: "Content & events", to: "/admin/events", label: "Events", icon: <CalendarDays className="h-5 w-5" />, badge: stats?.events?.to_verify },
-    { group: "Sales", to: "/admin/estimates", label: "Estimates", icon: <Calculator className="h-5 w-5" />, badge: stats?.estimates.new },
-    { group: "Sales", to: "/admin/messages", label: "Messages", icon: <Mail className="h-5 w-5" />, badge: stats?.messages.new },
-    { group: "Sales", to: "/admin/packages", label: "Packages", icon: <Gem className="h-5 w-5" /> },
-    { group: "Operations", to: "/admin/clients", label: "Clients", icon: <Building2 className="h-5 w-5" /> },
-    { group: "Operations", to: "/admin/support", label: "Support", icon: <LifeBuoy className="h-5 w-5" /> },
-    { group: "Operations", to: "/admin/domains", label: "Domains", icon: <Globe className="h-5 w-5" /> },
-    { group: "Operations", to: "/admin/servers", label: "Servers", icon: <Server className="h-5 w-5" /> },
-    { group: "Operations", to: "/admin/subscriptions", label: "Subscriptions", icon: <CreditCard className="h-5 w-5" /> },
-    { group: "Content & events", to: "/admin/projects", label: "Projects", icon: <Briefcase className="h-5 w-5" /> },
-    { group: "Content & events", to: "/admin/why-choose-us", label: "Why choose us", icon: <HeartHandshake className="h-5 w-5" /> },
-    { group: "Content & events", to: "/admin/news", label: "News", icon: <Newspaper className="h-5 w-5" />, badge: stats?.news?.drafts },
-    { group: "Content & events", to: "/admin/alerts", label: "Alerts", icon: <ShieldAlert className="h-5 w-5" />, badge: stats?.alerts.drafts },
-    { group: "Content & events", to: "/admin/subscribers", label: "Subscribers", icon: <Users className="h-5 w-5" /> },
-    { group: "Content & events", to: "/admin/scan", label: "Scan tickets", icon: <ScanLine className="h-5 w-5" /> },
-    { group: "Settings", to: "/admin/settings", label: "Settings", icon: <Settings className="h-5 w-5" /> },
+    { group: "Sales", to: "/admin/requests", label: "Requests", perm: "requests.view", icon: <Inbox className="h-5 w-5" />, badge: stats?.packages?.inquiries_new },
+    { group: "Sales", to: "/admin/billing", label: "Quotes & invoices", short: "Invoices", perm: "billing.view", icon: <FileText className="h-5 w-5" /> },
+    { group: "Operations", to: "/admin/operations", label: "Operations", perm: "operations.view", icon: <Activity className="h-5 w-5" />, badge: stats?.operations?.attention },
+    { group: "", to: "/admin/insights", label: "Insights", perm: "insights.view", icon: <BarChart3 className="h-5 w-5" /> },
+    { group: "Content & events", to: "/admin/events", label: "Events", perm: "events.view", icon: <CalendarDays className="h-5 w-5" />, badge: stats?.events?.to_verify },
+    { group: "Sales", to: "/admin/estimates", label: "Estimates", perm: "requests.view", icon: <Calculator className="h-5 w-5" />, badge: stats?.estimates?.new },
+    { group: "Sales", to: "/admin/messages", label: "Messages", perm: "requests.view", icon: <Mail className="h-5 w-5" />, badge: stats?.messages?.new },
+    { group: "Sales", to: "/admin/packages", label: "Packages", perm: "content.view", icon: <Gem className="h-5 w-5" /> },
+    { group: "Operations", to: "/admin/clients", label: "Clients", perm: "operations.view", icon: <Building2 className="h-5 w-5" /> },
+    { group: "Operations", to: "/admin/support", label: "Support", perm: "operations.view", icon: <LifeBuoy className="h-5 w-5" /> },
+    { group: "Operations", to: "/admin/domains", label: "Domains", perm: "operations.view", icon: <Globe className="h-5 w-5" /> },
+    { group: "Operations", to: "/admin/servers", label: "Servers", perm: "operations.view", icon: <Server className="h-5 w-5" /> },
+    { group: "Operations", to: "/admin/subscriptions", label: "Subscriptions", perm: "operations.view", icon: <CreditCard className="h-5 w-5" /> },
+    { group: "Content & events", to: "/admin/projects", label: "Projects", perm: "content.view", icon: <Briefcase className="h-5 w-5" /> },
+    { group: "Content & events", to: "/admin/why-choose-us", label: "Why choose us", perm: "content.view", icon: <HeartHandshake className="h-5 w-5" /> },
+    { group: "Content & events", to: "/admin/testimonials", label: "Testimonials", perm: "content.view", icon: <Quote className="h-5 w-5" /> },
+    { group: "Content & events", to: "/admin/news", label: "News", perm: "content.view", icon: <Newspaper className="h-5 w-5" />, badge: stats?.news?.drafts },
+    { group: "Content & events", to: "/admin/alerts", label: "Alerts", perm: "content.view", icon: <ShieldAlert className="h-5 w-5" />, badge: stats?.alerts?.drafts },
+    { group: "Content & events", to: "/admin/subscribers", label: "Subscribers", perm: "content.view", icon: <Users className="h-5 w-5" /> },
+    { group: "Content & events", to: "/admin/scan", label: "Scan tickets", perm: "events.checkin", icon: <ScanLine className="h-5 w-5" /> },
+    { group: "Team & settings", to: "/admin/users", label: "Users & roles", perm: "users.view", icon: <UserCog className="h-5 w-5" /> },
+    { group: "Team & settings", to: "/admin/activity", label: "Activity log", perm: "audit.view", icon: <History className="h-5 w-5" /> },
+    { group: "Team & settings", to: "/admin/settings", label: "Settings", perm: "settings.view", icon: <Settings className="h-5 w-5" /> },
+    { group: "Team & settings", to: "/admin/account", label: "My account", icon: <KeyRound className="h-5 w-5" /> },
   ]
+  // Only what the role allows (the server refuses the rest anyway)
+  const items = allItems.filter((item) => !item.perm || can(item.perm))
   // The sidebar and the "More" sheet show the items grouped
-  const GROUPS = ["", "Sales", "Operations", "Content & events", "Settings"]
+  const GROUPS = ["", "Sales", "Operations", "Content & events", "Team & settings"]
   const grouped = (list: NavItem[]) => GROUPS.map((g) => ({ group: g, items: list.filter((i) => i.group === g) })).filter((g) => g.items.length)
   // Mobile bottom bar shows the first four; the rest live under "More"
   const primaryItems = items.slice(0, 4)
@@ -221,28 +252,32 @@ function Shell() {
           >
             <Routes>
               <Route index element={<OverviewPage />} />
-              <Route path="alerts" element={<AlertsAdminPage />} />
-              <Route path="estimates" element={<EstimatesAdminPage />} />
-              <Route path="messages" element={<MessagesAdminPage />} />
-              <Route path="subscribers" element={<SubscribersAdminPage />} />
-              <Route path="news" element={<NewsAdminPage />} />
-              <Route path="events" element={<EventsAdminPage />} />
-              <Route path="events/:id" element={<EventRegistrationsPage />} />
-              <Route path="scan" element={<CheckInPage />} />
-              <Route path="packages" element={<PackagesAdminPage />} />
-              <Route path="requests" element={<PackageRequestsPage />} />
-              <Route path="operations" element={<OperationsPage />} />
-              <Route path="clients" element={<ClientsPage />} />
-              <Route path="support" element={<SupportPage />} />
-              <Route path="domains" element={<DomainsPage />} />
-              <Route path="servers" element={<ServersPage />} />
-              <Route path="subscriptions" element={<SubscriptionsPage />} />
-              <Route path="billing" element={<BillingPage />} />
-              <Route path="billing/:id" element={<DocumentPage />} />
-              <Route path="insights" element={<InsightsPage />} />
-              <Route path="settings" element={<SettingsPage />} />
-              <Route path="projects" element={<ProjectsAdminPage />} />
-              <Route path="why-choose-us" element={<WhyChooseUsAdminPage />} />
+              <Route path="alerts" element={<Guard perm="content.view"><AlertsAdminPage /></Guard>} />
+              <Route path="estimates" element={<Guard perm="requests.view"><EstimatesAdminPage /></Guard>} />
+              <Route path="messages" element={<Guard perm="requests.view"><MessagesAdminPage /></Guard>} />
+              <Route path="subscribers" element={<Guard perm="content.view"><SubscribersAdminPage /></Guard>} />
+              <Route path="news" element={<Guard perm="content.view"><NewsAdminPage /></Guard>} />
+              <Route path="events" element={<Guard perm="events.view"><EventsAdminPage /></Guard>} />
+              <Route path="events/:id" element={<Guard perm="events.view"><EventRegistrationsPage /></Guard>} />
+              <Route path="scan" element={<Guard perm="events.checkin"><CheckInPage /></Guard>} />
+              <Route path="packages" element={<Guard perm="content.view"><PackagesAdminPage /></Guard>} />
+              <Route path="requests" element={<Guard perm="requests.view"><PackageRequestsPage /></Guard>} />
+              <Route path="operations" element={<Guard perm="operations.view"><OperationsPage /></Guard>} />
+              <Route path="clients" element={<Guard perm="operations.view"><ClientsPage /></Guard>} />
+              <Route path="support" element={<Guard perm="operations.view"><SupportPage /></Guard>} />
+              <Route path="domains" element={<Guard perm="operations.view"><DomainsPage /></Guard>} />
+              <Route path="servers" element={<Guard perm="operations.view"><ServersPage /></Guard>} />
+              <Route path="subscriptions" element={<Guard perm="operations.view"><SubscriptionsPage /></Guard>} />
+              <Route path="billing" element={<Guard perm="billing.view"><BillingPage /></Guard>} />
+              <Route path="billing/:id" element={<Guard perm="billing.view"><DocumentPage /></Guard>} />
+              <Route path="insights" element={<Guard perm="insights.view"><InsightsPage /></Guard>} />
+              <Route path="settings" element={<Guard perm="settings.view"><SettingsPage /></Guard>} />
+              <Route path="projects" element={<Guard perm="content.view"><ProjectsAdminPage /></Guard>} />
+              <Route path="why-choose-us" element={<Guard perm="content.view"><WhyChooseUsAdminPage /></Guard>} />
+              <Route path="testimonials" element={<Guard perm="content.view"><TestimonialsAdminPage /></Guard>} />
+              <Route path="users" element={<Guard perm="users.view"><UsersPage /></Guard>} />
+              <Route path="activity" element={<Guard perm="audit.view"><ActivityPage /></Guard>} />
+              <Route path="account" element={<AccountPage />} />
               <Route path="*" element={<OverviewPage />} />
             </Routes>
           </Suspense>
