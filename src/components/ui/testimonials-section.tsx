@@ -1,5 +1,4 @@
 import { Star, Quote } from "lucide-react"
-import FounderImage from '../../assets/founder-384.webp'
 import Julio from '../../assets/julio-96.webp'
 import Yiiti from '../../assets/yiiti-96.webp'
 import Kingu from '../../assets/kingu-96.webp'
@@ -34,12 +33,6 @@ export function TestimonialsSection() {
       project: "AI Healthcare Platform"
     }
   ]
-
-  const castoinfo =
-  {
-    name: "Casto S. Shirima",
-    rating: 5,
-  }
 
 
   return (
@@ -142,60 +135,6 @@ export function TestimonialsSection() {
               </div>
             </div>
           </div>
-
-
-          <div id="founder" className="text-center mb-16 p-10">
-            <h2 className="text-primary text-3xl font-bold p-4">
-              Meet the Founder
-            </h2>
-
-            <div className="glass rounded-lg p-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
-
-              {/* Founder Image */}
-              <div className="flex justify-center items-center">
-                <img
-                  src={FounderImage}
-                  alt="Founder of RynexNative"
-                  width={192}
-                  height={192}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-48 h-48 rounded-full object-cover border-2 border-primary/20"
-                />
-                
-              </div>
-              
-
-              {/* Founder Info */}
-              <div className="relative overflow-hidden group text-left md:col-span-2 lg:col-span-2">
-                <div className="absolute top-6 right-6 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <Quote className="h-12 w-12 text-primary" />
-                </div>
-
-                <div className="flex mb-6">
-                  {[...Array(castoinfo.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 text-primary fill-primary" />
-                  ))}
-                </div>
-
-                <h3 className="font-semibold text-lg">Casto S. Shirima</h3>
-
-                <blockquote className="text-foreground/80 leading-relaxed mb-6 relative z-10">
-                  "Casto S. Shirima is the visionary behind RynexNative, a passionate technologist, ethical hacker,
-                  and advocate for digital transformation in Africa. With a mission to innovate and secure the digital space,
-                  Casto has led numerous initiatives in system development, mobile innovation, and cybersecurity solutions.
-                  My dream is to empower Africa through technology, foster home-grown innovations, and protect the digital future of our people."
-                </blockquote>
-                <div className="mb-6">
-                  <span className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full border border-primary/20">
-                  CEO - Rynexnative, Fullstack Developer
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
 
 
         </div>
