@@ -71,3 +71,18 @@ export const DEFAULT_WHY_CHOOSE_US: WhyChooseUsContent = {
   note_photo: "",
   show_numbers: true,
 }
+
+export type Testimonial = {
+  id: number
+  name: string
+  role: string
+  organisation: string
+  photo: string
+  headline: string
+  quote: string
+  service: string
+  result: string
+  is_featured: boolean
+}
+
+export type AdminTestimonial = Testimonial & { consent: boolean; is_published: boolean; sort_order: number; created_at: string; updated_at: string }

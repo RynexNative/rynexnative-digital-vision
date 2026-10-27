@@ -85,8 +85,9 @@ function useSessionGuard() {
   const queryClient = useQueryClient()
   return (error: unknown) => {
     if (error instanceof ApiError && (error.status === 401 || error.status === 403)) {
-      const detail = (error.data as { detail?: string } | null)?.detail ?? ""
-      if (!detail.toLowerCase().includes("csrf")) queryClient.setQueryData(dashboardKeys.me, null)
+      // Only "you are not signed in" logs out; "your role does not allow this" keeps you in
+      const detail = ((error.data as { detail?: string } | null)?.detail ?? "").toLowerCase()
+      if (error.status === 401 || detail.includes("credentials")) queryClient.setQueryData(dashboardKeys.me, null)
     }
   }
 }
