@@ -10,11 +10,88 @@ import { ErrorState, ListSkeleton, PageHeader } from "@/features/dashboard/ui"
 import { buttonGhost, buttonPrimary, inputClass } from "@/features/dashboard/styles"
 import { useToast } from "@/hooks/use-toast"
 import { dashboardFile, dashboardRequest, serverMessage } from "@/lib/api"
+import { usePushSwitch } from "@/features/notifications/NotificationBell"
+import { disablePush } from "@/features/notifications/push"
 import { cn } from "@/lib/utils"
 
 type ChannelStatus = { configured: boolean; recipients: string[]; issues: string[]; server?: string; sender?: string; template?: string }
 type LogEntry = { id: number; created_at: string; event: string; channel: string; recipient: string; subject: string; ok: boolean; error: string }
-type NotificationsStatus = { email: ChannelStatus; whatsapp: ChannelStatus; log: LogEntry[] }
+type PushStatus = { configured: boolean; devices: number; this_user_devices: number; issues: string[] }
+type NotificationsStatus = { email: ChannelStatus; whatsapp: ChannelStatus; push: PushStatus; log: LogEntry[] }
+
+/** Browser pop-ups: server set-up, and a switch for this very browser. */
+function PopupsCard({ status }: { status: PushStatus }) {
+  const { state, busy, turnOn, refresh } = usePushSwitch()
+  const { toast } = useToast()
+  const invalidate = useInvalidate()
+  const [turningOff, setTurningOff] = useState(false)
+  const here =
+    state === "on" ? "On for this browser" : state === "blocked" ? "Blocked in this browser's settings" : state === "unsupported" ? "Not supported by this browser" : "Off for this browser"
+  return (
+    <div className={cn("glass rounded-2xl p-5 md:col-span-2", status.configured ? "border-emerald-500/30" : "border-amber-500/40")}>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="h-9 w-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+          <BellRing className="h-4 w-4" />
+        </span>
+        <h3 className="font-semibold flex-1">Browser pop-ups</h3>
+        {status.configured ? (
+          <span className="text-sm text-emerald-700 font-semibold flex items-center gap-1">
+            <CheckCircle2 className="h-4 w-4" /> Ready
+          </span>
+        ) : (
+          <span className="text-sm text-amber-700 font-semibold flex items-center gap-1">
+            <AlertTriangle className="h-4 w-4" /> Not set up
+          </span>
+        )}
+      </div>
+      <p className="text-sm text-foreground/70">
+        A pop-up with a sound on every device where someone switched them on, even with the dashboard closed. {status.devices} device(s) in total,{" "}
+        {status.this_user_devices} of them yours.
+      </p>
+      <div className="flex flex-wrap items-center gap-3 mt-3">
+        <span className={cn("text-sm font-medium", state === "on" ? "text-emerald-700" : "text-foreground/60")}>{here}</span>
+        {status.configured && state === "off" && (
+          <button
+            type="button"
+            onClick={async () => {
+              await turnOn()
+              invalidate("notifications")
+            }}
+            disabled={busy}
+            className={buttonGhost}
+          >
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <BellRing className="h-4 w-4" />}
+            Turn on for this browser
+          </button>
+        )}
+        {state === "on" && (
+          <button
+            type="button"
+            disabled={turningOff}
+            onClick={async () => {
+              setTurningOff(true)
+              await disablePush()
+              setTurningOff(false)
+              invalidate("notifications")
+              await refresh()
+              toast({ title: "Pop-ups switched off for this browser" })
+            }}
+            className={cn(buttonGhost, "text-foreground/60")}
+          >
+            Turn off
+          </button>
+        )}
+      </div>
+      {status.issues.length > 0 && (
+        <ul className="mt-3 space-y-1 text-sm text-amber-800 bg-amber-500/10 rounded-xl p-3">
+          {status.issues.map((issue) => (
+            <li key={issue}>• {issue}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
 
 type DigestStatus = {
   recipients: string[]
@@ -265,6 +342,7 @@ function Notifications() {
           status={data.whatsapp}
           extra={<>WhatsApp Cloud API · template “{data.whatsapp.template}”</>}
         />
+        <PopupsCard status={data.push} />
       </div>
       <div className="flex flex-wrap items-center gap-3 mb-6">
         <button type="button" onClick={() => test.mutate()} disabled={test.isPending} className={cn(buttonGhost, "h-11 px-4")}>
@@ -287,7 +365,7 @@ function Notifications() {
               <span className="min-w-0 flex-1">
                 <span className="block truncate font-medium">{entry.subject}</span>
                 <span className="block text-xs text-foreground/55">
-                  {entry.channel === "whatsapp" ? "WhatsApp" : "Email"} · {entry.recipient} · {formatWhen(entry.created_at)}
+                  {entry.channel === "whatsapp" ? "WhatsApp" : entry.channel === "push" ? "Pop-up" : "Email"} · {entry.recipient} · {formatWhen(entry.created_at)}
                 </span>
                 {entry.error && <span className="block text-xs text-red-700 mt-0.5 break-words">{entry.error}</span>}
               </span>

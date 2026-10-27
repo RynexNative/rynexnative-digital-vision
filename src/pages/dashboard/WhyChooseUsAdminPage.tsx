@@ -313,7 +313,7 @@ export default function WhyChooseUsAdminPage() {
                 <input maxLength={80} value={draft.note_role} onChange={text("note_role")} className={inputClass} />
               </Field>
               <div className="sm:col-span-2">
-                <ImageField value={draft.note_photo} onChange={(url) => set("note_photo", url)} label="Photo (leave empty to use the founder photo)" />
+                <ImageField value={draft.note_photo} onChange={(url) => set("note_photo", url)} label="Photo (upload one; until then the initials are shown)" />
               </div>
             </div>
           </Card>

@@ -1,5 +1,4 @@
 import { CheckCircle2, MessageCircle, Quote } from "lucide-react"
-import FounderImage from "@/assets/founder-384.webp"
 import { WHATSAPP_NUMBER } from "@/features/packages/types"
 import { useTrackRecord } from "@/features/projects/api"
 import { useWhyChooseUs } from "@/features/sitecontent/api"
@@ -33,7 +32,8 @@ function Numbers() {
 /** The section itself, drawn from content. The dashboard uses it as a live preview while editing. */
 export function WhyChooseUsView({ content, numbers = true }: { content: WhyChooseUsContent; numbers?: boolean }) {
   const whatsapp = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Habari RynexNative, I would like to talk about a project.")}`
-  const photo = content.note_photo ? imageUrl(content.note_photo, 160) : FounderImage
+  // Uploaded in the dashboard; until then the person's initials are shown
+  const initials = content.note_name.split(/\s+/).filter(Boolean).map((w) => w[0]).filter((c) => /[A-Za-z]/.test(c)).slice(0, 2).join("").toUpperCase()
 
   return (
     <section id="why-choose-us" className="relative py-20 md:py-28 bg-background overflow-hidden">
@@ -51,13 +51,26 @@ export function WhyChooseUsView({ content, numbers = true }: { content: WhyChoos
 
         <div className={cn("grid gap-6", content.show_note && "lg:grid-cols-12")}>
           {content.show_note && (
-            <figure className="lg:col-span-5 surface-dark rounded-3xl p-8 md:p-10 relative overflow-hidden lg:sticky lg:top-28 self-start">
+            <figure id="founder" className="scroll-mt-28 lg:col-span-5 surface-dark rounded-3xl p-8 md:p-10 relative overflow-hidden lg:sticky lg:top-28 self-start">
               <div className="absolute -top-16 -right-16 h-48 w-48 rounded-full bg-primary/20 blur-2xl" aria-hidden="true" />
               <Quote className="relative h-10 w-10 text-primary mb-5" aria-hidden="true" />
               {content.note_greeting && <p className="relative text-3xl md:text-4xl font-bold font-poppins text-white mb-4">{content.note_greeting}</p>}
               <blockquote className="relative text-lg leading-relaxed text-slate-200 whitespace-pre-line">{content.note_text}</blockquote>
               <figcaption className="relative flex items-center gap-4 mt-8">
-                <img src={photo} alt="" width={64} height={64} loading="lazy" className="h-16 w-16 rounded-full object-cover ring-2 ring-primary/60" />
+                {content.note_photo ? (
+                  <img
+                    src={imageUrl(content.note_photo, 160)}
+                    alt={content.note_name}
+                    width={64}
+                    height={64}
+                    loading="lazy"
+                    className="h-16 w-16 rounded-full object-cover ring-2 ring-primary/60"
+                  />
+                ) : (
+                  <span className="h-16 w-16 rounded-full bg-primary/20 ring-2 ring-primary/60 text-primary text-xl font-bold font-poppins flex items-center justify-center" aria-hidden="true">
+                    {initials}
+                  </span>
+                )}
                 <span>
                   <span className="block font-semibold text-white">{content.note_name}</span>
                   <span className="block text-sm text-slate-400">{content.note_role}</span>

@@ -35,6 +35,8 @@ import { useDocumentTitle } from "@/hooks/use-document-title"
 import { lazyWithReload } from "@/lib/lazy-with-reload"
 import { cn } from "@/lib/utils"
 import { excludeThisBrowser } from "@/lib/track"
+import { useNotificationAlerts } from "@/features/notifications/alerts"
+import { NotificationBell, PushInvite } from "@/features/notifications/NotificationBell"
 import LoginPage from "./LoginPage"
 
 const OverviewPage = lazyWithReload(() => import("./OverviewPage"))
@@ -92,6 +94,9 @@ function Shell() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
+
+  // Toasts, a chime, pop-ups and the unread count in the tab title for new notifications
+  useNotificationAlerts()
 
   // The team's own visits to the website should not count in Insights
   useEffect(() => {
@@ -156,6 +161,7 @@ function Shell() {
             <p className="font-bold font-poppins leading-tight">RynexNative</p>
             <p className="text-xs text-primary font-semibold">Dashboard</p>
           </div>
+          <NotificationBell className="ml-auto" />
         </div>
         <nav className="flex-1 overflow-y-auto -mx-1 px-1 space-y-3 pb-2" aria-label="Dashboard">
           {grouped(items).map(({ group, items: groupItems }) => (
@@ -192,14 +198,18 @@ function Shell() {
           <img src="/logo-64.webp" alt="" className="w-7 h-7" />
           <span className="font-bold font-poppins">Dashboard</span>
         </div>
-        <button type="button" onClick={() => logout.mutate()} className="h-9 px-3 rounded-lg glass inline-flex items-center gap-1.5 text-sm">
-          <LogOut className="h-4 w-4" />
-          Log out
-        </button>
+        <div className="flex items-center gap-2">
+          <NotificationBell />
+          <button type="button" onClick={() => logout.mutate()} className="h-9 px-3 rounded-lg glass inline-flex items-center gap-1.5 text-sm">
+            <LogOut className="h-4 w-4" />
+            Log out
+          </button>
+        </div>
       </header>
 
       <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-10">
         <div className="max-w-5xl mx-auto">
+          <PushInvite />
           {/* Keyed by page so moving to another section clears an earlier error */}
           <ErrorBoundary key={pathname} compact>
           <Suspense

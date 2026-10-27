@@ -93,7 +93,8 @@ function useSessionGuard() {
 
 const isAuthError = (error: unknown) => error instanceof ApiError && (error.status === 401 || error.status === 403)
 
-export function useDashboardQuery<T>(key: readonly unknown[], path: string, enabled = true) {
+/** `pollEvery` (ms) keeps checking, also while the tab is in the background (used by the notification bell). */
+export function useDashboardQuery<T>(key: readonly unknown[], path: string, enabled = true, pollEvery?: number) {
   const onAuthError = useSessionGuard()
   return useQuery({
     queryKey: key,
@@ -106,7 +107,9 @@ export function useDashboardQuery<T>(key: readonly unknown[], path: string, enab
         throw error
       }
     },
-    staleTime: 30 * 1000,
+    staleTime: pollEvery ? 0 : 30 * 1000,
+    refetchInterval: pollEvery,
+    refetchIntervalInBackground: Boolean(pollEvery),
     // Retry network hiccups, but not "you are logged out"
     retry: (failureCount, error) => !isAuthError(error) && failureCount < 2,
   })
