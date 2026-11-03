@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://rynexnative.com/news/cisco/</loc>
+    <news:news>
+      <news:publication><news:name>RynexNative</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-10-29T20:46:30.668Z</news:publication_date>
+      <news:title>This is Cisco&#39;s free Skills for All program (Cisco Networking Academy).</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://rynexnative.com/news/cyberstrikeai-unleashes-44-ai-agents-to-automate-cyberattacks-on-japan/</loc>
+    <news:news>
+      <news:publication><news:name>RynexNative</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-10-28T13:03:28.247Z</news:publication_date>
+      <news:title>CyberStrikeAI Unleashes 44 AI Agents to Automate Cyberattacks on Japan</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://rynexnative.com/news/https-thehackernews-com-2026-10-russian-linked-hackers-used-new-mesh-html/</loc>
     <news:news>
       <news:publication><news:name>RynexNative</news:name><news:language>en</news:language></news:publication>

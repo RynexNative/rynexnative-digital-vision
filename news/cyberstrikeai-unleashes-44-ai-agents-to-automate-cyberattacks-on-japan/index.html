@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- # Ownership & legal issures -->
+  <meta name="author" content="Casto S Shirima">
+  <meta name="copyright" content="2024 rynexnative">
+
+  <!-- Fonts are served from this site (no extra connection to Google before the first paint).
+       Inter is one variable file for every weight; Poppins only in the weights headings use. -->
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/poppins-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 100 900; src: url(/fonts/inter-latin-wght-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 600; src: url(/fonts/poppins-latin-600-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 700; src: url(/fonts/poppins-latin-700-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 800; src: url(/fonts/poppins-latin-800-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  </style>
+
+  <!-- The API serves the home page sections; open the connection early -->
+  <link rel="preconnect" href="https://api.rynexnative.com" crossorigin>
+
+  <!-- # Favicon main ico -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <!-- PNG fallback for modern browsers -->
+  <link rel="icon" type="image/png" href="/logo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/logo.png" sizes="192x192">
+  
+  <!-- Apple devices -->
+  <link rel="apple-touch-icon" href="/logo.png">
+
+
+  <!-- # http-equiv -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none';"> -->
+
+
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+
+  <!-- Meta Description -->
+  
+
+  <!-- Meta Keywords -->
+  <meta name="keywords" content="Web development in Tanzania, 
+    Full-stack developer Africa,
+    Modern website development,
+    Custom software solutions,    
+    Tech company in East Africa,    
+    Scalable digital platforms,    
+    Secure web applications,
+    Ethical hacking training Tanzania,
+    Learn ethical hacking online,
+    Cybersecurity experts in Africa,
+    Penetration testing services,
+    Secure coding practices,
+    Ethical hacker for hire,
+    Digital security consulting,
+    Professional website design,
+    Software system development,    
+    IT consulting Tanzania,    
+    Custom tech solutions,    
+    Business automation software,    
+    Web app design and development,    
+    Cloud-based systems for businesses,
+    Coding for youth in Africa,
+    Programming mentorship Tanzania,    
+    Digital skills empowerment,    
+    Learn full-stack development,    
+    IT training programs in East Africa,
+    RynexNative company,
+    RynexNative services,    
+    Future of tech in Africa,    
+    Innovative tech company,    
+    Tech for Africa's growth,
+    rynex, Tanzania, Kenya, Uganda, Yiiti">
+
+  <!-- Robots -->
+  
+
+  <!-- News feed for readers and Google -->
+  <link rel="alternate" type="application/rss+xml" title="RynexNative News" href="/rss.xml">
+
+  <!-- Canonical URL -->
+  
+
+  <!-- # Open Graph for social sharing -->
+  
+  
+  
+  
+  
+
+  
+
+  <!-- # Twitter Card -->
+  
+  
+  
+  
+  <!--  -->
+
+  <!-- # Custom Meta -->
+  <meta name="app-version" content="2.1.1">
+
+  <!-- # JSON-LD Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "Rynexnative",
+          "url": "https://rynexnative.com",
+          "logo": "https://rynexnative.com/logo.png",
+          "image":"https://rynexnative.com/logo.png",
+          "sameAs": [
+            "https://www.instagram.com/rynexnative"
+          ],
+          "description": "Your product deserves better. Work with RynexNative for clean, efficient, and user-focused software development. Let RynexNative handle your code while you focus on growth. Get cutting-edge apps, modern designs & expert tech support now. RynexNative is where creativity meets logic.",
+          "founder": {
+            "@type": "Person",
+            "name": "Casto S. Shirima"
+          },
+          "foundingDate": "2021-05-01",
+          "foundingLocation": {
+            "@type": "Place",
+            "name": "Dodoma, Tanzania"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Dodoma mjini, miyuji, mwatano center",
+            "addressLocality": "Dodoma",
+            "addressRegion": "Dodoma",
+            "postalCode": "",
+            "addressCountry": "TZ"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+255687544999",
+            "contactType": "Customer Support",
+            "areaServed": "TZ",
+            "availableLanguage": ["en", "sw"]
+          },
+          "email": "info@rynexnative.com",
+          "telephone": "+255687544999",
+          "legalName": "Rynexnative",
+          "numberOfEmployees": 15,
+          "slogan": "Innovation and Security at Every Step — The Mark of a Nation."
+        },
+        {
+          "@type": "WebSite",
+          "name": "Rynexnative",
+          "alternateName": [
+            "RynexNative Technologies",
+            "RynexNative",
+            "RynexNative Lab",
+            "RynexNative Systems"
+          ],
+          "url": "https://rynexnative.com/"
+        },
+        {
+          "@type": "ImageObject",
+          "@id": "https://rynexnative.com/logo.png",
+          "url": "https://rynexnative.com/logo.png",
+          "width": 500,
+          "height": 500,
+          "caption": "Rynexnative Logo"
+        }
+      ]
+    }
+    </script>
+    
+  <script type="module" crossorigin src="/assets/index-CZ0WgzGx.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-BBDplG-j.css">
+
+  <title>CyberStrikeAI Unleashes 44 AI Agents to Automate Cyberattacks on Japan | RynexNative News</title>
+  <meta name="description" content="TrendAI, which analyzed three exposed server environments used by threat actors to conduct the malicious cyber operations, described them as distinct from…">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://rynexnative.com/news/cyberstrikeai-unleashes-44-ai-agents-to-automate-cyberattacks-on-japan/">
+  <meta property="og:site_name" content="RynexNative">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="CyberStrikeAI Unleashes 44 AI Agents to Automate Cyberattacks on Japan | RynexNative News">
+  <meta property="og:description" content="TrendAI, which analyzed three exposed server environments used by threat actors to conduct the malicious cyber operations, described them as distinct from…">
+  <meta property="og:url" content="https://rynexnative.com/news/cyberstrikeai-unleashes-44-ai-agents-to-automate-cyberattacks-on-japan/">
+  <meta property="og:image" content="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1793192593/rynexnative/mygpjrjciyc16ob3b0i7.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CyberStrikeAI Unleashes 44 AI Agents to Automate Cyberattacks on Japan | RynexNative News">
+  <meta name="twitter:description" content="TrendAI, which analyzed three exposed server environments used by threat actors to conduct the malicious cyber operations, described them as distinct from…">
+  <meta name="twitter:image" content="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1793192593/rynexnative/mygpjrjciyc16ob3b0i7.png">
+  <meta property="article:published_time" content="2026-10-28T16:03:28.247905+03:00">
+  <meta property="article:modified_time" content="2026-10-28T16:03:28.247990+03:00">
+  <meta property="article:section" content="Article">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://rynexnative.com/news/cyberstrikeai-unleashes-44-ai-agents-to-automate-cyberattacks-on-japan/"},"headline":"CyberStrikeAI Unleashes 44 AI Agents to Automate Cyberattacks on Japan","description":"TrendAI, which analyzed three exposed server environments used by threat actors to conduct the malicious cyber operations, described them as distinct from…","image":["https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1793192593/rynexnative/mygpjrjciyc16ob3b0i7.png"],"datePublished":"2026-10-28T16:03:28.247905+03:00","dateModified":"2026-10-28T16:03:28.247990+03:00","articleSection":"Article","author":{"@type":"Organization","name":"RynexNative","url":"https://rynexnative.com"},"publisher":{"@type":"Organization","name":"RynexNative","url":"https://rynexnative.com","logo":{"@type":"ImageObject","url":"https://rynexnative.com/logo.png"}}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rynexnative.com/"},{"@type":"ListItem","position":2,"name":"News","item":"https://rynexnative.com/news/"},{"@type":"ListItem","position":3,"name":"CyberStrikeAI Unleashes 44 AI Agents to Automate Cyberattacks on Japan","item":"https://rynexnative.com/news/cyberstrikeai-unleashes-44-ai-agents-to-automate-cyberattacks-on-japan/"}]}</script>
+</head>
+
+<body>
+  <div id="root"><div class="prerendered max-w-3xl mx-auto px-4 pt-32 pb-16"><article>
+<p><a href="/news/">News</a> · Article · <time datetime="2026-10-28T16:03:28.247905+03:00">28 October 2026</time></p>
+<h1>CyberStrikeAI Unleashes 44 AI Agents to Automate Cyberattacks on Japan</h1>
+<p><strong>TrendAI, which analyzed three exposed server environments used by threat actors to conduct the malicious cyber operations, described them as distinct from previously published attacks that have leveraged ARTEX, an autonomous AI penetration testing framework, to single out entities in South Korea and Japan.</strong></p>
+<img src="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1793192593/rynexnative/mygpjrjciyc16ob3b0i7.png" alt="CyberStrikeAI Unleashes 44 AI Agents to Automate Cyberattacks on Japan" width="1200" style="max-width:100%;height:auto;border-radius:1rem">
+<p>Cybersecurity researchers have disclosed details of three cyber attacks targeting organizations in Japan in which artificial intelligence (AI) was a key element, either in the driving seat or to assist a human operator.</p>
+<p>TrendAI, which analyzed three exposed server environments used by threat actors to conduct the malicious cyber operations, described them as distinct from previously published attacks that have leveraged ARTEX, an autonomous AI penetration testing framework, to single out entities in South Korea and Japan.</p>
+<p>&quot;These environments held reconnaissance and attack tools, scripts, target lists, results, logs, and command histories,&quot; security researchers Bakuei Matsukawa and Joseph C Chen said. &quot;They ranged from workspaces used largely by hand by skilled operators to AI-agent platforms that automated the entire workflow, including command and control.&quot;</p>
+<p>The first of the three attacks has been found to abuse CyberStrikeAI, another open-source penetration testing tool that was previously put to use in an attack campaign targeting Fortinet FortiGate appliances. The activity was concentrated in a short period in October 2026.</p>
+<p>The AI-driven activity leverages the offensive security tool to automate various aspects of the attack lifecycle into a repeatable workflow, beginning with reconnaissance and vulnerability discovery and validation, and exploitation, to command-and-control (C2), persistence, data exfiltration, and automated reporting.</p>
+<p>This involves delegating the work among 44 agents to handle various aspects of the attack, while also enabling the generation of forms and fake login pages in the Japanese language.</p>
+<p>&quot;In a short period, at least 19 identifiable organizations, including at least 16 in Japan, were subjected to validation activity,&quot; Trend Micro&#39;s enterprise security division said. &quot;Each had a report in the same format and an index of evidence. These were outputs of a structured process run by the platform, rather than ad hoc notes left by an operator.&quot;</p>
+<p>The second case has been characterized as a human-led attack with assistance from a large language model (LLM) to accelerate planning and tool development. Analysis of the infrastructure and artifacts indicates that the campaign is also designed to target AI workflow platforms and inference services with an aim to obtain large amounts of inference capacity at low cost.</p>
+<p>One of the intrusions is said to have targeted a geographic information system (GIS) server exposed with default credentials, resulting in the theft of cadastral and commercial records, Windows credentials, and email data. The entire campaign lasted for 24 days in August and September 2026.</p>
+<p>The third instance is where the AI&#39;s role has been found to be confined to developing the operator&#39;s tools and scripts, suggesting a limited role played by the technology in a series of campaigns designed to target edge devices from Cisco, Citrix, F5, and Yamaha using published vulnerabilities, management functions, or credentials present in configuration files.</p>
+<p>The threat actor is estimated to have run at least six campaigns from January to October 2026, opportunistically striking exposed VPN devices and WebLogic servers. &quot;The operator was experienced, with established practices for automation and evidence management,&quot; the researchers said.</p>
+<p>There is currently no evidence at this stage that suggests these three incidents share an operator. It&#39;s also unknown if the attacks have targeted other regions and what AI models are being used to pull off the attacks.</p>
+<p>That said, the attacks involving these threat actors are not restricted to Japan and neighboring countries like South Korea. The operator behind the first case has targeted organizations in Taiwan and Hong Kong, while the third case featured organizations in the U.K., France, Italy, Qatar, and Colombia in its WebLogic discovery lists.</p>
+<p>&quot;AI has increased the attackers&#39; workforce, but the work still consists of looking for unlocked doors,&quot; TrendAI said. &quot;The types of doors and the weaknesses that leave them open have not changed. What has changed is the ability to try thousands at once, adapt to the target country&#39;s language, and continue without fatigue.&quot;</p>
+<p>The development coincides with the discovery of multiple campaigns in which threat actors of varied motivations have integrated agentic AI into existing offensive security workflows, allowing them to speed up research, malware development, social engineering, and other parts of an attack.</p>
+<p>To make matters worse, AI is being increasingly used to accelerate reconnaissance, automate decision-making, and industrialize social engineering, shortening the time between exposure and exploitation of security flaws. According to Microsoft&#39;s 2026 Digital Defense Report, AI has collapsed the median time from vulnerability discovery to weaponization to well below 24 hours.</p>
+<p>The adoption of AI by bad actors is reducing the time, expertise, and cost required to discover and exploit weaknesses, at the same allowing attackers and defenders alike to operate with greater speed, scale, and autonomy, the Windows maker added.</p>
+<p>&quot;The key issue is not simply whether an actor has frontier AI,&quot; Trend Micro said. &quot;Access to capable models can already produce meaningful operational gains. Ecosystem depth, however, determines how reliably, independently, and at what scale those capabilities can be sustained.&quot;</p>
+<p>&quot;AI is no longer an experimental capability for APT groups; it is an operational component embedded directly into campaigns.&quot;</p>
+<p>The growing demand for AI tools by threat actors has also opened up a new monetization avenue that peddles stolen AI provider session tokens and offensive AI tools APEX AI, MessiahGPT, and DarkGPT, further commoditizing cybercrime and lowering the barrier to entry for carrying out advanced, persistent, and evasive attacks.</p>
+<p>Last week, Microsoft revealed that a China-state-aligned threat actor compromised a ConnectWise cloud backup application and used ARTEX to sign in to more than 2,250 Microsoft 365 tenants. The activity has been attributed to Storm-0940, which it said has used the framework since as early as September 2026 to automate password-spraying attacks on hundreds of organizations.</p>
+<p>&quot;While the majority of the targeting wasn&#39;t successful, Storm-0940 achieved privileged cloud persistence at many organizations in a brief time,&quot; Microsoft said. &quot;Storm-0940&#39;s activity illustrates how a threat actor with a broad target set can use an agentic AI tool and privileged authentication material to quickly attempt to compromise many organizations.&quot;</p>
+<p>According to local media reports from South Korea, authorities have identified seven suspects linked to a cybercrime operation that broke into more than 90 organizations in the country, most of which involved ARTEX. The 32-year-old mastermind behind the activity is alleged to have worked at a cybersecurity company between 2019 and 2022, gaining expertise in penetration testing.</p>
+<p>In 38 of the incidents, the threat actors demanded ransom payments of 360 million won ($270,000) in exchange for not leaking the stolen data. More than 8.2 million records are believed to have been siphoned from compromised organizations.</p>
+<p>Some of the other AI-oriented campaigns that have been documented in recent weeks are listed below -</p>
+<p>A financially-motivated threat actor operating under the handle BUGSTER configured the Hermes Agent framework with DeepSeek V4 as its reasoning engine and Cursor as a secondary tool (both with safety controls disabled) to run a WordPress brute-force campaign against an Indian university&#39;s website and generate a REST API enumeration report.<br>The attacker also breached a second Indian public university, exfiltrating a database of more than 5,200 records, including personally identifiable information (PII) on students. A third attack enumerated an Indian site on a popular e-commerce platform to extract a storefront API token, admin email addresses, phone numbers, and payment merchant IDs.<br>&quot;The actor also built specialized AI bot profiles to acquire VoIP fraud expertise through conversation and maintained automated pipelines for Wi-Fi password cracking and cryptocurrency whale reconnaissance (i.e., identifying large cryptocurrency holders),&quot; Palo Alto Networks Unit 42 said. &quot;Notably, the Wi-Fi cracking capability requires close physical proximity to the target, indicating the actor had local access to the targeted locations.&quot;<br>An e-crime group named CyberCartel has been observed using a multi-agent system called CARLIY0S to coordinate attacks against banks and payment providers across Latin America. The framework employs a cognitive swarm comprising four role-specialized Claude models that &quot;debate each target and defer to one arbiter&quot; before the main orchestrator acts. &quot;The group assigned different roles to commercial AI models to analyze targets, develop attacks, and coordinate operations,&quot; Straiker said.<br>Threat actors have developed an offensive AI agent designed to hijack exposed AI endpoints to run autonomous attacks, with instructions allowing it to carry out up to 100,000 steps without human approval while the legitimate owner of the exposed endpoint pays for the inference. The system features a malicious loop called Skynet mode that employs a set of 74 tools to scan for targets, infect them, deploy cryptocurrency miners, and reinfect compromised hosts.<br>An affiliate for the The Gentlemen ransomware operation has used Anthropic Claude Code during intrusions into at least six organizations in late June 2026, including to generate and execute reconnaissance and exploitation commands, write malicious scripts, modify firewall policies, and identify high-value business systems.<br>A credential-harvesting operation codenamed Zerofot built a scanner named &quot;auto_scan&quot; that integrated OpenAI Codex and Claude Code to harvest thousands of API keys and tokens from thousands of exposed hosts across the internet.<br>An AI-generated Python framework called RAGE has been used to scan internet-facing services (e.g., Redis, Elasticsearch, Docker, Apache Tomcat, Jenkins, Hadoop YARN, Confluence, and Supervisord), exploit vulnerable deployments, capture credentials, and deploy cryptocurrency miners.<br>A human operator employed frontier AI models to breach an enterprise network autonomously over a 10-hour period. &quot;The actor breached a publicly accessible web service to tunnel into the network, deploying an automated recon agent to map internal microservices,&quot; Unit 42 said. &quot;Sub-agents combed enterprise code repositories, extracting hard-coded tokens and service passwords.&quot; The attacker then harvested master administrative credentials and hijacked an enterprise code application to exfiltrate cloud access keys. The stolen cloud keys were then used to turn the victim&#39;s AI endpoints into post-compromise infrastructure.<br>A suspected Russian-speaking cyber actor used an AI-assisted workflow to exploit PaperCut NG/MF servers and compromise hundreds of instances. &quot;The campaign extended beyond initial exploitation into a structured post-exploitation pipeline covering Windows credential collection, service-credential harvesting, internal network pivoting, Metasploit automation, and victim packaging,&quot; Hunt.io said.<br>A Chinese-speaking threat actor has breached websites belonging to more than 100 companies, including Deere, SharkNinja, and Cummins, using an autonomous penetration testing engine called Cairn, tasking it to probe targets, search for security weaknesses that could lead to code execution or account takeover, attempt to break in, and steal sensitive data.<br>&quot;AI is serving as a force multiplier and an expanding attack surface at the same time,&quot; Rapid7 said. &quot;Generative AI is accelerating established attack methods by reducing the time, skill, and coordination previously required to execute them at scale.&quot;</p>
+<p>&quot;Rather than introducing entirely new categories of exploitation, threat actors are integrating AI into existing workflows to industrialize phishing, automate reconnaissance, and refine malicious scripts with greater speed and precision.&quot;</p>
+<p>Found this article interesting? Follow us on Google News and rynexnative page for more content like this</p>
+</article></div></div>
+</body>
+
+</html>

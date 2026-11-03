@@ -6,7 +6,25 @@
   <atom:link href="https://rynexnative.com/rss.xml" rel="self" type="application/rss+xml"/>
   <description>Projects, announcements and articles about technology in Tanzania from RynexNative.</description>
   <language>en</language>
-  <lastBuildDate>Sat, 24 Oct 2026 21:42:52 GMT</lastBuildDate>
+  <lastBuildDate>Thu, 29 Oct 2026 20:46:30 GMT</lastBuildDate>
+  <item>
+    <title>This is Cisco&#39;s free Skills for All program (Cisco Networking Academy).</title>
+    <link>https://rynexnative.com/news/cisco/</link>
+    <guid isPermaLink="true">https://rynexnative.com/news/cisco/</guid>
+    <pubDate>Thu, 29 Oct 2026 20:46:30 GMT</pubDate>
+    <category>Announcement</category>
+    <description>It&#39;s a free, self-paced, mobile-friendly online learning platform. The course to start with is Introduction to Cybersecurity, and Cisco itself recommends starting there</description>
+    <media:content url="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1793306676/rynexnative/e4u0bq9hlbbakosxdpg8.webp" medium="image"/>
+  </item>
+  <item>
+    <title>CyberStrikeAI Unleashes 44 AI Agents to Automate Cyberattacks on Japan</title>
+    <link>https://rynexnative.com/news/cyberstrikeai-unleashes-44-ai-agents-to-automate-cyberattacks-on-japan/</link>
+    <guid isPermaLink="true">https://rynexnative.com/news/cyberstrikeai-unleashes-44-ai-agents-to-automate-cyberattacks-on-japan/</guid>
+    <pubDate>Wed, 28 Oct 2026 13:03:28 GMT</pubDate>
+    <category>Article</category>
+    <description>TrendAI, which analyzed three exposed server environments used by threat actors to conduct the malicious cyber operations, described them as distinct from previously published attacks that have leveraged ARTEX, an autonomous AI penetration testing framework, to single out entities in South Korea and Japan.</description>
+    <media:content url="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1793192593/rynexnative/mygpjrjciyc16ob3b0i7.png" medium="image"/>
+  </item>
   <item>
     <title>&quot;Russian-Linked Hackers Used New Mesh Network Backdoor in Destructive Ukraine Attack&quot;.</title>
     <link>https://rynexnative.com/news/https-thehackernews-com-2026-10-russian-linked-hackers-used-new-mesh-html/</link>
