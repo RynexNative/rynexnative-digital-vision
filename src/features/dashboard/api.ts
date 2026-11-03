@@ -382,8 +382,11 @@ type UploadSignature = {
 }
 
 /** Uploads an image straight from the browser to Cloudinary and returns its https URL. */
-export async function uploadImage(file: File): Promise<string> {
-  const sig = await dashboardRequest<UploadSignature>("/uploads/signature/", { method: "POST" })
+export const uploadImage = (file: File) => uploadFile(file, "/uploads/signature/")
+
+/** Upload to Cloudinary with a signature from `signaturePath` (which decides the folder and who may upload). */
+export async function uploadFile(file: File, signaturePath: string): Promise<string> {
+  const sig = await dashboardRequest<UploadSignature>(signaturePath, { method: "POST" })
   const form = new FormData()
   form.append("file", file)
   form.append("api_key", sig.api_key)

@@ -19,6 +19,10 @@ const MODULES: Record<string, string> = {
   settings: "Settings",
   users: "Users & roles",
   audit: "Activity log",
+  cp_flocks: "Chicken Point · Flocks & health",
+  cp_costs: "Chicken Point · Costs & receipts",
+  cp_sales: "Chicken Point · Sales",
+  cp_reports: "Chicken Point · Reports",
 }
 
 const time = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit" })
@@ -99,7 +103,7 @@ export default function ActivityPage() {
   const search = useDebouncedValue(q, 300)
   const [filters, setFilters] = useState({ actor: searchParams.get("actor") ?? "", module: "", action: "", since: "", until: "" })
   const [pages, setPages] = useState(1)
-  const { data: people = [] } = useTeam("", can("users.view"))
+  const { data: people = [] } = useTeam("", "", can("users.view"))
   const params = useMemo(() => ({ ...filters, q: search }), [filters, search])
   useEffect(() => setPages(1), [params])
   useEffect(() => {

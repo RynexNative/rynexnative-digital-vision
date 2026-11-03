@@ -8,14 +8,26 @@ export type TeamUser = {
   email: string
   is_active: boolean
   is_owner: boolean
-  role_detail: { id: number | null; name: string } | null
+  role_detail: RoleRef | null
+  farm_role_detail: RoleRef | null
+  /** Businesses this person works in (the category): "rynexnative", "chickenpoint" */
+  workspaces: string[]
   created_by: Person | null
   created_at: string
   last_login: string | null
 }
 
+export type RoleRef = { id: number | null; name: string; workspace?: string }
+
+export const WORKSPACE_NAMES: Record<string, string> = { rynexnative: "RynexNative", chickenpoint: "Chicken Point" }
+export const WORKSPACE_PILL: Record<string, string> = {
+  rynexnative: "bg-primary/10 text-primary border-primary/25",
+  chickenpoint: "bg-amber-500/15 text-amber-800 border-amber-500/30 dark:text-amber-300",
+}
+
 export type Role = {
   id: number
+  workspace: string
   name: string
   description: string
   permissions: string[]
@@ -25,7 +37,7 @@ export type Role = {
   updated_at: string
 }
 
-export type CatalogModule = { key: string; label: string; description: string; actions: Record<string, string> }
+export type CatalogModule = { workspace: string; key: string; label: string; description: string; actions: Record<string, string> }
 
 export type AuditEvent = {
   id: number
