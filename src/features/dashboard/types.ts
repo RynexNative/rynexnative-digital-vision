@@ -10,6 +10,10 @@ export type DashboardUser = {
   is_superuser: boolean
   /** "Owner" for owners, otherwise the role's name ("" when none) */
   role: string
+  /** Chicken Point role ("" when none) */
+  farm_role: string
+  /** Which businesses' dashboards this person can open: "rynexnative", "chickenpoint" */
+  workspaces: string[]
   /** What the role allows, e.g. "billing.view"; the server checks every request anyway */
   permissions: string[]
 }

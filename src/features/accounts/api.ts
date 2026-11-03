@@ -3,7 +3,8 @@ import { query, useDashboardQuery, useInvalidate } from "@/features/dashboard/ap
 import { dashboardRequest } from "@/lib/api"
 import type { AuditPage, CatalogModule, Role, TeamUser } from "./types"
 
-export const useTeam = (q: string, enabled = true) => useDashboardQuery<TeamUser[]>(["dashboard", "users", q], `/users/${query({ q })}`, enabled)
+export const useTeam = (q: string, workspace = "", enabled = true) =>
+  useDashboardQuery<TeamUser[]>(["dashboard", "users", q, workspace], `/users/${query({ q, workspace })}`, enabled)
 export const useRoles = (enabled = true) => useDashboardQuery<Role[]>(["dashboard", "roles"], "/roles/", enabled)
 export const useCatalog = () => useDashboardQuery<CatalogModule[]>(["dashboard", "roles", "catalog"], "/roles/catalog/")
 

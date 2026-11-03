@@ -1,8 +1,14 @@
 import { Suspense, useEffect, useState, type ReactNode } from "react"
-import { NavLink, Route, Routes, useLocation } from "react-router-dom"
+import { Navigate, NavLink, Route, Routes, useLocation, useNavigate } from "react-router-dom"
 import {
   Activity,
+  ArrowLeftRight,
   BarChart3,
+  Bird,
+  Egg,
+  HandCoins,
+  PieChart,
+  Receipt,
   Briefcase,
   HeartHandshake,
   History,
@@ -71,6 +77,21 @@ const TestimonialsAdminPage = lazyWithReload(() => import("./TestimonialsAdminPa
 const UsersPage = lazyWithReload(() => import("./UsersPage"))
 const ActivityPage = lazyWithReload(() => import("./ActivityPage"))
 const AccountPage = lazyWithReload(() => import("./AccountPage"))
+const FarmOverviewPage = lazyWithReload(() => import("./farm/FarmOverviewPage"))
+const BatchesPage = lazyWithReload(() => import("./farm/BatchesPage"))
+const BatchDetailPage = lazyWithReload(() => import("./farm/BatchDetailPage"))
+const CostsPage = lazyWithReload(() => import("./farm/CostsPage"))
+const SalesPage = lazyWithReload(() => import("./farm/SalesPage"))
+const FarmReportsPage = lazyWithReload(() => import("./farm/FarmReportsPage"))
+
+type Workspace = "rynexnative" | "chickenpoint"
+const FARM = "/admin/chicken-point"
+const WORKSPACES: Record<Workspace, { name: string; home: string }> = {
+  rynexnative: { name: "RynexNative", home: "/admin" },
+  chickenpoint: { name: "Chicken Point", home: FARM },
+}
+// Every Chicken Point permission that opens a part of its dashboard
+const FARM_VIEW = ["cp_flocks.view", "cp_costs.view", "cp_sales.view", "cp_reports.view"]
 
 type NavItem = { to: string; label: string; icon: ReactNode; badge?: number; group: string; /** For the narrow mobile bar */ short?: string; /** Permission needed to see it */ perm?: string }
 
@@ -93,16 +114,57 @@ function useNoIndex() {
 }
 
 /** A page the role does not cover: say so instead of showing errors (the server refuses its data anyway). */
-function Guard({ perm, children }: { perm: string; children: ReactNode }) {
-  const { can, user } = usePermissions()
-  if (can(perm)) return <>{children}</>
+function Guard({ perm, children }: { perm: string | string[]; children: ReactNode }) {
+  const { canAny, user } = usePermissions()
+  if (canAny(...(Array.isArray(perm) ? perm : [perm]))) return <>{children}</>
   return (
     <div className="max-w-md mx-auto text-center py-20">
       <ShieldAlert className="h-12 w-12 text-foreground/30 mx-auto mb-4" />
       <h1 className="text-2xl font-bold font-poppins mb-2">No access</h1>
       <p className="text-foreground/65">
-        Your role{user?.role ? ` (${user.role})` : ""} does not include this part of the dashboard. Ask an administrator if you need it.
+        Your role{user?.role || user?.farm_role ? ` (${[user.role, user.farm_role].filter(Boolean).join(", ")})` : ""} does not include this part of the dashboard. Ask an administrator if you need it.
       </p>
+    </div>
+  )
+}
+
+/** RynexNative ⇄ Chicken Point, for people who work in both. */
+function WorkspaceSwitch({ current, compact }: { current: Workspace; compact?: boolean }) {
+  const { data: user } = useCurrentUser()
+  const navigate = useNavigate()
+  const available = (user?.workspaces ?? []) as Workspace[]
+  if (available.length < 2) return null
+  if (compact) {
+    const other: Workspace = current === "chickenpoint" ? "rynexnative" : "chickenpoint"
+    return (
+      <button
+        type="button"
+        onClick={() => navigate(WORKSPACES[other].home)}
+        className="h-9 px-2.5 rounded-lg glass inline-flex items-center gap-1.5 text-xs font-semibold"
+        aria-label={`Switch to ${WORKSPACES[other].name}`}
+      >
+        <ArrowLeftRight className="h-3.5 w-3.5" />
+        {other === "chickenpoint" ? "Farm" : "RynexNative"}
+      </button>
+    )
+  }
+  return (
+    <div role="tablist" aria-label="Business" className="grid grid-cols-2 gap-1 p-1 rounded-xl bg-foreground/5 mb-4">
+      {(["rynexnative", "chickenpoint"] as Workspace[]).map((w) => (
+        <button
+          key={w}
+          type="button"
+          role="tab"
+          aria-selected={current === w}
+          onClick={() => current !== w && navigate(WORKSPACES[w].home)}
+          className={cn(
+            "h-8 rounded-lg text-xs font-semibold transition-colors",
+            current === w ? (w === "chickenpoint" ? "bg-amber-500 text-white" : "bg-primary text-primary-foreground") : "text-foreground/60 hover:text-foreground",
+          )}
+        >
+          {WORKSPACES[w].name}
+        </button>
+      ))}
     </div>
   )
 }
@@ -113,6 +175,17 @@ function Shell() {
   const { can } = usePermissions()
   const logout = useLogout()
   const { pathname } = useLocation()
+
+  // Which business's dashboard is open: from the address, so links and the back button just work.
+  // "My account" belongs to both and keeps the one you came from.
+  const available = (user?.workspaces ?? []) as Workspace[]
+  const neutral = pathname === "/admin/account"
+  const [lastWorkspace, setLastWorkspace] = useState<Workspace>(available.includes("rynexnative") ? "rynexnative" : "chickenpoint")
+  const workspace: Workspace = pathname.startsWith(FARM) ? "chickenpoint" : neutral ? lastWorkspace : "rynexnative"
+  useEffect(() => {
+    if (!neutral) setLastWorkspace(workspace)
+  }, [neutral, workspace])
+  const farm = workspace === "chickenpoint"
 
   // Braces matter: newer browsers return a Promise from scrollTo, and an effect must
   // return nothing or a cleanup function (React would call the Promise and crash)
@@ -128,7 +201,15 @@ function Shell() {
     excludeThisBrowser()
   }, [])
 
-  const allItems: NavItem[] = [
+  const farmItems: NavItem[] = [
+    { group: "", to: FARM, label: "Overview", icon: <LayoutDashboard className="h-5 w-5" /> },
+    { group: "Farm", to: `${FARM}/batches`, label: "Batches", perm: "cp_flocks.view", icon: <Bird className="h-5 w-5" /> },
+    { group: "Farm", to: `${FARM}/costs`, label: "Costs & receipts", short: "Costs", perm: "cp_costs.view", icon: <Receipt className="h-5 w-5" /> },
+    { group: "Farm", to: `${FARM}/sales`, label: "Sales & customers", short: "Sales", perm: "cp_sales.view", icon: <HandCoins className="h-5 w-5" /> },
+    { group: "Farm", to: `${FARM}/reports`, label: "Profit & reports", short: "Reports", perm: "cp_reports.view", icon: <PieChart className="h-5 w-5" /> },
+    { group: "Team & settings", to: "/admin/account", label: "My account", icon: <KeyRound className="h-5 w-5" /> },
+  ]
+  const allItems: NavItem[] = farm ? farmItems : [
     { group: "", to: "/admin", label: "Overview", icon: <LayoutDashboard className="h-5 w-5" /> },
     { group: "Sales", to: "/admin/requests", label: "Requests", perm: "requests.view", icon: <Inbox className="h-5 w-5" />, badge: stats?.packages?.inquiries_new },
     { group: "Sales", to: "/admin/billing", label: "Quotes & invoices", short: "Invoices", perm: "billing.view", icon: <FileText className="h-5 w-5" /> },
@@ -158,7 +239,7 @@ function Shell() {
   // Only what the role allows (the server refuses the rest anyway)
   const items = allItems.filter((item) => !item.perm || can(item.perm))
   // The sidebar and the "More" sheet show the items grouped
-  const GROUPS = ["", "Sales", "Operations", "Content & events", "Team & settings"]
+  const GROUPS = ["", "Farm", "Sales", "Operations", "Content & events", "Team & settings"]
   const grouped = (list: NavItem[]) => GROUPS.map((g) => ({ group: g, items: list.filter((i) => i.group === g) })).filter((g) => g.items.length)
   // Mobile bottom bar shows the first four; the rest live under "More"
   const primaryItems = items.slice(0, 4)
@@ -172,8 +253,12 @@ function Shell() {
   const navClass = ({ isActive }: { isActive: boolean }) =>
     cn(
       "flex items-center gap-3 px-3 h-9 rounded-xl text-sm font-medium transition-colors",
-      isActive ? "bg-primary/15 text-primary" : "text-foreground/70 hover:text-foreground hover:bg-foreground/5",
+      isActive ? (farm ? "bg-amber-500/15 text-amber-700 dark:text-amber-400" : "bg-primary/15 text-primary") : "text-foreground/70 hover:text-foreground hover:bg-foreground/5",
     )
+  const accent = farm ? "text-amber-600 dark:text-amber-400" : "text-primary"
+
+  // Someone who only works at Chicken Point lands there
+  if (user && !farm && !neutral && !available.includes("rynexnative") && available.includes("chickenpoint")) return <Navigate to={FARM} replace />
 
   const badge = (count?: number) =>
     count ? (
@@ -187,19 +272,26 @@ function Shell() {
       {/* Sidebar (desktop) */}
       <aside className="hidden lg:flex lg:flex-col w-64 flex-shrink-0 border-r border-border bg-background sticky top-0 h-screen p-4">
         <div className="flex items-center gap-2.5 px-2 mb-5 mt-1">
-          <img src="/logo-64.webp" alt="" className="w-8 h-8" />
+          {farm ? (
+            <span className="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center">
+              <Egg className="h-5 w-5" />
+            </span>
+          ) : (
+            <img src="/logo-64.webp" alt="" className="w-8 h-8" />
+          )}
           <div>
-            <p className="font-bold font-poppins leading-tight">RynexNative</p>
-            <p className="text-xs text-primary font-semibold">Dashboard</p>
+            <p className="font-bold font-poppins leading-tight">{WORKSPACES[workspace].name}</p>
+            <p className={cn("text-xs font-semibold", accent)}>Dashboard</p>
           </div>
           <NotificationBell className="ml-auto" />
         </div>
+        <WorkspaceSwitch current={workspace} />
         <nav className="flex-1 overflow-y-auto -mx-1 px-1 space-y-3 pb-2" aria-label="Dashboard">
           {grouped(items).map(({ group, items: groupItems }) => (
             <div key={group || "main"} className="space-y-0.5">
               {group && <p className="px-3 pb-1 text-[11px] font-bold uppercase tracking-[0.15em] text-foreground/40">{group}</p>}
               {groupItems.map((item) => (
-                <NavLink key={item.to} to={item.to} end={item.to === "/admin"} className={navClass}>
+                <NavLink key={item.to} to={item.to} end={item.to === "/admin" || item.to === FARM} className={navClass}>
                   {item.icon}
                   {item.label}
                   {badge(item.badge)}
@@ -225,15 +317,22 @@ function Shell() {
 
       {/* Top bar (mobile) */}
       <header className="lg:hidden sticky top-0 z-30 glass backdrop-blur-xl flex items-center justify-between h-14 px-4">
-        <div className="flex items-center gap-2">
-          <img src="/logo-64.webp" alt="" className="w-7 h-7" />
-          <span className="font-bold font-poppins">Dashboard</span>
+        <div className="flex items-center gap-2 min-w-0">
+          {farm ? (
+            <span className="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center flex-shrink-0">
+              <Egg className="h-4 w-4" />
+            </span>
+          ) : (
+            <img src="/logo-64.webp" alt="" className="w-7 h-7" />
+          )}
+          <span className="font-bold font-poppins truncate">{farm ? "Chicken Point" : "Dashboard"}</span>
         </div>
         <div className="flex items-center gap-2">
+          <WorkspaceSwitch current={workspace} compact />
           <NotificationBell />
-          <button type="button" onClick={() => logout.mutate()} className="h-9 px-3 rounded-lg glass inline-flex items-center gap-1.5 text-sm">
+          <button type="button" onClick={() => logout.mutate()} aria-label="Log out" className="h-9 px-2.5 sm:px-3 rounded-lg glass inline-flex items-center gap-1.5 text-sm">
             <LogOut className="h-4 w-4" />
-            Log out
+            <span className="hidden sm:inline">Log out</span>
           </button>
         </div>
       </header>
@@ -278,6 +377,12 @@ function Shell() {
               <Route path="users" element={<Guard perm="users.view"><UsersPage /></Guard>} />
               <Route path="activity" element={<Guard perm="audit.view"><ActivityPage /></Guard>} />
               <Route path="account" element={<AccountPage />} />
+              <Route path="chicken-point" element={<Guard perm={FARM_VIEW}><FarmOverviewPage /></Guard>} />
+              <Route path="chicken-point/batches" element={<Guard perm="cp_flocks.view"><BatchesPage /></Guard>} />
+              <Route path="chicken-point/batches/:id" element={<Guard perm="cp_flocks.view"><BatchDetailPage /></Guard>} />
+              <Route path="chicken-point/costs" element={<Guard perm="cp_costs.view"><CostsPage /></Guard>} />
+              <Route path="chicken-point/sales" element={<Guard perm="cp_sales.view"><SalesPage /></Guard>} />
+              <Route path="chicken-point/reports" element={<Guard perm="cp_reports.view"><FarmReportsPage /></Guard>} />
               <Route path="*" element={<OverviewPage />} />
             </Routes>
           </Suspense>
@@ -294,11 +399,11 @@ function Shell() {
           <NavLink
             key={item.to}
             to={item.to}
-            end={item.to === "/admin"}
+            end={item.to === "/admin" || item.to === FARM}
             className={({ isActive }) =>
               cn(
                 "relative flex flex-col items-center justify-center gap-1 h-16 text-[11px] font-medium",
-                isActive ? "text-primary" : "text-foreground/60",
+                isActive ? accent : "text-foreground/60",
               )
             }
           >

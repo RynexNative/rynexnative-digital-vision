@@ -14,7 +14,7 @@ import {
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Switch } from "@/components/ui/switch"
 import { useCatalog, useDeleteRole, useRoles, useSaveRole, useSaveUser, useSetPassword, useTeam } from "@/features/accounts/api"
-import { generatePassword, type CatalogModule, type Role, type TeamUser } from "@/features/accounts/types"
+import { WORKSPACE_NAMES, WORKSPACE_PILL, generatePassword, type CatalogModule, type Role, type TeamUser } from "@/features/accounts/types"
 import { usePermissions } from "@/features/dashboard/access"
 import { formatWhen } from "@/features/dashboard/types"
 import { EmptyState, ErrorState, FilterTabs, ListSkeleton, PageHeader, Pill, SearchInput } from "@/features/dashboard/ui"
@@ -65,7 +65,36 @@ function PasswordInput({ value, onChange, required }: { value: string; onChange:
 
 /* ---------------- People ---------------- */
 
-type UserDraft = { id?: number; username: string; first_name: string; last_name: string; email: string; role: string; is_owner: boolean; is_active: boolean; password: string }
+type UserDraft = {
+  id?: number
+  username: string
+  first_name: string
+  last_name: string
+  email: string
+  /** RynexNative role */
+  role: string
+  /** Chicken Point role */
+  farm_role: string
+  is_owner: boolean
+  is_active: boolean
+  password: string
+}
+
+function RoleSelect({ value, onChange, roles, workspace }: { value: string; onChange: (v: string) => void; roles: Role[]; workspace: string }) {
+  return (
+    <select value={value} onChange={(e) => onChange(e.target.value)} className={inputClass} aria-label={`${WORKSPACE_NAMES[workspace]} role`}>
+      <option value="">No access to {WORKSPACE_NAMES[workspace]}</option>
+      {roles
+        .filter((r) => r.workspace === workspace)
+        .map((r) => (
+          <option key={r.id} value={r.id}>
+            {r.name}
+            {r.description ? ` · ${r.description}` : ""}
+          </option>
+        ))}
+    </select>
+  )
+}
 
 function UserEditor({ initial, roles, onDone }: { initial: UserDraft; roles: Role[]; onDone: () => void }) {
   const { toast } = useToast()
@@ -86,7 +115,7 @@ function UserEditor({ initial, roles, onDone }: { initial: UserDraft; roles: Rol
           email: draft.email.trim(),
           is_active: draft.is_active,
           ...(me?.is_superuser ? { is_owner: draft.is_owner } : {}),
-          ...(draft.is_owner ? {} : { role: draft.role ? Number(draft.role) : null }),
+          ...(draft.is_owner ? {} : { role: draft.role ? Number(draft.role) : null, farm_role: draft.farm_role ? Number(draft.farm_role) : null }),
           ...(isNew ? { password: draft.password } : {}),
         }
         save.mutate(
@@ -130,17 +159,15 @@ function UserEditor({ initial, roles, onDone }: { initial: UserDraft; roles: Rol
       )}
 
       {!draft.is_owner && (
-        <Field label="Role *" hint="Decides exactly what this person can see and do">
-          <select required value={draft.role} onChange={(e) => set("role", e.target.value)} className={inputClass}>
-            <option value="">Choose a role</option>
-            {roles.map((r) => (
-              <option key={r.id} value={r.id}>
-                {r.name}
-                {r.description ? ` · ${r.description}` : ""}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <div className="rounded-2xl border border-foreground/10 p-4 space-y-4">
+          <p className="text-sm text-foreground/65">One role per business. Give a role only where this person works; at least one is needed.</p>
+          <Field label="RynexNative role" hint="Requests, invoices, operations, website content...">
+            <RoleSelect value={draft.role} onChange={(v) => set("role", v)} roles={roles} workspace="rynexnative" />
+          </Field>
+          <Field label="Chicken Point role" hint="Batches, health, costs and receipts, sales, profit">
+            <RoleSelect value={draft.farm_role} onChange={(v) => set("farm_role", v)} roles={roles} workspace="chickenpoint" />
+          </Field>
+        </div>
       )}
 
       {isNew && (
@@ -208,8 +235,9 @@ function People() {
   const { can, user: me } = usePermissions()
   const { toast } = useToast()
   const [q, setQ] = useState("")
+  const [category, setCategory] = useState<"" | "rynexnative" | "chickenpoint">("")
   const search = useDebouncedValue(q, 300)
-  const { data: people = [], isLoading, isError, refetch } = useTeam(search)
+  const { data: people = [], isLoading, isError, refetch } = useTeam(search, category)
   const { data: roles = [] } = useRoles()
   const save = useSaveUser()
   const [editing, setEditing] = useState<UserDraft | null>(null)
@@ -221,10 +249,31 @@ function People() {
     <>
       <div className="flex flex-col sm:flex-row gap-3 mb-5">
         <SearchInput value={q} onChange={setQ} placeholder="Search name, username, email..." />
+        <FilterTabs
+          value={category}
+          onChange={setCategory}
+          options={[
+            { id: "", label: "Everyone" },
+            { id: "rynexnative", label: "RynexNative" },
+            { id: "chickenpoint", label: "Chicken Point" },
+          ]}
+        />
         {manage && (
           <button
             type="button"
-            onClick={() => setEditing({ username: "", first_name: "", last_name: "", email: "", role: "", is_owner: false, is_active: true, password: generatePassword() })}
+            onClick={() =>
+              setEditing({
+                username: "",
+                first_name: "",
+                last_name: "",
+                email: "",
+                role: "",
+                farm_role: "",
+                is_owner: false,
+                is_active: true,
+                password: generatePassword(),
+              })
+            }
             className={cn(buttonPrimary, "sm:ml-auto")}
           >
             <Plus className="h-4 w-4" />
@@ -262,7 +311,11 @@ function People() {
                         <Crown className="h-3 w-3 mr-1" /> Owner
                       </Pill>
                     ) : (
-                      <Pill className="bg-primary/10 text-primary border-primary/25">{u.role_detail?.name ?? "No role"}</Pill>
+                      <>
+                        {u.role_detail && <Pill className={WORKSPACE_PILL.rynexnative}>RynexNative · {u.role_detail.name}</Pill>}
+                        {u.farm_role_detail && <Pill className={WORKSPACE_PILL.chickenpoint}>Chicken Point · {u.farm_role_detail.name}</Pill>}
+                        {!u.role_detail && !u.farm_role_detail && <Pill className="bg-foreground/10 text-foreground/60 border-foreground/15">No role</Pill>}
+                      </>
                     )}
                     {!u.is_active && <Pill className="bg-foreground/10 text-foreground/60 border-foreground/15">Deactivated</Pill>}
                   </p>
@@ -291,6 +344,7 @@ function People() {
                             last_name: u.last_name,
                             email: u.email,
                             role: u.role_detail?.id ? String(u.role_detail.id) : "",
+                            farm_role: u.farm_role_detail?.id ? String(u.farm_role_detail.id) : "",
                             is_owner: u.is_owner,
                             is_active: u.is_active,
                             password: "",
@@ -405,7 +459,7 @@ function PermissionMatrix({ catalog, value, onChange }: { catalog: CatalogModule
   )
 }
 
-type RoleDraft = { id?: number; name: string; description: string; permissions: string[] }
+type RoleDraft = { id?: number; workspace: string; name: string; description: string; permissions: string[]; users?: number }
 
 function Roles() {
   const { toast } = useToast()
@@ -428,7 +482,7 @@ function Roles() {
       <div className="flex mb-5">
         <p className="text-sm text-foreground/65 flex-1">A role is a set of permissions. Everyone with the role gets exactly these, checked by the server on every action.</p>
         {manage && (
-          <button type="button" onClick={() => setEditing({ name: "", description: "", permissions: [] })} className={cn(buttonPrimary, "ml-3 flex-shrink-0")}>
+          <button type="button" onClick={() => setEditing({ workspace: "rynexnative", name: "", description: "", permissions: [] })} className={cn(buttonPrimary, "ml-3 flex-shrink-0")}>
             <Plus className="h-4 w-4" />
             New role
           </button>
@@ -439,12 +493,18 @@ function Roles() {
       ) : isError ? (
         <ErrorState onRetry={() => refetch()} />
       ) : (
+        Object.keys(WORKSPACE_NAMES).map((ws) => (
+        <section key={ws} className="mb-8">
+        <h2 className="text-sm font-bold uppercase tracking-[0.15em] text-foreground/50 mb-3 flex items-center gap-2">
+          <span className={cn("h-2 w-2 rounded-full", ws === "chickenpoint" ? "bg-amber-500" : "bg-primary")} />
+          {WORKSPACE_NAMES[ws]}
+        </h2>
         <ul className="grid md:grid-cols-2 gap-3">
-          {roles.map((r) => (
+          {roles.filter((r) => r.workspace === ws).map((r) => (
             <li key={r.id} className="glass rounded-2xl p-5 flex flex-col">
               <div className="flex items-start justify-between gap-2 mb-1">
                 <p className="font-semibold flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-primary" />
+                  <ShieldCheck className={cn("h-4 w-4", r.workspace === "chickenpoint" ? "text-amber-600" : "text-primary")} />
                   {r.name}
                 </p>
                 <span className="text-xs text-foreground/55">{r.users} person(s)</span>
@@ -460,7 +520,11 @@ function Roles() {
               </ul>
               {manage && (
                 <div className="mt-auto flex gap-2">
-                  <button type="button" onClick={() => setEditing({ id: r.id, name: r.name, description: r.description, permissions: r.permissions })} className={buttonGhost}>
+                  <button
+                    type="button"
+                    onClick={() => setEditing({ id: r.id, workspace: r.workspace, name: r.name, description: r.description, permissions: r.permissions, users: r.users })}
+                    className={buttonGhost}
+                  >
                     <Pencil className="h-4 w-4" />
                     Edit
                   </button>
@@ -479,6 +543,8 @@ function Roles() {
             </li>
           ))}
         </ul>
+        </section>
+        ))
       )}
 
       <Sheet open={editing !== null} onOpenChange={(open) => !open && setEditing(null)}>
@@ -492,7 +558,10 @@ function Roles() {
               onSubmit={(e) => {
                 e.preventDefault()
                 save.mutate(
-                  { id: editing.id, data: { name: editing.name.trim(), description: editing.description.trim(), permissions: editing.permissions } },
+                  {
+                    id: editing.id,
+                    data: { workspace: editing.workspace, name: editing.name.trim(), description: editing.description.trim(), permissions: editing.permissions },
+                  },
                   {
                     onSuccess: () => {
                       toast({ title: "Role saved ✅" })
@@ -512,7 +581,21 @@ function Roles() {
                   <input maxLength={200} value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} className={inputClass} />
                 </Field>
               </div>
-              <PermissionMatrix catalog={catalog} value={editing.permissions} onChange={(permissions) => setEditing({ ...editing, permissions })} />
+              <Field label="Business" hint={editing.users ? "People have this role, so it stays with its business." : "A role gives permissions in one business only."}>
+                <select
+                  value={editing.workspace}
+                  disabled={Boolean(editing.users)}
+                  onChange={(e) => setEditing({ ...editing, workspace: e.target.value, permissions: [] })}
+                  className={inputClass}
+                >
+                  {Object.entries(WORKSPACE_NAMES).map(([k, label]) => (
+                    <option key={k} value={k}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <PermissionMatrix catalog={catalog.filter((m) => m.workspace === editing.workspace)} value={editing.permissions} onChange={(permissions) => setEditing({ ...editing, permissions })} />
               {editing.permissions.includes("users.manage") && (
                 <p className="text-sm rounded-xl bg-amber-500/10 border border-amber-500/30 p-3 text-amber-900">
                   “Create users, change roles” makes people with this role administrators: they can change any role, including their own.
@@ -563,7 +646,7 @@ export default function UsersPage() {
   const [tab, setTab] = useState<"people" | "roles">("people")
   return (
     <>
-      <PageHeader title="Users & roles" subtitle="Who can sign in to the dashboard, and what each role may do." />
+      <PageHeader title="Users & roles" subtitle="Who can sign in to the dashboard, and what each role may do, for RynexNative and Chicken Point." />
       <div className="mb-5">
         <FilterTabs
           value={tab}
