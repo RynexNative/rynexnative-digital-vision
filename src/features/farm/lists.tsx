@@ -1,17 +1,31 @@
 import { useState } from "react"
-import { FileText, Loader2, Paperclip, Plus, Trash2 } from "lucide-react"
+import { AlertTriangle, FileText, Loader2, Paperclip, Plus, Trash2 } from "lucide-react"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { usePermissions } from "@/features/dashboard/access"
 import { EmptyState, ErrorState, ListSkeleton, Pill } from "@/features/dashboard/ui"
 import { buttonGhost } from "@/features/dashboard/styles"
 import { useToast } from "@/hooks/use-toast"
-import { errorMessage, validationMessage } from "@/lib/api"
+import { serverMessage } from "@/lib/api"
 import { cn } from "@/lib/utils"
 import { useDeleteSalePayment, useExpenses, useHealth, useSalePayment, useSales } from "./api"
 import { FarmSheet } from "./FarmSheet"
 import { farmButton, toBody, toValues, type Values } from "./form"
 import { expenseDefaults, expenseFields, healthDefaults, healthFields, paymentFields, saleDefaults, saleFields, saleTotal } from "./fields"
-import { CUSTOMER_KINDS, HEALTH_KINDS, isPdf, PAYMENT_METHODS, num, shortDate, today, tzs, type Expense, type HealthEvent, type Sale } from "./types"
+import {
+  CUSTOMER_KINDS,
+  HEALTH_KINDS,
+  isPdf,
+  PAYMENT_METHODS,
+  num,
+  shortDate,
+  today,
+  tzs,
+  type Expense,
+  type HealthEvent,
+  type Sale,
+  type SalePayment,
+} from "./types"
 
 const who = (p: { name: string } | null) => (p ? ` · by ${p.name}` : "")
 
@@ -180,12 +194,91 @@ export function ExpenseList({ batch }: { batch: number }) {
 
 /* ---------------- Sales ---------------- */
 
+/**
+ * Removing money already received changes what the customer owes and the farm's figures,
+ * so it asks first, shows exactly what goes, and needs a reason (kept in the activity log).
+ */
+function RemovePaymentDialog({ sale, payment, onClose, onRemoved }: { sale: Sale; payment: SalePayment; onClose: () => void; onRemoved: (s: Sale) => void }) {
+  const { toast } = useToast()
+  const remove = useDeleteSalePayment()
+  const [reason, setReason] = useState("")
+  const ready = reason.trim().length >= 5
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!ready) return
+    remove.mutate(
+      { sale: sale.id, payment: payment.id, reason: reason.trim() },
+      {
+        onSuccess: (updated) => {
+          toast({ title: "Payment removed", description: "Recorded in the activity log with your reason." })
+          onRemoved(updated)
+          onClose()
+        },
+        onError: (error) => toast({ variant: "destructive", title: "Not removed", description: serverMessage(error, "Please try again.") }),
+      },
+    )
+  }
+
+  return (
+    <Dialog open onOpenChange={(o) => !o && !remove.isPending && onClose()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-red-600" />
+            Remove this payment?
+          </DialogTitle>
+          <DialogDescription>
+            {sale.buyer} will owe {tzs(Number(sale.balance) + Number(payment.amount))} again, and the money received will drop. Only do this if the payment was a
+            mistake or never arrived.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={submit} className="space-y-4">
+          <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-3 text-sm">
+            <p className="font-semibold tabular-nums">{tzs(payment.amount)}</p>
+            <p className="text-foreground/60">
+              {shortDate(payment.date)} · {PAYMENT_METHODS[payment.method]}
+              {payment.reference && ` · ${payment.reference}`}
+            </p>
+          </div>
+          <label className="block">
+            <span className="block text-sm font-medium mb-1.5">Why is it being removed? *</span>
+            <textarea
+              required
+              rows={3}
+              autoFocus
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="e.g. Recorded twice by mistake; the M-Pesa payment was reversed"
+              className="w-full px-3 py-2.5 rounded-xl bg-card/60 border border-foreground/15 text-sm resize-y"
+            />
+            <span className="block text-xs text-foreground/50 mt-1">Saved in the activity log with your name, the amount and the time.</span>
+          </label>
+          <div className="flex justify-end gap-2">
+            <button type="button" onClick={onClose} disabled={remove.isPending} className="h-11 px-4 rounded-xl glass font-medium">
+              Keep the payment
+            </button>
+            <button
+              type="submit"
+              disabled={!ready || remove.isPending}
+              className="h-11 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold inline-flex items-center gap-2 disabled:opacity-50"
+            >
+              {remove.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+              Remove payment
+            </button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 function PaymentsSheet({ sale, onClose }: { sale: Sale; onClose: () => void }) {
   const { toast } = useToast()
   const { can } = usePermissions()
   const pay = useSalePayment()
-  const remove = useDeleteSalePayment()
   const [current, setCurrent] = useState(sale)
+  const [removing, setRemoving] = useState<SalePayment | null>(null)
   const [values, setValues] = useState<Values>({ amount: Number(sale.balance) || "", date: today(), method: "cash" })
   const manage = can("cp_sales.manage")
   const settled = Number(current.balance) <= 0
@@ -200,7 +293,7 @@ function PaymentsSheet({ sale, onClose }: { sale: Sale; onClose: () => void }) {
           setValues({ amount: Number(updated.balance) || "", date: today(), method: "cash" })
           toast({ title: "Payment recorded ✅" })
         },
-        onError: (error) => toast({ variant: "destructive", title: "Could not record", description: validationMessage(error) ?? errorMessage(error, "Please try again.") }),
+        onError: (error) => toast({ variant: "destructive", title: "Could not record", description: serverMessage(error, "Please try again.") }),
       },
     )
   }
@@ -240,12 +333,7 @@ function PaymentsSheet({ sale, onClose }: { sale: Sale; onClose: () => void }) {
                   <button
                     type="button"
                     aria-label="Remove payment"
-                    onClick={() =>
-                      remove.mutate(
-                        { sale: sale.id, payment: p.id },
-                        { onSuccess: (updated) => setCurrent(updated), onError: (error) => toast({ variant: "destructive", title: errorMessage(error, "Could not remove") }) },
-                      )
-                    }
+                    onClick={() => setRemoving(p)}
                     className="h-9 w-9 rounded-lg text-red-600 hover:bg-red-500/10 inline-flex items-center justify-center"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -290,6 +378,7 @@ function PaymentsSheet({ sale, onClose }: { sale: Sale; onClose: () => void }) {
           </form>
         )}
         {settled && <p className="text-center text-sm font-semibold text-emerald-600">Fully paid ✅</p>}
+        {removing && <RemovePaymentDialog sale={current} payment={removing} onClose={() => setRemoving(null)} onRemoved={setCurrent} />}
       </SheetContent>
     </Sheet>
   )
@@ -363,7 +452,7 @@ export function SaleList({ batch, params = {}, showAdd = true }: { batch?: numbe
           recordId={isNew ? undefined : (editing as Sale).id}
           extra={batch ? { batch } : undefined}
           onClose={() => setEditing(null)}
-          deleteText="The sale and its payments will be removed; the birds count as alive again."
+          deleteText="The sale will be removed and its birds count as alive again. A sale with payments cannot be deleted: remove its payments first, each with a reason."
           preview={(v) => (
             <p className="mt-5 glass rounded-xl p-3 text-sm flex justify-between">
               <span className="text-foreground/60">Total</span>
