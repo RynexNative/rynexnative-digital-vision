@@ -132,7 +132,7 @@ function Guard({ perm, children }: { perm: string | string[]; children: ReactNod
 function WorkspaceSwitch({ current, compact }: { current: Workspace; compact?: boolean }) {
   const { data: user } = useCurrentUser()
   const navigate = useNavigate()
-  const available = (user?.workspaces ?? []) as Workspace[]
+  const available = (user?.workspaces ?? (user?.is_superuser ? ["rynexnative", "chickenpoint"] : ["rynexnative"])) as Workspace[]
   if (available.length < 2) return null
   if (compact) {
     const other: Workspace = current === "chickenpoint" ? "rynexnative" : "chickenpoint"
@@ -178,7 +178,7 @@ function Shell() {
 
   // Which business's dashboard is open: from the address, so links and the back button just work.
   // "My account" belongs to both and keeps the one you came from.
-  const available = (user?.workspaces ?? []) as Workspace[]
+  const available = (user?.workspaces ?? (user?.is_superuser ? ["rynexnative", "chickenpoint"] : ["rynexnative"])) as Workspace[]
   const neutral = pathname === "/admin/account"
   const [lastWorkspace, setLastWorkspace] = useState<Workspace>(available.includes("rynexnative") ? "rynexnative" : "chickenpoint")
   const workspace: Workspace = pathname.startsWith(FARM) ? "chickenpoint" : neutral ? lastWorkspace : "rynexnative"

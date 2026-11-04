@@ -53,7 +53,8 @@ export function useSalePayment() {
 export function useDeleteSalePayment() {
   const done = useFarmDone()
   return useMutation({
-    mutationFn: ({ sale, payment }: { sale: number; payment: number }) => dashboardRequest<Sale>(`/farm/sales/${sale}/payments/${payment}/`, { method: "DELETE" }),
+    mutationFn: ({ sale, payment, reason }: { sale: number; payment: number; reason: string }) =>
+      dashboardRequest<Sale>(`/farm/sales/${sale}/payments/${payment}/`, { method: "DELETE", body: { reason } }),
     onSuccess: done,
   })
 }

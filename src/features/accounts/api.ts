@@ -5,8 +5,15 @@ import type { AuditPage, CatalogModule, Role, TeamUser } from "./types"
 
 export const useTeam = (q: string, workspace = "", enabled = true) =>
   useDashboardQuery<TeamUser[]>(["dashboard", "users", q, workspace], `/users/${query({ q, workspace })}`, enabled)
-export const useRoles = (enabled = true) => useDashboardQuery<Role[]>(["dashboard", "roles"], "/roles/", enabled)
-export const useCatalog = () => useDashboardQuery<CatalogModule[]>(["dashboard", "roles", "catalog"], "/roles/catalog/")
+// Roles and modules from a server older than workspaces belong to RynexNative
+export function useRoles(enabled = true) {
+  const result = useDashboardQuery<Role[]>(["dashboard", "roles"], "/roles/", enabled)
+  return { ...result, data: result.data?.map((r) => ({ ...r, workspace: r.workspace ?? "rynexnative" })) }
+}
+export function useCatalog() {
+  const result = useDashboardQuery<CatalogModule[]>(["dashboard", "roles", "catalog"], "/roles/catalog/")
+  return { ...result, data: result.data?.map((m) => ({ ...m, workspace: m.workspace ?? "rynexnative" })) }
+}
 
 export function useAudit(params: Record<string, string>, offset: number) {
   return useDashboardQuery<AuditPage>(["dashboard", "audit", params, offset], `/audit/${query({ ...params, offset: String(offset), limit: "50" })}`)

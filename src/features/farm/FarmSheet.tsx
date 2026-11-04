@@ -13,7 +13,7 @@ import {
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { inputClass } from "@/features/dashboard/styles"
 import { useToast } from "@/hooks/use-toast"
-import { errorMessage, validationMessage } from "@/lib/api"
+import { serverMessage } from "@/lib/api"
 import { cn } from "@/lib/utils"
 import { useBatches, useCustomers, useDeleteFarm, useSaveFarm, type FarmResource } from "./api"
 import { ReceiptField } from "./ReceiptField"
@@ -142,7 +142,7 @@ export function FarmSheet({
           toast({ title: recordId ? "Saved ✅" : "Recorded ✅" })
           onClose()
         },
-        onError: (error) => toast({ variant: "destructive", title: "Could not save", description: validationMessage(error) ?? errorMessage(error, "Please try again.") }),
+        onError: (error) => toast({ variant: "destructive", title: "Could not save", description: serverMessage(error, "Please try again.") }),
       },
     )
   }
@@ -223,7 +223,7 @@ export function FarmSheet({
                     onClose()
                     onDeleted?.()
                   },
-                  onError: (error) => toast({ variant: "destructive", title: "Could not delete", description: errorMessage(error, "Please try again.") }),
+                  onError: (error) => toast({ variant: "destructive", title: "Could not delete", description: serverMessage(error, "Please try again.") }),
                 })
               }
             >
