@@ -77,6 +77,10 @@ export const ACTION_LABELS: Record<string, string> = {
   payments: "Payment",
   delete_payment: "Payment removed",
   from_request: "Quote from request",
+  deliver: "Delivered",
+  cancel: "Cancelled",
+  restore: "Restored",
+  export: "Downloaded",
 }
 
 export const ACTION_TONE: Record<string, string> = {

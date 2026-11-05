@@ -75,22 +75,115 @@ export type Expense = {
 export type CategoryTotal = { category: string; label: string; amount: string }
 export type ExpenseList = { total: string; by_category: CategoryTotal[]; results: Expense[] }
 
+export type Segment = "regular" | "new" | "quiet" | "once" | "none"
+
+export type CustomerStats = {
+  purchases: number
+  first_purchase: string | null
+  last_purchase: string | null
+  days_since: number | null
+  /** How many days usually pass between two purchases */
+  usual_gap_days: number | null
+  next_expected: string | null
+  bought: string
+  birds_bought: number
+  paid: string
+  /** Negative: we owe them (a credit) */
+  owes: string
+  open_orders: number
+  deposits_held: string
+  segment: Segment
+  segment_label: string
+}
+
 export type Customer = {
   id: number
   name: string
   kind: string
   contact_person: string
   phone: string
+  phone2: string
+  whatsapp: string
+  email: string
   location: string
   notes: string
   is_active: boolean
-  sales_count: number
-  bought: string
-  paid: string
-  owes: string
+  stats: CustomerStats
+  created_by: Person | null
+  created_at: string
 }
 
-export type SalePayment = { id: number; date: string; amount: string; method: string; reference: string; created_at: string }
+export type CustomerList = { segments: { key: Segment; label: string; count: number }[]; results: Customer[] }
+
+export type NoteKind = "call" | "whatsapp" | "visit" | "complaint" | "note"
+
+export type CustomerNote = {
+  id: number
+  customer: number
+  customer_name: string
+  customer_phone: string
+  date: string
+  kind: NoteKind
+  text: string
+  follow_up_on: string | null
+  follow_up_done: boolean
+  created_by: Person | null
+  created_at: string
+}
+
+export type SalePayment = {
+  id: number
+  kind: "payment" | "refund"
+  date: string
+  amount: string
+  method: string
+  reference: string
+  /** Paid as a deposit on this order before delivery */
+  from_order: number | null
+  created_by: Person | null
+  created_at: string
+}
+
+export type OrderStatus = "open" | "ready" | "delivered" | "cancelled"
+
+export type Order = {
+  id: number
+  customer: number | null
+  customer_name: string
+  customer_phone: string
+  customer_kind: string
+  buyer: string
+  phone: string
+  ordered_on: string
+  wanted_on: string | null
+  birds: number
+  pricing: "per_kg" | "per_bird"
+  unit_price: string | null
+  est_weight_kg: string | null
+  batch: number | null
+  batch_code: string | null
+  status: OrderStatus
+  sale: number | null
+  cancel_reason: string
+  notes: string
+  payments: SalePayment[]
+  paid: string
+  expected_total: string | null
+  to_pay: string | null
+  created_by: Person | null
+  created_at: string
+}
+
+export type TrashItem = {
+  kind: string
+  kind_label: string
+  id: number
+  label: string
+  deleted_at: string
+  deleted_by: Person | null
+  reason: string
+  can_restore: boolean
+}
 
 export type Sale = {
   id: number
@@ -109,6 +202,7 @@ export type Sale = {
   paid: string
   balance: string
   payments: SalePayment[]
+  order: number | null
   notes: string
   created_by: Person | null
   created_at: string
@@ -122,7 +216,7 @@ export type FarmSummary = {
   birds_alive?: number
   deaths_week?: number
   recent_health?: HealthEvent[]
-  warnings?: { batch: number; text: string }[]
+  warnings?: { batch: number | null; text: string }[]
   costs_month?: string
   costs_month_by_category?: CategoryTotal[]
   unpaid_bills?: string
@@ -132,6 +226,13 @@ export type FarmSummary = {
   owed_total?: string
   owed?: { name: string; customer: number | null; amount: string; sales: number }[]
   profit_month?: string
+  birds_promised?: number
+  orders_due?: Order[]
+  deposits_held?: string
+  refunds_due_total?: string
+  refunds_due?: { name: string; customer: number | null; amount: string; order: number | null; sale: number | null; why: string }[]
+  follow_ups_due?: CustomerNote[]
+  quiet_customers?: { id: number; name: string; phone: string; purchases: number; last_purchase: string | null; usual_gap_days: number | null }[]
 }
 
 export type MonthRow = { month: string; revenue: string; costs: string; profit: string; collected: string }
@@ -204,3 +305,60 @@ export const today = () => {
 }
 
 export const isPdf = (url: string) => /\.pdf($|\?)/i.test(url)
+
+export const SEGMENT_STYLE: Record<Segment, string> = {
+  regular: "bg-emerald-500/10 text-emerald-700 border-emerald-500/30 dark:text-emerald-300",
+  new: "bg-sky-500/10 text-sky-700 border-sky-500/30 dark:text-sky-300",
+  quiet: "bg-red-500/10 text-red-700 border-red-500/30 dark:text-red-300",
+  once: "bg-amber-500/15 text-amber-800 border-amber-500/30 dark:text-amber-300",
+  none: "bg-foreground/5 text-foreground/60 border-foreground/15",
+}
+
+export const SEGMENT_HELP: Record<Segment, string> = {
+  regular: "Buys again and again",
+  new: "First bought in the last 30 days",
+  quiet: "Used to buy but has not for a while: call them",
+  once: "Bought once, more than a month ago",
+  none: "In the list, nothing bought yet",
+}
+
+export const NOTE_KINDS: Record<NoteKind, string> = { call: "Phone call", whatsapp: "WhatsApp / SMS", visit: "Visit", complaint: "Complaint", note: "Note" }
+
+export const ORDER_STATUS: Record<OrderStatus, { label: string; className: string }> = {
+  open: { label: "Waiting", className: "bg-sky-500/10 text-sky-700 border-sky-500/30 dark:text-sky-300" },
+  ready: { label: "Ready to deliver", className: "bg-amber-500/15 text-amber-800 border-amber-500/30 dark:text-amber-300" },
+  delivered: { label: "Delivered", className: "bg-emerald-500/10 text-emerald-700 border-emerald-500/30 dark:text-emerald-300" },
+  cancelled: { label: "Cancelled", className: "bg-foreground/5 text-foreground/60 border-foreground/15" },
+}
+
+/** "0712 345 678" -> "+255712345678" (Tanzanian numbers); others as typed, digits only */
+export function intlPhone(phone: string | null | undefined) {
+  const digits = (phone ?? "").replace(/\D/g, "")
+  if (!digits) return ""
+  if (digits.startsWith("255") && digits.length === 12) return `+${digits}`
+  if (digits.startsWith("0") && digits.length === 10) return `+255${digits.slice(1)}`
+  if (digits.length === 9 && /^[67]/.test(digits)) return `+255${digits}`
+  return (phone ?? "").trim().startsWith("+") ? `+${digits}` : digits
+}
+
+/** "+255712345678" -> "0712345678" */
+export const localPhone = (phone: string | null | undefined) => {
+  const intl = intlPhone(phone)
+  return intl.startsWith("+255") ? `0${intl.slice(4)}` : intl
+}
+
+/** "0712345678" -> "0712 345 678", for reading */
+export const prettyPhone = (phone: string | null | undefined) => {
+  const local = localPhone(phone)
+  return /^0\d{9}$/.test(local) ? `${local.slice(0, 4)} ${local.slice(4, 7)} ${local.slice(7)}` : local
+}
+
+export const waLink = (phone: string, text = "") => `https://wa.me/${intlPhone(phone).replace("+", "")}${text ? `?text=${encodeURIComponent(text)}` : ""}`
+
+/** "today", "yesterday", "12 days ago" */
+export function daysAgo(days: number | null | undefined) {
+  if (days === null || days === undefined) return "never"
+  if (days <= 0) return "today"
+  if (days === 1) return "yesterday"
+  return `${days} days ago`
+}

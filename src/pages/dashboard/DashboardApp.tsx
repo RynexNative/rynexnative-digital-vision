@@ -2,7 +2,9 @@ import { Suspense, useEffect, useState, type ReactNode } from "react"
 import { Navigate, NavLink, Route, Routes, useLocation, useNavigate } from "react-router-dom"
 import {
   Activity,
+  Archive,
   ArrowLeftRight,
+  ClipboardList,
   BarChart3,
   Bird,
   Egg,
@@ -83,6 +85,12 @@ const BatchDetailPage = lazyWithReload(() => import("./farm/BatchDetailPage"))
 const CostsPage = lazyWithReload(() => import("./farm/CostsPage"))
 const SalesPage = lazyWithReload(() => import("./farm/SalesPage"))
 const FarmReportsPage = lazyWithReload(() => import("./farm/FarmReportsPage"))
+const CustomersPage = lazyWithReload(() => import("./farm/CustomersPage"))
+const CustomerDetailPage = lazyWithReload(() => import("./farm/CustomerDetailPage"))
+const CustomerListPrintPage = lazyWithReload(() => import("./farm/CustomerListPrintPage"))
+const CustomerStatementPage = lazyWithReload(() => import("./farm/CustomerStatementPage"))
+const OrdersPage = lazyWithReload(() => import("./farm/OrdersPage"))
+const TrashPage = lazyWithReload(() => import("./farm/TrashPage"))
 
 type Workspace = "rynexnative" | "chickenpoint"
 const FARM = "/admin/chicken-point"
@@ -205,8 +213,11 @@ function Shell() {
     { group: "", to: FARM, label: "Overview", icon: <LayoutDashboard className="h-5 w-5" /> },
     { group: "Farm", to: `${FARM}/batches`, label: "Batches", perm: "cp_flocks.view", icon: <Bird className="h-5 w-5" /> },
     { group: "Farm", to: `${FARM}/costs`, label: "Costs & receipts", short: "Costs", perm: "cp_costs.view", icon: <Receipt className="h-5 w-5" /> },
-    { group: "Farm", to: `${FARM}/sales`, label: "Sales & customers", short: "Sales", perm: "cp_sales.view", icon: <HandCoins className="h-5 w-5" /> },
+    { group: "Farm", to: `${FARM}/sales`, label: "Sales", perm: "cp_sales.view", icon: <HandCoins className="h-5 w-5" /> },
+    { group: "Customers", to: `${FARM}/customers`, label: "Customers", perm: "cp_sales.view", icon: <Users className="h-5 w-5" /> },
+    { group: "Customers", to: `${FARM}/orders`, label: "Orders & deposits", short: "Orders", perm: "cp_sales.view", icon: <ClipboardList className="h-5 w-5" /> },
     { group: "Farm", to: `${FARM}/reports`, label: "Profit & reports", short: "Reports", perm: "cp_reports.view", icon: <PieChart className="h-5 w-5" /> },
+    { group: "Team & settings", to: `${FARM}/deleted`, label: "Deleted items", short: "Deleted", icon: <Archive className="h-5 w-5" /> },
     { group: "Team & settings", to: "/admin/account", label: "My account", icon: <KeyRound className="h-5 w-5" /> },
   ]
   const allItems: NavItem[] = farm ? farmItems : [
@@ -239,7 +250,7 @@ function Shell() {
   // Only what the role allows (the server refuses the rest anyway)
   const items = allItems.filter((item) => !item.perm || can(item.perm))
   // The sidebar and the "More" sheet show the items grouped
-  const GROUPS = ["", "Farm", "Sales", "Operations", "Content & events", "Team & settings"]
+  const GROUPS = ["", "Farm", "Customers", "Sales", "Operations", "Content & events", "Team & settings"]
   const grouped = (list: NavItem[]) => GROUPS.map((g) => ({ group: g, items: list.filter((i) => i.group === g) })).filter((g) => g.items.length)
   // Mobile bottom bar shows the first four; the rest live under "More"
   const primaryItems = items.slice(0, 4)
@@ -270,7 +281,7 @@ function Shell() {
   return (
     <div className="min-h-screen section-muted font-inter lg:flex">
       {/* Sidebar (desktop) */}
-      <aside className="hidden lg:flex lg:flex-col w-64 flex-shrink-0 border-r border-border bg-background sticky top-0 h-screen p-4">
+      <aside className="hidden print:!hidden lg:flex lg:flex-col w-64 flex-shrink-0 border-r border-border bg-background sticky top-0 h-screen p-4">
         <div className="flex items-center gap-2.5 px-2 mb-5 mt-1">
           {farm ? (
             <span className="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center">
@@ -316,7 +327,7 @@ function Shell() {
       </aside>
 
       {/* Top bar (mobile) */}
-      <header className="lg:hidden sticky top-0 z-30 glass backdrop-blur-xl flex items-center justify-between h-14 px-4">
+      <header className="lg:hidden print:hidden sticky top-0 z-30 glass backdrop-blur-xl flex items-center justify-between h-14 px-4">
         <div className="flex items-center gap-2 min-w-0">
           {farm ? (
             <span className="w-7 h-7 rounded-lg bg-amber-500 text-white flex items-center justify-center flex-shrink-0">
@@ -337,9 +348,11 @@ function Shell() {
         </div>
       </header>
 
-      <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-10">
+      <main className="flex-1 min-w-0 px-4 sm:px-6 lg:px-10 py-6 lg:py-10 pb-28 lg:pb-10 print:p-0">
         <div className="max-w-5xl mx-auto">
-          <PushInvite />
+          <div className="print:hidden">
+            <PushInvite />
+          </div>
           {/* Keyed by page so moving to another section clears an earlier error */}
           <ErrorBoundary key={pathname} compact>
           <Suspense
@@ -383,6 +396,12 @@ function Shell() {
               <Route path="chicken-point/costs" element={<Guard perm="cp_costs.view"><CostsPage /></Guard>} />
               <Route path="chicken-point/sales" element={<Guard perm="cp_sales.view"><SalesPage /></Guard>} />
               <Route path="chicken-point/reports" element={<Guard perm="cp_reports.view"><FarmReportsPage /></Guard>} />
+              <Route path="chicken-point/customers" element={<Guard perm="cp_sales.view"><CustomersPage /></Guard>} />
+              <Route path="chicken-point/customers/print" element={<Guard perm="cp_sales.view"><CustomerListPrintPage /></Guard>} />
+              <Route path="chicken-point/customers/:id" element={<Guard perm="cp_sales.view"><CustomerDetailPage /></Guard>} />
+              <Route path="chicken-point/customers/:id/statement" element={<Guard perm="cp_sales.view"><CustomerStatementPage /></Guard>} />
+              <Route path="chicken-point/orders" element={<Guard perm="cp_sales.view"><OrdersPage /></Guard>} />
+              <Route path="chicken-point/deleted" element={<Guard perm={FARM_VIEW}><TrashPage /></Guard>} />
               <Route path="*" element={<OverviewPage />} />
             </Routes>
           </Suspense>
@@ -393,7 +412,7 @@ function Shell() {
       {/* Bottom navigation (mobile) */}
       <nav
         aria-label="Dashboard"
-        className="lg:hidden fixed bottom-0 inset-x-0 z-30 border-t border-foreground/10 bg-background/95 backdrop-blur-xl grid grid-cols-5 pb-[env(safe-area-inset-bottom)]"
+        className="lg:hidden print:hidden fixed bottom-0 inset-x-0 z-30 border-t border-foreground/10 bg-background/95 backdrop-blur-xl grid grid-cols-5 pb-[env(safe-area-inset-bottom)]"
       >
         {primaryItems.map((item) => (
           <NavLink
