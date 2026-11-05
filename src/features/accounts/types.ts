@@ -80,10 +80,12 @@ export const ACTION_LABELS: Record<string, string> = {
   deliver: "Delivered",
   cancel: "Cancelled",
   restore: "Restored",
+  erase: "Deleted forever",
   export: "Downloaded",
 }
 
 export const ACTION_TONE: Record<string, string> = {
+  erase: "bg-red-500/10 text-red-700 border-red-500/30",
   destroy: "bg-red-500/10 text-red-700 border-red-500/30",
   denied: "bg-red-500/10 text-red-700 border-red-500/30",
   login_failed: "bg-amber-500/15 text-amber-800 border-amber-500/30",

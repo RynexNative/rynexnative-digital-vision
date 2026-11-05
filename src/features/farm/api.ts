@@ -85,6 +85,26 @@ export function useOrderAction() {
   })
 }
 
+export type PurgePreview = {
+  batch: { id: number; code: string; chicks_count: number; started_on: string; deleted: boolean }
+  counts: { key: string; label: string; count: number }[]
+  already_deleted: number
+  planned_orders: number
+  money: { costs: string; sales: string; received: string }
+}
+
+export const usePurgePreview = (id: number) => useDashboardQuery<PurgePreview>(key("purge", id), `/farm/batches/${id}/purge/`)
+
+/** Owners only: a batch with everything on it, to Deleted items or forever */
+export function usePurgeBatch() {
+  const done = useFarmDone()
+  return useMutation({
+    mutationFn: ({ id, data }: { id: number; data: { mode: "trash" | "permanent"; reason: string; confirm: string; password?: string } }) =>
+      dashboardRequest<{ detail: string }>(`/farm/batches/${id}/purge/`, { method: "POST", body: data }),
+    onSuccess: done,
+  })
+}
+
 export function useRestore() {
   const done = useFarmDone()
   return useMutation({

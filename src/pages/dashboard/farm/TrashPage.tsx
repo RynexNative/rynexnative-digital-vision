@@ -1,8 +1,9 @@
 import { useState } from "react"
-import { RotateCcw } from "lucide-react"
+import { RotateCcw, Trash2 } from "lucide-react"
 import { buttonGhost } from "@/features/dashboard/styles"
 import { EmptyState, ErrorState, FilterTabs, ListSkeleton, PageHeader, Pill } from "@/features/dashboard/ui"
 import { useRestore, useTrash } from "@/features/farm/api"
+import { PurgeBatchDialog } from "@/features/farm/PurgeBatchDialog"
 import { useToast } from "@/hooks/use-toast"
 import { serverMessage } from "@/lib/api"
 
@@ -14,6 +15,7 @@ export default function TrashPage() {
   const { data = [], isLoading, isError, refetch } = useTrash()
   const restore = useRestore()
   const [kind, setKind] = useState("")
+  const [erasing, setErasing] = useState<number | null>(null)
   const kinds = [...new Map(data.map((i) => [i.kind, i.kind_label])).entries()]
   const items = kind ? data.filter((i) => i.kind === kind) : data
   return (
@@ -39,6 +41,9 @@ export default function TrashPage() {
                   <Pill className="bg-foreground/5 text-foreground/70 border-foreground/15">{item.kind_label}</Pill>
                   {item.label}
                 </p>
+                {item.records_with_it > 0 && (
+                  <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5">With {item.records_with_it} records deleted along with it: restoring the batch brings them all back.</p>
+                )}
                 <p className="text-xs text-foreground/55 mt-1">
                   Deleted {when.format(new Date(item.deleted_at))}
                   {item.deleted_by && ` by ${item.deleted_by.name}`}
@@ -64,10 +69,17 @@ export default function TrashPage() {
                   Restore
                 </button>
               )}
+              {item.can_erase && (
+                <button type="button" onClick={() => setErasing(item.id)} className="h-9 px-3 rounded-lg border border-red-500/40 text-red-700 text-sm font-medium inline-flex items-center gap-1.5 hover:bg-red-500/10">
+                  <Trash2 className="h-4 w-4" />
+                  Delete forever
+                </button>
+              )}
             </li>
           ))}
         </ul>
       )}
+      {erasing !== null && <PurgeBatchDialog batchId={erasing} foreverOnly onClose={() => setErasing(null)} onDone={() => setErasing(null)} />}
     </div>
   )
 }
