@@ -1,5 +1,5 @@
 import type { FarmField, Values } from "./form"
-import { CUSTOMER_KINDS, EXPENSE_CATEGORIES, PAYMENT_METHODS, today } from "./types"
+import { CUSTOMER_KINDS, EXPENSE_CATEGORIES, NOTE_KINDS, PAYMENT_METHODS, today } from "./types"
 
 const HEALTH_OPTIONS = { death: "Deaths", sickness: "Sickness", treatment: "Treatment", vaccination: "Vaccination", weighing: "Weighing", note: "Note" }
 const RECEIVED = { cash: "Cash", mobile: "Mobile money", bank: "Bank" }
@@ -60,8 +60,11 @@ export const expenseDefaults = (): Values => ({ category: "feed", date: today(),
 export const customerFields: FarmField[] = [
   { name: "name", label: "Name", type: "text", required: true, wide: true, placeholder: "e.g. Serena Hotel" },
   { name: "kind", label: "Type", type: "select", options: CUSTOMER_KINDS },
-  { name: "phone", label: "Phone", type: "tel" },
-  { name: "contact_person", label: "Contact person", type: "text" },
+  { name: "contact_person", label: "Contact person", type: "text", placeholder: "e.g. Chef Ali" },
+  { name: "phone", label: "Phone", type: "tel", placeholder: "0712 345 678" },
+  { name: "phone2", label: "Other phone", type: "tel", hint: "Kitchen, accountant..." },
+  { name: "whatsapp", label: "WhatsApp number", type: "tel", hint: "Only if different from the phone" },
+  { name: "email", label: "Email", type: "text" },
   { name: "location", label: "Location", type: "text" },
   { name: "is_active", label: "Status", type: "select", options: { true: "Active", false: "No longer buying" } },
   { name: "notes", label: "Notes", type: "textarea" },
@@ -87,16 +90,42 @@ export const saleFields = (isNew: boolean, withBatch: boolean): FarmField[] => [
 ]
 export const saleDefaults = (): Values => ({ date: today(), pricing: "per_kg", paid_method: "cash" })
 
-export const paymentFields: FarmField[] = [
-  { name: "amount", label: "Amount received (TZS)", type: "number", required: true },
-  { name: "date", label: "Date", type: "date", required: true },
-  { name: "method", label: "Paid by", type: "select", options: RECEIVED },
-  { name: "reference", label: "Reference", type: "text", placeholder: "M-Pesa code, bank ref..." },
-]
-
 /** What the sale form adds up to, before saving */
 export function saleTotal(v: Values) {
   const price = Number(v.unit_price || 0)
   const qty = v.pricing === "per_kg" ? Number(v.weight_kg || 0) : Number(v.birds || 0)
   return price * qty
 }
+
+export const orderFields = (isNew: boolean, withCustomer: boolean): FarmField[] => [
+  ...(withCustomer
+    ? [
+        { name: "customer", label: "Customer", type: "customer", allowEmpty: "Someone not in the list" } as FarmField,
+        { name: "customer_name", label: "Buyer's name", type: "text", required: true, showIf: (v: Values) => !v.customer } as FarmField,
+        { name: "customer_phone", label: "Buyer's phone", type: "tel", showIf: (v: Values) => !v.customer } as FarmField,
+      ]
+    : []),
+  { name: "birds", label: "Number of birds", type: "number", step: "1", required: true },
+  { name: "wanted_on", label: "Wanted on", type: "date", hint: "When they want them" },
+  { name: "pricing", label: "Sold by", type: "select", options: { per_kg: "Per kg", per_bird: "Per bird" } },
+  { name: "unit_price", label: "Agreed price (TZS)", type: "number", hint: "Per kg or per bird; leave empty if not agreed yet" },
+  { name: "est_weight_kg", label: "Expected total weight (kg)", type: "number", showIf: (v) => v.pricing === "per_kg", hint: "To work out what they owe" },
+  { name: "batch", label: "From batch", type: "batch", allowEmpty: "Not decided yet" },
+  ...(isNew
+    ? [
+        { name: "paid_now", label: "Deposit paid now (TZS)", type: "number", hint: "In full or in part; leave empty if nothing yet" } as FarmField,
+        { name: "paid_method", label: "Paid by", type: "select", options: { cash: "Cash", mobile: "Mobile money", bank: "Bank" } } as FarmField,
+        { name: "paid_reference", label: "Reference", type: "text", placeholder: "M-Pesa code, bank ref..." } as FarmField,
+      ]
+    : [{ name: "status", label: "Status", type: "select", options: { open: "Waiting", ready: "Ready to deliver" } } as FarmField]),
+  { name: "notes", label: "Notes", type: "text", wide: true },
+]
+export const orderDefaults = (): Values => ({ pricing: "per_bird", paid_method: "cash", status: "open" })
+
+export const noteFields: FarmField[] = [
+  { name: "kind", label: "What", type: "select", options: NOTE_KINDS },
+  { name: "date", label: "Date", type: "date", required: true },
+  { name: "text", label: "What was said or agreed", type: "textarea", required: true, placeholder: "e.g. Wants 50 birds every Friday; asks for a lower price above 100 birds" },
+  { name: "follow_up_on", label: "Get back to them on", type: "date", hint: "A reminder appears on the overview that day" },
+]
+export const noteDefaults = (): Values => ({ kind: "call", date: today() })

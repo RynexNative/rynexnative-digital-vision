@@ -1,21 +1,12 @@
 import { useState, type ReactNode } from "react"
 import { Loader2, Trash2 } from "lucide-react"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { inputClass } from "@/features/dashboard/styles"
 import { useToast } from "@/hooks/use-toast"
 import { serverMessage } from "@/lib/api"
 import { cn } from "@/lib/utils"
 import { useBatches, useCustomers, useDeleteFarm, useSaveFarm, type FarmResource } from "./api"
+import { ReasonDialog } from "./ReasonDialog"
 import { ReceiptField } from "./ReceiptField"
 import { farmButton, toBody, type FarmField, type Values } from "./form"
 
@@ -109,6 +100,9 @@ export function FarmSheet({
   canDelete = true,
   preview,
   onDeleted,
+  onSubmit,
+  submitLabel,
+  pending,
 }: {
   resource: FarmResource
   title: string
@@ -124,6 +118,10 @@ export function FarmSheet({
   /** Shown under the form, from the current values (e.g. the sale's total) */
   preview?: (values: Values) => ReactNode
   onDeleted?: () => void
+  /** Instead of saving the record (e.g. delivering an order): receives the request body */
+  onSubmit?: (body: Values) => void
+  submitLabel?: string
+  pending?: boolean
 }) {
   const { toast } = useToast()
   const save = useSaveFarm(resource)
@@ -135,6 +133,7 @@ export function FarmSheet({
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (onSubmit) return onSubmit({ ...toBody(visible, values), ...extra })
     save.mutate(
       { id: recordId, data: { ...toBody(visible, values), ...extra } },
       {
@@ -195,9 +194,9 @@ export function FarmSheet({
                 <button type="button" onClick={onClose} className="h-11 px-4 rounded-xl glass font-medium">
                   Cancel
                 </button>
-                <button type="submit" disabled={save.isPending} className={farmButton}>
-                  {save.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-                  {recordId ? "Save" : "Record"}
+                <button type="submit" disabled={save.isPending || pending} className={farmButton}>
+                  {(save.isPending || pending) && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {submitLabel ?? (recordId ? "Save" : "Record")}
                 </button>
               </div>
             </div>
@@ -205,33 +204,31 @@ export function FarmSheet({
         </SheetContent>
       </Sheet>
 
-      <AlertDialog open={confirm} onOpenChange={setConfirm}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete this record?</AlertDialogTitle>
-            <AlertDialogDescription>{deleteText ?? "It will be removed permanently, and the figures will change. The activity log keeps a note of it."}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-red-600 hover:bg-red-700 text-white"
-              onClick={() =>
-                recordId &&
-                remove.mutate(recordId, {
-                  onSuccess: () => {
-                    toast({ title: "Deleted" })
-                    onClose()
-                    onDeleted?.()
-                  },
-                  onError: (error) => toast({ variant: "destructive", title: "Could not delete", description: serverMessage(error, "Please try again.") }),
-                })
-              }
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      {confirm && (
+        <ReasonDialog
+          title="Delete this record?"
+          description={deleteText ?? "It disappears from the lists and the figures, but is kept under Deleted items and can be restored."}
+          confirmLabel="Delete"
+          keepLabel="Keep it"
+          pending={remove.isPending}
+          onClose={() => setConfirm(false)}
+          onConfirm={(reason) =>
+            recordId &&
+            remove.mutate(
+              { id: recordId, reason },
+              {
+                onSuccess: () => {
+                  toast({ title: "Deleted", description: "Kept under Deleted items, where it can be restored." })
+                  setConfirm(false)
+                  onClose()
+                  onDeleted?.()
+                },
+                onError: (error) => toast({ variant: "destructive", title: "Could not delete", description: serverMessage(error, "Please try again.") }),
+              },
+            )
+          }
+        />
+      )}
     </>
   )
 }

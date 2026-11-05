@@ -45,3 +45,10 @@ export function toValues(fields: FarmField[], record: Values | null | undefined,
   values.batch_code = record.batch_code
   return values
 }
+
+/** {a: "1", b: ""} -> "?a=1" */
+export function query(params: Record<string, string>) {
+  const search = new URLSearchParams(Object.entries(params).filter(([, v]) => v))
+  const text = search.toString()
+  return text ? `?${text}` : ""
+}

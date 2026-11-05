@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom"
-import { AlertTriangle, Bird, HandCoins, Receipt, Skull, TrendingUp } from "lucide-react"
+import { AlertTriangle, BellRing, Bird, HandCoins, PhoneCall, Receipt, Skull, TrendingUp, Truck } from "lucide-react"
 import { usePermissions } from "@/features/dashboard/access"
 import { EmptyState, ErrorState, ListSkeleton, PageHeader, Pill } from "@/features/dashboard/ui"
 import { useFarmSummary } from "@/features/farm/api"
 import { BatchCard, Bars, FARM, Stat } from "@/features/farm/ui"
-import { HEALTH_KINDS, num, shortDate, tzs, tzsShort } from "@/features/farm/types"
+import { HEALTH_KINDS, num, shortDate, tzs, tzsShort, waLink } from "@/features/farm/types"
+import { DepositStatus } from "@/features/farm/orders"
+import { cn } from "@/lib/utils"
 import { farmButton } from "@/features/farm/form"
 
 export default function FarmOverviewPage() {
@@ -34,7 +36,7 @@ export default function FarmOverviewPage() {
         <ul className="mb-6 space-y-2">
           {data.warnings.map((w, i) => (
             <li key={i}>
-              <Link to={`${FARM}/batches/${w.batch}`} className="flex items-center gap-3 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm hover:bg-amber-500/15">
+              <Link to={w.batch ? `${FARM}/batches/${w.batch}` : `${FARM}/orders`} className="flex items-center gap-3 rounded-xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm hover:bg-amber-500/15">
                 <AlertTriangle className="h-4 w-4 text-amber-600 flex-shrink-0" />
                 {w.text}
               </Link>
@@ -62,7 +64,91 @@ export default function FarmOverviewPage() {
           />
         )}
         {data.owed_total !== undefined && <Stat label="Customers owe" value={tzsShort(data.owed_total)} tone={Number(data.owed_total) ? "bad" : undefined} />}
+        {data.deposits_held !== undefined && (Number(data.deposits_held) > 0 || Number(data.birds_promised) > 0) && (
+          <Stat label="Deposits held" value={tzsShort(data.deposits_held)} sub={`for ${num(data.birds_promised)} birds ordered, not delivered yet`} />
+        )}
+        {data.refunds_due_total !== undefined && Number(data.refunds_due_total) > 0 && (
+          <Stat label="To refund" value={tzsShort(data.refunds_due_total)} tone="bad" sub={data.refunds_due?.map((r) => r.name).slice(0, 2).join(", ")} />
+        )}
       </div>
+
+      {(data.orders_due?.length || data.follow_ups_due?.length || data.quiet_customers?.length) ? (
+        <div className="grid lg:grid-cols-3 gap-4 mb-8">
+          {data.orders_due && data.orders_due.length > 0 && (
+            <section className="glass rounded-2xl p-4">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="font-semibold flex items-center gap-2">
+                  <Truck className="h-4 w-4 text-amber-600" />
+                  Orders to deliver soon
+                </h2>
+                <Link to={`${FARM}/orders`} className="text-xs text-amber-700 dark:text-amber-400 font-medium">
+                  All →
+                </Link>
+              </div>
+              <ul className="divide-y divide-border text-sm">
+                {data.orders_due.map((o) => (
+                  <li key={o.id} className="py-2">
+                    <p className="flex justify-between gap-2">
+                      <span className="font-medium truncate">{o.buyer}</span>
+                      <span className={cn("text-xs whitespace-nowrap", o.wanted_on && o.wanted_on <= data.today ? "text-red-600 font-semibold" : "text-foreground/55")}>
+                        {o.wanted_on ? shortDate(o.wanted_on) : "No date"}
+                      </span>
+                    </p>
+                    <div className="flex justify-between gap-2 text-xs text-foreground/60">
+                      <span>{num(o.birds)} birds</span>
+                      <DepositStatus order={o} />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {data.follow_ups_due && data.follow_ups_due.length > 0 && (
+            <section className="glass rounded-2xl p-4">
+              <h2 className="font-semibold flex items-center gap-2 mb-2">
+                <BellRing className="h-4 w-4 text-amber-600" />
+                Get back to them today
+              </h2>
+              <ul className="divide-y divide-border text-sm">
+                {data.follow_ups_due.map((n) => (
+                  <li key={n.id} className="py-2">
+                    <Link to={`${FARM}/customers/${n.customer}`} className="font-medium hover:text-amber-700">
+                      {n.customer_name}
+                    </Link>
+                    <p className="text-xs text-foreground/60 line-clamp-2">{n.text}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {data.quiet_customers && data.quiet_customers.length > 0 && (
+            <section className="glass rounded-2xl p-4">
+              <h2 className="font-semibold flex items-center gap-2 mb-1">
+                <PhoneCall className="h-4 w-4 text-amber-600" />
+                Regulars gone quiet
+              </h2>
+              <p className="text-xs text-foreground/55 mb-2">They used to buy and have not for a while. A call can bring them back.</p>
+              <ul className="divide-y divide-border text-sm">
+                {data.quiet_customers.map((c) => (
+                  <li key={c.id} className="py-2 flex items-center justify-between gap-2">
+                    <Link to={`${FARM}/customers/${c.id}`} className="min-w-0 hover:text-amber-700">
+                      <p className="font-medium truncate">{c.name}</p>
+                      <p className="text-xs text-foreground/55">
+                        {c.purchases} purchases · last {c.last_purchase ? shortDate(c.last_purchase) : "—"}
+                      </p>
+                    </Link>
+                    {c.phone && (
+                      <a href={waLink(c.phone, `Habari ${c.name}, `)} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-emerald-700 whitespace-nowrap">
+                        WhatsApp
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
+      ) : null}
 
       {data.batches && (
         <section className="mb-8">
