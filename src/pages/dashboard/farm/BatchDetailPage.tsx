@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { ArrowLeft, Pencil } from "lucide-react"
+import { ArrowLeft, Pencil, ShieldAlert, Trash2 } from "lucide-react"
 import { usePermissions } from "@/features/dashboard/access"
 import { buttonGhost } from "@/features/dashboard/styles"
 import { ErrorState, FilterTabs, ListSkeleton, Pill } from "@/features/dashboard/ui"
@@ -9,6 +9,7 @@ import { FarmSheet } from "@/features/farm/FarmSheet"
 import { toValues, type Values } from "@/features/farm/form"
 import { batchFields } from "@/features/farm/fields"
 import { ExpenseList, HealthList, SaleList } from "@/features/farm/lists"
+import { PurgeBatchDialog } from "@/features/farm/PurgeBatchDialog"
 import { BATCH_STATUS, num, shortDate, tzs } from "@/features/farm/types"
 import { FARM, Stat } from "@/features/farm/ui"
 
@@ -17,7 +18,7 @@ type Tab = "health" | "costs" | "sales"
 export default function BatchDetailPage() {
   const { id = "" } = useParams()
   const navigate = useNavigate()
-  const { can } = usePermissions()
+  const { can, user } = usePermissions()
   const { data: batch, isLoading, isError, refetch } = useBatch(id)
   const tabs = [
     { id: "health" as const, label: "Health log", perm: "cp_flocks.view" },
@@ -26,6 +27,7 @@ export default function BatchDetailPage() {
   ].filter((t) => can(t.perm))
   const [tab, setTab] = useState<Tab>(tabs[0]?.id ?? "health")
   const [editing, setEditing] = useState(false)
+  const [purging, setPurging] = useState(false)
 
   if (isLoading) return <ListSkeleton rows={3} />
   if (isError || !batch) return <ErrorState onRetry={() => refetch()} />
@@ -79,6 +81,23 @@ export default function BatchDetailPage() {
       {tab === "health" && <HealthList batch={batch.id} />}
       {tab === "costs" && <ExpenseList batch={batch.id} />}
       {tab === "sales" && <SaleList batch={batch.id} />}
+
+      {user?.is_superuser && (
+        <section className="mt-12 rounded-2xl border border-red-500/30 p-4 sm:p-5">
+          <h2 className="font-semibold text-red-700 dark:text-red-400 flex items-center gap-2">
+            <ShieldAlert className="h-4 w-4" />
+            Danger zone (owners only)
+          </h2>
+          <p className="text-sm text-foreground/65 mt-1 mb-3">
+            Delete this batch together with its health records, costs, sales and payments: to Deleted items (can be restored) or forever.
+          </p>
+          <button type="button" onClick={() => setPurging(true)} className="h-10 px-4 rounded-xl border border-red-500/50 text-red-700 dark:text-red-400 text-sm font-semibold hover:bg-red-500/10 inline-flex items-center gap-2">
+            <Trash2 className="h-4 w-4" />
+            Delete batch and all its records
+          </button>
+        </section>
+      )}
+      {purging && <PurgeBatchDialog batchId={batch.id} onClose={() => setPurging(false)} onDone={() => navigate(`${FARM}/batches`, { replace: true })} />}
 
       {editing && (
         <FarmSheet

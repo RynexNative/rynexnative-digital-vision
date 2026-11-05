@@ -183,6 +183,10 @@ export type TrashItem = {
   deleted_by: Person | null
   reason: string
   can_restore: boolean
+  /** Records deleted together with this batch (they come back with it) */
+  records_with_it: number
+  /** Owners can erase a deleted batch for good */
+  can_erase: boolean
 }
 
 export type Sale = {
