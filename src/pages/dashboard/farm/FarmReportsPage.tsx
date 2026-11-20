@@ -148,7 +148,7 @@ export default function FarmReportsPage() {
                 {data.batches.map((b) => (
                   <li key={b.id} className="glass rounded-2xl p-4 text-sm">
                     <div className="flex items-center justify-between gap-2 mb-2">
-                      <Link to={`${FARM}/batches/${b.id}`} className="font-semibold hover:text-amber-700 py-1">
+                      <Link to={`${FARM}/batches/${b.id}`} className="font-semibold hover:text-amber-700 py-2.5 -my-2.5 pr-3">
                         {b.code}
                       </Link>
                       <Pill className={BATCH_STATUS[b.status].className}>{BATCH_STATUS[b.status].label}</Pill>
