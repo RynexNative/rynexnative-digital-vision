@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- # Ownership & legal issures -->
+  <meta name="author" content="Casto S Shirima">
+  <meta name="copyright" content="2024 rynexnative">
+
+  <!-- Fonts are served from this site (no extra connection to Google before the first paint).
+       Inter is one variable file for every weight; Poppins only in the weights headings use. -->
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/poppins-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 100 900; src: url(/fonts/inter-latin-wght-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 600; src: url(/fonts/poppins-latin-600-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 700; src: url(/fonts/poppins-latin-700-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 800; src: url(/fonts/poppins-latin-800-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  </style>
+
+  <!-- The API serves the home page sections; open the connection early -->
+  <link rel="preconnect" href="https://api.rynexnative.com" crossorigin>
+
+  <!-- # Favicon main ico -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <!-- PNG fallback for modern browsers -->
+  <link rel="icon" type="image/png" href="/logo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/logo.png" sizes="192x192">
+  
+  <!-- Apple devices -->
+  <link rel="apple-touch-icon" href="/logo.png">
+
+
+  <!-- # http-equiv -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none';"> -->
+
+
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+
+  <!-- Meta Description -->
+  
+
+  <!-- Meta Keywords -->
+  <meta name="keywords" content="Web development in Tanzania, 
+    Full-stack developer Africa,
+    Modern website development,
+    Custom software solutions,    
+    Tech company in East Africa,    
+    Scalable digital platforms,    
+    Secure web applications,
+    Ethical hacking training Tanzania,
+    Learn ethical hacking online,
+    Cybersecurity experts in Africa,
+    Penetration testing services,
+    Secure coding practices,
+    Ethical hacker for hire,
+    Digital security consulting,
+    Professional website design,
+    Software system development,    
+    IT consulting Tanzania,    
+    Custom tech solutions,    
+    Business automation software,    
+    Web app design and development,    
+    Cloud-based systems for businesses,
+    Coding for youth in Africa,
+    Programming mentorship Tanzania,    
+    Digital skills empowerment,    
+    Learn full-stack development,    
+    IT training programs in East Africa,
+    RynexNative company,
+    RynexNative services,    
+    Future of tech in Africa,    
+    Innovative tech company,    
+    Tech for Africa's growth,
+    rynex, Tanzania, Kenya, Uganda, Yiiti">
+
+  <!-- Robots -->
+  
+
+  <!-- News feed for readers and Google -->
+  <link rel="alternate" type="application/rss+xml" title="RynexNative News" href="/rss.xml">
+
+  <!-- Canonical URL -->
+  
+
+  <!-- # Open Graph for social sharing -->
+  
+  
+  
+  
+  
+
+  
+
+  <!-- # Twitter Card -->
+  
+  
+  
+  
+  <!--  -->
+
+  <!-- # Custom Meta -->
+  <meta name="app-version" content="2.1.1">
+
+  <!-- # JSON-LD Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "Rynexnative",
+          "url": "https://rynexnative.com",
+          "logo": "https://rynexnative.com/logo.png",
+          "image":"https://rynexnative.com/logo.png",
+          "sameAs": [
+            "https://www.instagram.com/rynexnative"
+          ],
+          "description": "Your product deserves better. Work with RynexNative for clean, efficient, and user-focused software development. Let RynexNative handle your code while you focus on growth. Get cutting-edge apps, modern designs & expert tech support now. RynexNative is where creativity meets logic.",
+          "founder": {
+            "@type": "Person",
+            "name": "Casto S. Shirima"
+          },
+          "foundingDate": "2021-05-01",
+          "foundingLocation": {
+            "@type": "Place",
+            "name": "Dodoma, Tanzania"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Dodoma mjini, miyuji, mwatano center",
+            "addressLocality": "Dodoma",
+            "addressRegion": "Dodoma",
+            "postalCode": "",
+            "addressCountry": "TZ"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+255687544999",
+            "contactType": "Customer Support",
+            "areaServed": "TZ",
+            "availableLanguage": ["en", "sw"]
+          },
+          "email": "info@rynexnative.com",
+          "telephone": "+255687544999",
+          "legalName": "Rynexnative",
+          "numberOfEmployees": 15,
+          "slogan": "Innovation and Security at Every Step — The Mark of a Nation."
+        },
+        {
+          "@type": "WebSite",
+          "name": "Rynexnative",
+          "alternateName": [
+            "RynexNative Technologies",
+            "RynexNative",
+            "RynexNative Lab",
+            "RynexNative Systems"
+          ],
+          "url": "https://rynexnative.com/"
+        },
+        {
+          "@type": "ImageObject",
+          "@id": "https://rynexnative.com/logo.png",
+          "url": "https://rynexnative.com/logo.png",
+          "width": 500,
+          "height": 500,
+          "caption": "Rynexnative Logo"
+        }
+      ]
+    }
+    </script>
+    
+  <script type="module" crossorigin src="/assets/index-CUPDgQsk.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CentDAxT.css">
+
+  <title>Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026, | RynexNative News</title>
+  <meta name="description" content="Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026, following a multi-layered scandal involving…">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://rynexnative.com/news/jensen-huang-the-co-founder-and-longtime-ceo-of-nvidia-resigned-effective-immedi/">
+  <meta property="og:site_name" content="RynexNative">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026, | RynexNative News">
+  <meta property="og:description" content="Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026, following a multi-layered scandal involving…">
+  <meta property="og:url" content="https://rynexnative.com/news/jensen-huang-the-co-founder-and-longtime-ceo-of-nvidia-resigned-effective-immedi/">
+  <meta property="og:image" content="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1794603734/rynexnative/kzyugpviqqqqglicmlzu.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026, | RynexNative News">
+  <meta name="twitter:description" content="Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026, following a multi-layered scandal involving…">
+  <meta name="twitter:image" content="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1794603734/rynexnative/kzyugpviqqqqglicmlzu.jpg">
+  <meta property="article:published_time" content="2026-11-14T00:02:23.470895+03:00">
+  <meta property="article:modified_time" content="2026-11-14T00:02:23.470973+03:00">
+  <meta property="article:section" content="Announcement">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://rynexnative.com/news/jensen-huang-the-co-founder-and-longtime-ceo-of-nvidia-resigned-effective-immedi/"},"headline":"Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026,","description":"Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026, following a multi-layered scandal involving…","image":["https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1794603734/rynexnative/kzyugpviqqqqglicmlzu.jpg"],"datePublished":"2026-11-14T00:02:23.470895+03:00","dateModified":"2026-11-14T00:02:23.470973+03:00","articleSection":"Announcement","author":{"@type":"Organization","name":"RynexNative","url":"https://rynexnative.com"},"publisher":{"@type":"Organization","name":"RynexNative","url":"https://rynexnative.com","logo":{"@type":"ImageObject","url":"https://rynexnative.com/logo.png"}}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rynexnative.com/"},{"@type":"ListItem","position":2,"name":"News","item":"https://rynexnative.com/news/"},{"@type":"ListItem","position":3,"name":"Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026,","item":"https://rynexnative.com/news/jensen-huang-the-co-founder-and-longtime-ceo-of-nvidia-resigned-effective-immedi/"}]}</script>
+</head>
+
+<body>
+  <div id="root"><div class="prerendered max-w-3xl mx-auto px-4 pt-32 pb-16"><article>
+<p><a href="/news/">News</a> · Announcement · <time datetime="2026-11-14T00:02:23.470895+03:00">14 November 2026</time></p>
+<h1>Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026,</h1>
+<p><strong>Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026, following a multi-layered scandal involving extramarital affairs and U.S.</strong></p>
+<img src="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1794603734/rynexnative/kzyugpviqqqqglicmlzu.jpg" alt="Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026," width="1200" style="max-width:100%;height:auto;border-radius:1rem">
+<p>Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026, following a multi-layered scandal involving extramarital affairs and U.S. national security concerns over Chinese espionage. His sudden departure abruptly ends a 33-year tenure during which he built the chipmaker into the dominant powerhouse of the artificial intelligence boom, peaking at a $5 trillion valuation just weeks earlier.</p>
+<p>Timeline of the Scandal</p>
+<p>• Initial Intelligence Reports (Late October 2026). Reports emerged in The New York Times revealing that U.S. intelligence officials suspected Jensen Huang had been targeted by a Chinese intelligence operation. At the time, Nvidia dismissed the concerns, stating there was nothing unusual about his business interactions.<br>• The Espionage and Megaspeed Connection (November 6, 2026). Further investigative reporting from The New York Times and Financial Times identified the woman at the center of the intelligence probe as Alice Huang (also reported as Alice Wong), a senior executive at Megaspeed International. U.S. officials allege she is a Chinese intelligence asset who used her romantic relationship with Huang to acquire at least $7.5 billion worth of restricted Nvidia AI chips for China via the Singapore-based cloud company, bypassing U.S. export controls.<br>• Public Admission and Board Investigation (November 8, 2026). Facing mounting pressure, Huang sent a letter to Nvidia staff admitting he had been unfaithful to his wife of over three decades, Lori, and apologized to his family and employees. Nvidia&#39;s Board of Directors initially stood behind him while hiring the prominent law firm Wachtell, Lipton, Rosen &amp; Katz to conduct an independent investigation into whether national security or corporate secrets had been compromised.<br>• Internal Workplace Affairs Exposed (November 11, 2026). The crisis reached a breaking point when The New York Times and Reuters revealed that Huang had engaged in separate extramarital affairs with employees inside Nvidia. One of the women was identified as Kimberly Powell, a senior Nvidia executive running the company&#39;s healthcare division who reported directly to Huang.<br>• Resignation and Ouster (November 12, 2026). With internal governance rules violated by relationships with direct reports and investor confidence crumbling, the board met to discuss his removal. Shortly afterward, Nvidia officially announced that Huang had resigned as President, CEO, and member of the Board of Directors.</p>
+<p>Leadership Transition and Immediate Fallout</p>
+<p>• Interim Leadership. Nvidia&#39;s board appointed longtime Executive Vice President and Chief Financial Officer Colette Kress as Interim CEO while launching a search for a permanent successor among both internal and external candidates. Longtime board member Harvey C. Jones was simultaneously named Nvidia&#39;s first-ever Chair of the Board.<br>• external candidates. Longtime board member Harvey C. Jones was simultaneously named Nvidia&#39;s first-ever Chair of the Board.<br>• Market Impact. News of the scandal and Huang&#39;s exit triggered severe volatility on Wall Street. Nvidia shares plunged up to 13% in early trading on Thursday before closing down roughly 4.3%, bringing the company&#39;s valuation down to around $4 trillion—a loss of nearly $2 trillion from its October 2026 peak.<br>• Congressional and Political Scrutiny. The fallout has spilled into Washington, where three Republican-led House committees summoned Huang to testify in a closed-door hearing regarding the Megaspeed chip transfers. Huang has agreed to appear before Congress prior to Thanksgiving. Meanwhile, U.S. President Donald Trump—who had initially urged Huang to fight for his job—publicly praised Huang&#39;s legacy and suggested former Apple CEO Tim Cook as an ideal replacement. China&#39;s Foreign Ministry has strongly denied the espionage claims, calling them a smear.<br>Kwa taarifa za hivi karibuni (Novemba 2026), hakuna CEO wa kampuni ya mtandao wa simu nchini Tanzania aliyetangaza kujiuzulu. Hata hivyo, katika sekta ya teknolojia duniani, Jensen Huang, ambaye ni mwanzilishi na CEO wa kampuni kubwa ya teknolojia ya Nvidia, amejiuzulu wadhifa wake mnamo Novemba 12, 2026.</p>
+<p>Mambo Muhimu Kuhusu Kujiuzulu kwa Jensen Huang (Nvidia)</p>
+<p>• Sababu ya Kuondoka. Huang amejiuzulu baada ya kuibuka kwa kashfa na uchunguzi kuhusu mahusiano yake binafsi na mwanamke anayeshukiwa kuwa jasusi wa China, pamoja na uhusiano mwingine na kiongozi mwandamizi ndani ya kampuni hiyo.<br>• Kaimu Mkurugenzi Mkuu. Bodi ya Wakurugenzi ya Nvidia imemteua Colette Kress, ambaye alikuwa Afisa Mkuu wa Fedha (CFO), kuwa CEO wa muda wakati mchakato wa kutafuta mrithi wa kudumu ukiendelea.<br>• Athari Kwenye Soko. Kufuatia kuondoka kwa kiongozi huyo aliyeiongoza kampuni hiyo kwa miaka 33, thamani ya soko ya Nvidia ilishuka chini ya dola trilioni 4.<br>Ikiwa ulikuwa unalenga kampuni mahususi ya mawasiliano ya simu (kama Vodacom, Airtel, Yas/Tigo, au Halotel) au mtandao wa kijamii, unaweza kutaja jina lake ili kupata taarifa za kina zaidi.<br>Je, kuna kampuni mahususi ya mawasiliano au mtandao wa kijamii unayotaka niangalie taarifa za uongozi wake? Nitajie jina lake ili nikupatie uhakika.</p>
+<p>Naomba unielezee kisa kizima kiundani na kwa kingereza kiundani kabisa</p>
+<p>Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026, following a multi-layered scandal involving extramarital affairs and U.S. national security concerns over Chinese espionage. His sudden departure abruptly ends a 33-year tenure during which he built the chipmaker into the dominant powerhouse of the artificial intelligence boom, peaking at a $5 trillion valuation just weeks earlier.</p>
+<p>Timeline of the Scandal</p>
+<p>• Initial Intelligence Reports (Late October 2026). Reports emerged in The New York Times revealing that U.S. intelligence officials suspected Jensen Huang had been targeted by a Chinese intelligence operation. At the time, Nvidia dismissed the concerns, stating there was nothing unusual about his business interactions.<br>• The Espionage and Megaspeed Connection (November 6, 2026). Further investigative reporting from The New York Times and Financial Times identified the woman at the center of the intelligence probe as Alice Huang (also reported as Alice Wong), a senior executive at Megaspeed International. U.S. officials allege she is a Chinese intelligence asset who used her romantic relationship with Huang to acquire at least $7.5 billion worth of restricted Nvidia AI chips for China via the Singapore-based cloud company, bypassing U.S. export controls.<br>• Public Admission and Board Investigation (November 8, 2026). Facing mounting pressure, Huang sent a letter to Nvidia staff admitting he had been unfaithful to his wife of over three decades, Lori, and apologized to his family and employees. Nvidia&#39;s Board of Directors initially stood behind him while hiring the prominent law firm Wachtell, Lipton, Rosen &amp; Katz to conduct an independent investigation into whether national security or corporate secrets had been compromised.<br>• Internal Workplace Affairs Exposed (November 11, 2026). The crisis reached a breaking point when The New York Times and Reuters revealed that Huang had engaged in separate extramarital affairs with employees inside Nvidia. One of the women was identified as Kimberly Powell, a senior Nvidia executive running the company&#39;s healthcare division who reported directly to Huang.<br>• Resignation and Ouster (November 12, 2026). With internal governance rules violated by relationships with direct reports and investor confidence crumbling, the board met to discuss his removal. Shortly afterward, Nvidia officially announced that Huang had resigned as President, CEO, and member of the Board of Directors.</p>
+<p>Leadership Transition and Immediate Fallout</p>
+<p>• Interim Leadership. Nvidia&#39;s board appointed longtime Executive Vice President and Chief Financial Officer Colette Kress as Interim CEO while launching a search for a permanent successor among both internal and external candidates. Longtime board member Harvey C. Jones was simultaneously named Nvidia&#39;s first-ever Chair of the Board.<br>• Market Impact. News of the scandal and Huang&#39;s exit triggered severe volatility on Wall Street. Nvidia shares plunged up to 13% in early trading on Thursday before closing down roughly 4.3%, bringing the company&#39;s valuation down to around $4 trillion—a loss of nearly $2 trillion from its October 2026 peak.<br>• Congressional and Political Scrutiny. The fallout has spilled into Washington, where three Republican-led House committees summoned Huang to testify in a closed-door hearing regarding the Megaspeed chip transfers. Huang has agreed to appear before Congress prior to Thanksgiving. Meanwhile, U.S. President Donald Trump—who had initially urged Huang to fight for his job—publicly praised Huang&#39;s legacy and suggested former Apple CEO Tim Cook as an ideal replacement. China&#39;s Foreign Ministry has strongly denied the espionage claims, calling them a smear.<br>Would you like to explore who the leading candidates are to permanently replace Jensen Huang at Nvidia, or look closer at how the Megaspeed chip-smuggling allegations affect U.S.-China tech relations?</p>
+<p>Yes go on</p>
+<p>The fallout from Jensen Huang’s resignation has split into two major storylines: a high-stakes race to replace a founder who left no clear heir, and a deepening geopolitical crisis in Washington and Southeast Asia over how restricted AI chips reached China.</p>
+<p>1. The Search for Nvidia&#39;s Next CEO</p>
+<p>Finding a permanent successor for Huang is uniquely difficult because he maintained an unusually flat organizational structure with roughly 60 executives reporting directly to him and no designated &quot;number two&quot;. While CFO Colette Kress serves as interim CEO, Nvidia’s board has hired an outside search firm to evaluate both internal and external contenders.<br>• Rene Haas (CEO of Arm Holdings). According to the Financial Times, Nvidia’s board has already approached Haas. He spent seven years as an executive at Nvidia more than a decade ago, maintains close ties with the board, and leads Arm—whose chip architecture powers Nvidia&#39;s Grace and Vera CPUs.<br>• Ian Buck (Nvidia VP of Hyperscale and HPC). Considered the top internal technical candidate, Buck runs Nvidia’s data center business and invented CUDA, the foundational software platform that locked developers into Nvidia’s ecosystem. However, analysts note he lacks experience running a massive publicly traded company.<br>• Lisa Su (CEO of AMD). Frequently cited by Wall Street analysts as a dream external pick, Su is widely credited with engineering AMD&#39;s turnaround into a major semiconductor powerhouse, though poaching her from Nvidia’s primary rival would be a massive corporate coup.<br>• Other External Tech Leaders. Names circulating in executive recruitment and political circles include Apple hardware chief Johny Srouji, AWS CEO Matt Garman, Micron CEO Sanjay Mehrotra, and former Apple CEO Tim Cook, whom President Donald Trump publicly suggested for the role.</p>
+<p>2. The Megaspeed Loophole and Geopolitical Fallout</p>
+<p>The scandal has exposed major weaknesses in U.S. efforts to keep advanced artificial intelligence hardware out of China, triggering political infighting in Washington and crackdowns in Southeast Asia.<br>• How Megaspeed Operated. Spun off from a Chinese gaming company, Singapore-based Megaspeed International rapidly grew into Nvidia’s largest Southeast Asian customer, purchasing over $4.8 billion worth of Nvidia AI equipment between 2024 and 2026. Operating as a &quot;neocloud&quot; provider, Megaspeed built data centers in Malaysia and Singapore to legally rent computing power to Chinese tech giants like Alibaba—a major loophole in U.S. export rules. U.S. investigators also suspect the firm physically smuggled restricted chips across the border into China.<br>• Singapore&#39;s Crackdown. On November 12, Singapore’s Ministry of Home Affairs announced it had permanently barred Alice Huang (born Huang Le) from re-entering the country and issued her a stern warning for giving false statements to police to downplay her leadership role at Megaspeed. Singaporean authorities noted they had impounded her passport in 2025 but received &quot;limited information or assistance&quot; from U.S. officials when they requested help investigating the company.<br>• Infighting in the Trump Administration. The scandal has sparked public blame inside Washington. Treasury Secretary Scott Bessent told CNBC that multiple agencies had pushed for months to blacklist Megaspeed, blaming Commerce Secretary Howard Lutnick for delaying the move. Reports from The New York Times indicate the Commerce Department had previously halted a chip inquiry into Megaspeed following direct intervention from Nvidia.<br>• Congressional Subpoenas. Both the House and the Senate Banking Committee—chaired by Republican Senator Tim Scott—have summoned Jensen Huang and Commerce Secretary Howard Lutnick to testify in December regarding the national security lapses, warning of formal subpoenas if they do not appear. Meanwhile, China&#39;s Foreign Ministry has warned Washington against using the allegations as a pretext to impose stricter export controls on AI chips.<br>Would you like to look at how Nvidia&#39;s stock and the broader AI market are reacting to this leadership vacuum, or examine the specific U.S. export laws that allowed cloud companies in Southeast Asia to rent Nvidia chips to China?<br>BBC<br>The rise and fall of Jensen Huang - how the tech ... - BBC<br>12 Nov 2026 — The rise and fall of Jensen Huang - how the tech superstar became mired in scandal. 7 hours ago. Share. Save. Add as preferred on Google. Michael Race,. Peter H...<br>CNN<br>Alice Huang and Nvidia; what we know about ... - CNN<br>10 Nov 2026 — Alice Huang, the alleged spy at the center of the Nvidia scandal. Alice Huang&#39;s social media posts in the US identify her as a 43-year-old Chinese citizen by th...<br>YouTube·WatchMojo.com<br>The Nvidia Scandal Explained<br>10 Nov 2026 — The scandal caused Nvidia&#39;s market value to drop by $330 billion US. US investigators had been looking into where some Nvidia chips sold to Mega Speed, a Singap...<br>12:10<br>Newsweek<br>Who could replace Jensen Huang as Nvidia CEO? 5 ...<br>November 13, 2026 — Huang&#39;s departure followed reports of two affairs: one with a Chinese national who U.S. intelligence sources reportedly suspected was a spy, and another with an...<br>CNBC<br>Why Singapore keeps surfacing in Nvidia chips and China ...<br>13 Nov 2026 — Jensen Huang has resigned as Nvidia CEO on Thursday, ending 33 years at the helm after revelations that he had two extramarital affairs, plunging the chipmaker<br>Bloomberg.com<br>Nvidia Drama Triggers Difficult Search for Huang&#39;s Successor<br>12 Nov 2026 — longtime Chief Financial Officer Colette Kress is serving as interim CEO. runs Nvidia&#39;s products for data centers such as its AI chips. is also the inventor of ...<br>Instagram·timesnow<br>Nvidia&#39;s board has reportedly approached Arm CEO Rene ...<br>November 13, 2026 — Rene Haas as a potential successor to Jensen Huang, considered, with no guarantee he will receive or accept an offer.<br>The Indian Express<br>Who will lead Nvidia after Jensen Huang? Meet the ...<br>13 Nov 2026 — After Huang&#39;s exit, the company appointed chief financial officer Colette Kress as interim CEO while it searches for a permanent replacement, according to The N...<br>Fortune<br>Nvidia&#39;s next CEO: The outside contenders to ...<br>November 13, 2026 — Colette Kress, chief financial officer at Nvidia since “He spent seven years at Nvidia and understands Jensen&#39;s culture;<br>Fox Business<br>New candidate emerges to replace Jensen Huang as Nvidia CEO<br>13 Nov 2026 — Nvidia&#39;s Board of Directors has approached Rene Haas, the CEO of British chipmaker Arm, in its search for the successor to Jensen Huang, according to a report f...<br>BBC<br>Bessent blames Lutnick&#39;s department for not ... - BBC<br>13 Nov 2026 — US Treasury Secretary Scott Bessent has blamed the Commerce Department, run by Howard Lutnick, for failing to properly oversee the export of high-spec Nvidia ch...<br>DW.com<br>Megaspeed: Nvidia partner at the center of the spy affair<br>November 10, 2026 — This type of firm is often referred to as a &quot;neocloud&quot;. It buys Nvidia chips and computing power and then rents it out — in this case, at multiple sites across ...<br>Atlantic Council<br>Beyond the spy scandal: What the Nvidia<br>November 13, 2026 — But the company also faces suspicions that it has physically diverted restricted chips to China, which is prohibited under export controls. Megaspeed denies wro...<br>The New York Times<br>Commerce Dept. Chip Inquiry Was Halted After Nvidia ...<br>November 9, 2026 — A representative for Megaspeed said the company was conducting an internal investigation into allegations of chip diversion and had repeatedly offered to cooper...<br>NBC News<br>Megaspeed, chip firm at center of Nvidia scandal, pledges to ...<br>November 12, 2026 — authorities had interviewed Huang and impounded her passport in 2025, but that its requests for cooperation from U.S. authorities had gone unanswered.<br>Facebook·Al Jazeera English<br>China has warned the US against imposing additional ...<br>November 13, 2026 — This video details a major espionage controversy involving Nvidia&#39;s head of Artificial Intelligence, Jensen Huang, and a suspected Chinese spy named Alice Wong.<br>1:08</p>
+<p>2. The Megaspeed Loophole and Geopolitical Fallout</p>
+<p>The scandal has exposed major weaknesses in U.S. efforts to keep advanced artificial intelligence hardware out of China, triggering political infighting in Washington and crackdowns in Southeast Asia.<br>• How Megaspeed Operated. Spun off from a Chinese gaming company, Singapore-based Megaspeed International rapidly grew into Nvidia’s largest Southeast Asian customer, purchasing over $4.8 billion worth of Nvidia AI equipment between 2024 and 2026. Operating as a &quot;neocloud&quot; provider, Megaspeed built data centers in Malaysia and Singapore to legally rent computing power to Chinese tech giants like Alibaba—a major loophole in U.S. export rules. U.S. investigators also suspect the firm physically smuggled restricted chips across the border into China.<br>• Singapore&#39;s Crackdown. On November 12, Singapore’s Ministry of Home Affairs announced it had permanently barred Alice Huang (born Huang Le) from re-entering the country and issued her a stern warning for giving false statements to police to downplay her leadership role at Megaspeed. Singaporean authorities noted they had impounded her passport in 2025 but received &quot;limited information or assistance&quot; from U.S. officials when they requested help investigating the company.<br>• Infighting in the Trump Administration. The scandal has sparked public blame inside Washington. Treasury Secretary Scott Bessent told CNBC that multiple agencies had pushed for months to blacklist Megaspeed, blaming Commerce Secretary Howard Lutnick for delaying the move. Reports from The New York Times indicate the Commerce Department had previously halted a chip inquiry into Megaspeed following direct intervention from Nvidia.<br>• Congressional Subpoenas. Both the House and the Senate Banking Committee—chaired by Republican Senator Tim Scott—have summoned Jensen Huang and Commerce Secretary Howard Lutnick to testify in December regarding the national security lapses, warning of formal subpoenas if they do not appear. Meanwhile, China&#39;s Foreign Ministry has warned Washington against using the allegations as a pretext to impose stricter export controls on AI chips.</p>
+<p>1. How Nvidia Stock and the AI Market Are Reacting</p>
+<p>• Sharp Selloff and Retail Dip-Buying. When news of Huang’s resignation broke on November 12, Nvidia shares plunged roughly 14% in early trading before retail dip-buyers stepped in, narrowing the daily loss to 4.34%. Over the week since the scandal first erupted, Nvidia has lost more than $300 billion in market value, pushing its valuation below $4 trillion.<br>• Wall Street Succession Fears. Analysts warn that Nvidia faces an &quot;uninvestable&quot; period of uncertainty because Huang had no clear successor and personally managed key government and customer relationships. Investment firm Bernstein responded by slashing its price target on Nvidia in half from $400 to $200.<br>• Ripple Effects Across the AI Ecosystem. Because Nvidia finances many of the startups and &quot;neocloud&quot; data centers that buy its chips—a practice known as circular financing—its turmoil dragged down partners like CoreWeave (-13.6%), Nebius (-20%), Micron (-5.8%), and Taiwan Semiconductor (-2.3%).<br>• Gains for Rivals. Competitors are seeing investor inflows on bets that customers will diversify their chip supply. Rivals AMD and Broadcom rose on Thursday following the resignation, while Chinese domestic chipmakers like Cambricon Technologies and MetaX surged over 8% in Shanghai on expectations of stronger local demand.</p>
+<p>2. The U.S. Export Loophole and Southeast Asia Cloud Rentals</p>
+<p>• How the Loophole Works. Under current U.S. Bureau of Industry and Security (BIS) rules, Nvidia is banned from physically shipping its top-tier AI processors (such as H100, H200, and Blackwell chips) to China. However, U.S. export law regulates physical goods rather than remote cloud computing. This allowed Singapore- and Malaysia-based cloud operators like Megaspeed to legally buy billions of dollars in Nvidia hardware and rent out remote server access to Chinese tech giants like Alibaba.<br>• Physical Smuggling Probes. Alongside legal cloud rentals, U.S. prosecutors and Bloomberg investigations uncovered evidence that entities linked to Alice Huang physically diverted restricted Nvidia servers into mainland China, including facilities near Shanghai.<br>• Closing the Gap with the RASA Bill. The scandal has created overwhelming bipartisan momentum in Washington to pass the Remote Access Security Act (RASA). Already approved by the House of Representatives in a 369–22 vote earlier in 2026, the bill awaits Senate action and would give the U.S. Commerce Department explicit authority to block Chinese firms from remotely accessing restricted American chips via foreign data centers.<br>• Scramble for Compute Power. Fearing an imminent U.S. ban on offshore rentals and new Commerce Department restrictions targeting Malaysia and Singapore, Chinese AI labs are rushing to lock in long-term server leases across Southeast Asia before the loophole shuts.</p>
+</article></div></div>
+</body>
+
+</html>

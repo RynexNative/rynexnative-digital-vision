@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://rynexnative.com/news/apple-outage-hits-icloud-app-store-as-company-rules-out-is-not-cyberattack/</loc>
+    <news:news>
+      <news:publication><news:name>RynexNative</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-11-18T08:54:23.862Z</news:publication_date>
+      <news:title>Apple outage hits iCloud, App Store as company rules out is not cyberattack</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://rynexnative.com/news/jensen-huang-the-co-founder-and-longtime-ceo-of-nvidia-resigned-effective-immedi/</loc>
+    <news:news>
+      <news:publication><news:name>RynexNative</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-11-13T21:02:23.470Z</news:publication_date>
+      <news:title>Jensen Huang, the co-founder and longtime CEO of Nvidia, resigned effective immediately on November 12, 2026,</news:title>
+    </news:news>
+  </url>
+  <url>
+    <loc>https://rynexnative.com/news/major-microsoft-365-outage-nov-12-13-2026/</loc>
+    <news:news>
+      <news:publication><news:name>RynexNative</news:name><news:language>en</news:language></news:publication>
+      <news:publication_date>2026-11-13T12:52:08.838Z</news:publication_date>
+      <news:title>Major Microsoft 365 outage (Nov 12-13, 2026)</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://rynexnative.com/news/cisco/</loc>
     <news:news>
       <news:publication><news:name>RynexNative</news:name><news:language>en</news:language></news:publication>
@@ -14,22 +38,6 @@
       <news:publication><news:name>RynexNative</news:name><news:language>en</news:language></news:publication>
       <news:publication_date>2026-10-28T13:03:28.247Z</news:publication_date>
       <news:title>CyberStrikeAI Unleashes 44 AI Agents to Automate Cyberattacks on Japan</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://rynexnative.com/news/https-thehackernews-com-2026-10-russian-linked-hackers-used-new-mesh-html/</loc>
-    <news:news>
-      <news:publication><news:name>RynexNative</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-10-24T21:18:34.944Z</news:publication_date>
-      <news:title>&quot;Russian-Linked Hackers Used New Mesh Network Backdoor in Destructive Ukraine Attack&quot;.</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://rynexnative.com/news/yams/</loc>
-    <news:news>
-      <news:publication><news:name>RynexNative</news:name><news:language>en</news:language></news:publication>
-      <news:publication_date>2026-10-02T19:39:36.739Z</news:publication_date>
-      <news:title>&quot;Yams&quot; - Hautateseka tena kusimamia Shuhuli yoyote katika Shule yako.</news:title>
     </news:news>
   </url>
 </urlset>

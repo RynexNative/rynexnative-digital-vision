@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- # Ownership & legal issures -->
+  <meta name="author" content="Casto S Shirima">
+  <meta name="copyright" content="2024 rynexnative">
+
+  <!-- Fonts are served from this site (no extra connection to Google before the first paint).
+       Inter is one variable file for every weight; Poppins only in the weights headings use. -->
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/poppins-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 100 900; src: url(/fonts/inter-latin-wght-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 600; src: url(/fonts/poppins-latin-600-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 700; src: url(/fonts/poppins-latin-700-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 800; src: url(/fonts/poppins-latin-800-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  </style>
+
+  <!-- The API serves the home page sections; open the connection early -->
+  <link rel="preconnect" href="https://api.rynexnative.com" crossorigin>
+
+  <!-- # Favicon main ico -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <!-- PNG fallback for modern browsers -->
+  <link rel="icon" type="image/png" href="/logo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/logo.png" sizes="192x192">
+  
+  <!-- Apple devices -->
+  <link rel="apple-touch-icon" href="/logo.png">
+
+
+  <!-- # http-equiv -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none';"> -->
+
+
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+
+  <!-- Meta Description -->
+  
+
+  <!-- Meta Keywords -->
+  <meta name="keywords" content="Web development in Tanzania, 
+    Full-stack developer Africa,
+    Modern website development,
+    Custom software solutions,    
+    Tech company in East Africa,    
+    Scalable digital platforms,    
+    Secure web applications,
+    Ethical hacking training Tanzania,
+    Learn ethical hacking online,
+    Cybersecurity experts in Africa,
+    Penetration testing services,
+    Secure coding practices,
+    Ethical hacker for hire,
+    Digital security consulting,
+    Professional website design,
+    Software system development,    
+    IT consulting Tanzania,    
+    Custom tech solutions,    
+    Business automation software,    
+    Web app design and development,    
+    Cloud-based systems for businesses,
+    Coding for youth in Africa,
+    Programming mentorship Tanzania,    
+    Digital skills empowerment,    
+    Learn full-stack development,    
+    IT training programs in East Africa,
+    RynexNative company,
+    RynexNative services,    
+    Future of tech in Africa,    
+    Innovative tech company,    
+    Tech for Africa's growth,
+    rynex, Tanzania, Kenya, Uganda, Yiiti">
+
+  <!-- Robots -->
+  
+
+  <!-- News feed for readers and Google -->
+  <link rel="alternate" type="application/rss+xml" title="RynexNative News" href="/rss.xml">
+
+  <!-- Canonical URL -->
+  
+
+  <!-- # Open Graph for social sharing -->
+  
+  
+  
+  
+  
+
+  
+
+  <!-- # Twitter Card -->
+  
+  
+  
+  
+  <!--  -->
+
+  <!-- # Custom Meta -->
+  <meta name="app-version" content="2.1.1">
+
+  <!-- # JSON-LD Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "Rynexnative",
+          "url": "https://rynexnative.com",
+          "logo": "https://rynexnative.com/logo.png",
+          "image":"https://rynexnative.com/logo.png",
+          "sameAs": [
+            "https://www.instagram.com/rynexnative"
+          ],
+          "description": "Your product deserves better. Work with RynexNative for clean, efficient, and user-focused software development. Let RynexNative handle your code while you focus on growth. Get cutting-edge apps, modern designs & expert tech support now. RynexNative is where creativity meets logic.",
+          "founder": {
+            "@type": "Person",
+            "name": "Casto S. Shirima"
+          },
+          "foundingDate": "2021-05-01",
+          "foundingLocation": {
+            "@type": "Place",
+            "name": "Dodoma, Tanzania"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Dodoma mjini, miyuji, mwatano center",
+            "addressLocality": "Dodoma",
+            "addressRegion": "Dodoma",
+            "postalCode": "",
+            "addressCountry": "TZ"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+255687544999",
+            "contactType": "Customer Support",
+            "areaServed": "TZ",
+            "availableLanguage": ["en", "sw"]
+          },
+          "email": "info@rynexnative.com",
+          "telephone": "+255687544999",
+          "legalName": "Rynexnative",
+          "numberOfEmployees": 15,
+          "slogan": "Innovation and Security at Every Step — The Mark of a Nation."
+        },
+        {
+          "@type": "WebSite",
+          "name": "Rynexnative",
+          "alternateName": [
+            "RynexNative Technologies",
+            "RynexNative",
+            "RynexNative Lab",
+            "RynexNative Systems"
+          ],
+          "url": "https://rynexnative.com/"
+        },
+        {
+          "@type": "ImageObject",
+          "@id": "https://rynexnative.com/logo.png",
+          "url": "https://rynexnative.com/logo.png",
+          "width": 500,
+          "height": 500,
+          "caption": "Rynexnative Logo"
+        }
+      ]
+    }
+    </script>
+    
+  <script type="module" crossorigin src="/assets/index-CUPDgQsk.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CentDAxT.css">
+
+  <title>Apple outage hits iCloud, App Store as company rules out is not cyberattack | RynexNative News</title>
+  <meta name="description" content="Apple outage hits iCloud, App Store as company rules out not cyberattack on 17 November 2026">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://rynexnative.com/news/apple-outage-hits-icloud-app-store-as-company-rules-out-is-not-cyberattack/">
+  <meta property="og:site_name" content="RynexNative">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Apple outage hits iCloud, App Store as company rules out is not cyberattack | RynexNative News">
+  <meta property="og:description" content="Apple outage hits iCloud, App Store as company rules out not cyberattack on 17 November 2026">
+  <meta property="og:url" content="https://rynexnative.com/news/apple-outage-hits-icloud-app-store-as-company-rules-out-is-not-cyberattack/">
+  <meta property="og:image" content="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1794992044/rynexnative/jhmttzectil5jdj4skub.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Apple outage hits iCloud, App Store as company rules out is not cyberattack | RynexNative News">
+  <meta name="twitter:description" content="Apple outage hits iCloud, App Store as company rules out not cyberattack on 17 November 2026">
+  <meta name="twitter:image" content="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1794992044/rynexnative/jhmttzectil5jdj4skub.jpg">
+  <meta property="article:published_time" content="2026-11-18T11:54:23.862112+03:00">
+  <meta property="article:modified_time" content="2026-11-18T11:54:23.862182+03:00">
+  <meta property="article:section" content="Announcement">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://rynexnative.com/news/apple-outage-hits-icloud-app-store-as-company-rules-out-is-not-cyberattack/"},"headline":"Apple outage hits iCloud, App Store as company rules out is not cyberattack","description":"Apple outage hits iCloud, App Store as company rules out not cyberattack on 17 November 2026","image":["https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1794992044/rynexnative/jhmttzectil5jdj4skub.jpg"],"datePublished":"2026-11-18T11:54:23.862112+03:00","dateModified":"2026-11-18T11:54:23.862182+03:00","articleSection":"Announcement","author":{"@type":"Organization","name":"RynexNative","url":"https://rynexnative.com"},"publisher":{"@type":"Organization","name":"RynexNative","url":"https://rynexnative.com","logo":{"@type":"ImageObject","url":"https://rynexnative.com/logo.png"}}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rynexnative.com/"},{"@type":"ListItem","position":2,"name":"News","item":"https://rynexnative.com/news/"},{"@type":"ListItem","position":3,"name":"Apple outage hits iCloud, App Store as company rules out is not cyberattack","item":"https://rynexnative.com/news/apple-outage-hits-icloud-app-store-as-company-rules-out-is-not-cyberattack/"}]}</script>
+</head>
+
+<body>
+  <div id="root"><div class="prerendered max-w-3xl mx-auto px-4 pt-32 pb-16"><article>
+<p><a href="/news/">News</a> · Announcement · <time datetime="2026-11-18T11:54:23.862112+03:00">18 November 2026</time></p>
+<h1>Apple outage hits iCloud, App Store as company rules out is not cyberattack</h1>
+<p><strong>Apple outage hits iCloud, App Store as company rules out not  cyberattack on 17 November 2026</strong></p>
+<img src="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1794992044/rynexnative/jhmttzectil5jdj4skub.jpg" alt="Apple outage hits iCloud, App Store as company rules out is not cyberattack" width="1200" style="max-width:100%;height:auto;border-radius:1rem">
+<p>Apple had a real outage on Tuesday, November 17, 2026. Here is what the reports show. Times are Eastern Time (ET), which is 8 hours behind Tanzania time.<br>What happened<br>Problems began late morning ET. Apple&#39;s status page first flagged AppleCare at 11:15 a.m. ET, and Downdetector reports spiked around 11:40 a.m. By just before 1 p.m., roughly 2,000 users were reporting outages on Apple Support, Apple Pay, and iCloud.  (Time)<br>Services affected<br>iCloud sign-in: Apple&#39;s status page listed issues with iCloud Account &amp; Sign In as affecting &quot;all users&quot;. Users reported unexpected iCloud sign-outs on iPhone and Mac, followed by verification failures or unknown errors when trying to sign back in.  (TechCrunch)  (9to5Mac)<br>App Store: Others say the App Store won&#39;t load or download apps. Apple&#39;s page showed the App Store outage starting around 11:45 a.m. ET.  (9to5Mac)<br>Apple Pay, Apple Music and Apple Support: Users reported problems with these too, though Apple&#39;s list of resolved outages did not always include them.<br>AppleCare: The status page said &quot;AppleCare purchase is temporarily unavailable.&quot;  (Time)<br>Developers: Developers have separately reported trouble accessing App Store Connect.  (9to5Mac)<br>Other systems: Apple&#39;s status page also listed iCloud Mail, iCloud Web Apps (iCloud.com), Schoolwork, and the Volume Purchase Program. One report says Apple retail stores and corporate offices were also affected.  (TechCrunch)  (9to5Mac)<br>Cause<br>Apple has said an internal update caused the outage, ruling out a cyber attack. Before that statement, some people had suspected a cyberattack, but Apple&#39;s explanation contradicts that. Be aware that some reports describe Apple&#39;s statement only as an update, so the details of what changed have not been published.  (9to5Mac)<br>Recovery<br>Consumer services came back over the afternoon. One report says Apple has resolved outages that impacted several of the company&#39;s services on Tuesday, including Apple Pay, iCloud, and Apple Support. Timing differs between sources. For example, one says by 2:02 p.m., outages affecting the App Store and Apple Music had been resolved, while Apple&#39;s AppleCare outage was marked resolved at 3:39 p.m. ET. Developer services were still having problems at the time of the 9to5Mac update.  (Time)  (detroitnews)<br>Why it hurt so many people<br>Your Apple ID is used for iCloud, Apple Pay, the App Store, and setting up a new phone. When sign-in fails, people can be locked out of several services at once.<br>What you should do<br>Check Apple&#39;s System Status page to see which services are currently listed as available.<br>If an app download or purchase failed during the outage, try again now.<br>If you were signed out of iCloud, try signing in again. One outlet reported that you should not need to reset your password, since the cause was on Apple&#39;s side. If sign-in keeps failing, wait a while and try again later.<br>Also, a separate iCloud outage affecting Mail, Contacts, Calendar, and Find My was reported on November 10. It is not confirmed to be related to Tuesday&#39;s problemsWho was affected<br>iPhone, iPad, and Mac users who were signed in to iCloud or the App Store. Reports said users were signed out of iCloud and had trouble signing back in.<br>Apple Pay users, who had problems making payments.<br>Music and app users, who had trouble with Apple Music and downloading apps.<br>App developers, who had trouble getting into App Store Connect, the tool used to publish and manage apps.<br>Schools and businesses using Apple School Manager, the Volume Purchase Program, or Apple Business Manager.<br>Anyone trying to activate a new iPhone or buy AppleCare.<br>Reports came from the US and from other countries, but I did not find a source that confirms how many users were affected in Tanzania specifically.<br>How it affects an ordinary user<br>If your Apple ID is your main sign-in for your phone, you may have been asked for your password again or unable to open your iCloud photos, backups, or contacts for a while. You may also have had failed app downloads or payments. Most of these problems should be fixed once Apple&#39;s services are back, so you may not need to change anything.<br>How it affects a developer<br>If you publish apps or websites that depend on Apple services, a problem with App Store Connect can delay uploads, updates, and access to your account. Developer services were still having problems at the time of the 9to5Mac update.<br>Here is how this outage would affect you, depending on how you use Apple&#39;s services.<br>As an iPhone or Mac user<br>If you were signed out of iCloud, you may have had to sign in again. Your iCloud photos, contacts, and backups may have been slow to sync during the outage. App downloads and Apple Pay payments may have failed. Most of these should now be working again, so you probably only need to retry anything that failed.<br>As an app developer<br>This is the part that matters most if you publish apps. During the outage, App Store Connect was unreliable, so you may have been unable to:<br>upload new app builds<br>submit an app or update for review<br>manage TestFlight testers<br>check the status of an app that was already submitted<br>If you had a release planned for that day, it may now be delayed. Check your app&#39;s status in App Store Connect before assuming anything was submitted.<br>If your apps use Apple services<br>If your app uses Sign in with Apple, Apple Pay, or in-app purchases, some of your users may have hit errors on November 17. Check your logs or error reports for that day. If you see a spike in failed sign-ins or payments, it likely matches this outage, and you do not need to fix your code for it.<br>What I&#39;d suggest<br>Check the developer status page before you upload or submit a build during any Apple outage.<br>If you are building a system that depends on Apple services, add retry logic so temporary failures do not break things for your users.<br>Apple says the outage is over. Its services were back to normal by the evening of Tuesday, November 17, 2026, and it was about a day ago at the time of my search.<br>Timeline (Eastern Time, Tanzania is 8 hours ahead)<br>About 11:15 a.m. to 11:45 a.m. ET (6:15 to 6:45 p.m. in Tanzania): Problems started. Apple&#39;s status page first listed AppleCare, then the App Store.<br>Afternoon: Apple&#39;s status page listed iCloud sign-in as affecting all users. Some services recovered during the afternoon. The App Store was reported back by about 2:00 p.m. ET, though sources differ on the exact time.<br>3:39 p.m. ET (11:39 p.m. in Tanzania): AppleCare was marked as resolved.<br>Evening: Apple said that many systems had returned to normal after an internal update caused the problem. One report puts the total length of the disruption at about 3 hours and 15 minutes.<br>What is still working through<br>Developer tools: App Store Connect was still having problems in some reports after the consumer services came back. If you publish apps, check the developer status page before you upload.<br>Individual sign-ins: People who were signed out of iCloud may need to sign in again. If sign-in still fails, try again later, then contact Apple Support if the problem continues.<br>Failed downloads and purchases: Retry them now.<br>Apple has said the cause was an internal update, meaning a change Apple made to its own systems, not an outside attack. Apple denied that a cyberattack was behind it.<br>Apple has not published details about what the update changed or why it caused the problem. Some outlets said the update was the reason but did not say what it contained. So I can&#39;t tell you the exact technical fault.<br>Apple has not published the details of how it fixed the problem. What is known is limited to general statements from Apple and news reports.<br>Apple said it was working to restore its systems after an internal update caused the outage. Later that day, it told the New York Post that services were &quot;back up and running.&quot; Reports say the service recovery happened gradually during the afternoon, and Apple&#39;s status page marked the App Store, iCloud sign-in, and AppleCare as resolved.Apple has released only short public statements about the outage. Its main message to users was that the cause was an internal update, not an attack.<br>During the outage: Apple said it was working to restore its systems after an internal update caused the disruption, according to Reuters, which reported that Apple said it was working to restore its systems.  (dunyanews)<br>After services recovered: Apple told users that services were &quot;back up and running.&quot; In another statement, Apple said an internal update caused the outage, and it ruled out a cyberattack.  (13wham)  (ibtimes)<br>On its status page: Apple listed each affected service and marked it as available once it recovered, including the App Store, iCloud sign-in, and AppleCare.<br>Apple did not give a detailed public explanation, an apology, or a timeline for the fix. It also did not publish a full post-incident report, so the details of the internal update remain unclear.</p>
+</article></div></div>
+</body>
+
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- # Ownership & legal issures -->
+  <meta name="author" content="Casto S Shirima">
+  <meta name="copyright" content="2024 rynexnative">
+
+  <!-- Fonts are served from this site (no extra connection to Google before the first paint).
+       Inter is one variable file for every weight; Poppins only in the weights headings use. -->
+  <link rel="preload" href="/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/poppins-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 100 900; src: url(/fonts/inter-latin-wght-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 600; src: url(/fonts/poppins-latin-600-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 700; src: url(/fonts/poppins-latin-700-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+    @font-face { font-family: 'Poppins'; font-style: normal; font-display: swap; font-weight: 800; src: url(/fonts/poppins-latin-800-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  </style>
+
+  <!-- The API serves the home page sections; open the connection early -->
+  <link rel="preconnect" href="https://api.rynexnative.com" crossorigin>
+
+  <!-- # Favicon main ico -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <!-- PNG fallback for modern browsers -->
+  <link rel="icon" type="image/png" href="/logo.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/logo.png" sizes="192x192">
+  
+  <!-- Apple devices -->
+  <link rel="apple-touch-icon" href="/logo.png">
+
+
+  <!-- # http-equiv -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none';"> -->
+
+
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+
+  <!-- Meta Description -->
+  
+
+  <!-- Meta Keywords -->
+  <meta name="keywords" content="Web development in Tanzania, 
+    Full-stack developer Africa,
+    Modern website development,
+    Custom software solutions,    
+    Tech company in East Africa,    
+    Scalable digital platforms,    
+    Secure web applications,
+    Ethical hacking training Tanzania,
+    Learn ethical hacking online,
+    Cybersecurity experts in Africa,
+    Penetration testing services,
+    Secure coding practices,
+    Ethical hacker for hire,
+    Digital security consulting,
+    Professional website design,
+    Software system development,    
+    IT consulting Tanzania,    
+    Custom tech solutions,    
+    Business automation software,    
+    Web app design and development,    
+    Cloud-based systems for businesses,
+    Coding for youth in Africa,
+    Programming mentorship Tanzania,    
+    Digital skills empowerment,    
+    Learn full-stack development,    
+    IT training programs in East Africa,
+    RynexNative company,
+    RynexNative services,    
+    Future of tech in Africa,    
+    Innovative tech company,    
+    Tech for Africa's growth,
+    rynex, Tanzania, Kenya, Uganda, Yiiti">
+
+  <!-- Robots -->
+  
+
+  <!-- News feed for readers and Google -->
+  <link rel="alternate" type="application/rss+xml" title="RynexNative News" href="/rss.xml">
+
+  <!-- Canonical URL -->
+  
+
+  <!-- # Open Graph for social sharing -->
+  
+  
+  
+  
+  
+
+  
+
+  <!-- # Twitter Card -->
+  
+  
+  
+  
+  <!--  -->
+
+  <!-- # Custom Meta -->
+  <meta name="app-version" content="2.1.1">
+
+  <!-- # JSON-LD Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "Rynexnative",
+          "url": "https://rynexnative.com",
+          "logo": "https://rynexnative.com/logo.png",
+          "image":"https://rynexnative.com/logo.png",
+          "sameAs": [
+            "https://www.instagram.com/rynexnative"
+          ],
+          "description": "Your product deserves better. Work with RynexNative for clean, efficient, and user-focused software development. Let RynexNative handle your code while you focus on growth. Get cutting-edge apps, modern designs & expert tech support now. RynexNative is where creativity meets logic.",
+          "founder": {
+            "@type": "Person",
+            "name": "Casto S. Shirima"
+          },
+          "foundingDate": "2021-05-01",
+          "foundingLocation": {
+            "@type": "Place",
+            "name": "Dodoma, Tanzania"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Dodoma mjini, miyuji, mwatano center",
+            "addressLocality": "Dodoma",
+            "addressRegion": "Dodoma",
+            "postalCode": "",
+            "addressCountry": "TZ"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+255687544999",
+            "contactType": "Customer Support",
+            "areaServed": "TZ",
+            "availableLanguage": ["en", "sw"]
+          },
+          "email": "info@rynexnative.com",
+          "telephone": "+255687544999",
+          "legalName": "Rynexnative",
+          "numberOfEmployees": 15,
+          "slogan": "Innovation and Security at Every Step — The Mark of a Nation."
+        },
+        {
+          "@type": "WebSite",
+          "name": "Rynexnative",
+          "alternateName": [
+            "RynexNative Technologies",
+            "RynexNative",
+            "RynexNative Lab",
+            "RynexNative Systems"
+          ],
+          "url": "https://rynexnative.com/"
+        },
+        {
+          "@type": "ImageObject",
+          "@id": "https://rynexnative.com/logo.png",
+          "url": "https://rynexnative.com/logo.png",
+          "width": 500,
+          "height": 500,
+          "caption": "Rynexnative Logo"
+        }
+      ]
+    }
+    </script>
+    
+  <script type="module" crossorigin src="/assets/index-CUPDgQsk.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CentDAxT.css">
+
+  <title>Major Microsoft 365 outage (Nov 12-13, 2026) | RynexNative News</title>
+  <meta name="description" content="Waris has launched an AI agent training program tailored for HR professionals. This initiative helps… nvidia, ai Nvidia CEO Faces Uncertain Future Amid…">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://rynexnative.com/news/major-microsoft-365-outage-nov-12-13-2026/">
+  <meta property="og:site_name" content="RynexNative">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Major Microsoft 365 outage (Nov 12-13, 2026) | RynexNative News">
+  <meta property="og:description" content="Waris has launched an AI agent training program tailored for HR professionals. This initiative helps… nvidia, ai Nvidia CEO Faces Uncertain Future Amid…">
+  <meta property="og:url" content="https://rynexnative.com/news/major-microsoft-365-outage-nov-12-13-2026/">
+  <meta property="og:image" content="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1794574512/rynexnative/zlmz6iah70voixdtm2vi.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Major Microsoft 365 outage (Nov 12-13, 2026) | RynexNative News">
+  <meta name="twitter:description" content="Waris has launched an AI agent training program tailored for HR professionals. This initiative helps… nvidia, ai Nvidia CEO Faces Uncertain Future Amid…">
+  <meta name="twitter:image" content="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1794574512/rynexnative/zlmz6iah70voixdtm2vi.png">
+  <meta property="article:published_time" content="2026-11-13T15:52:08.838162+03:00">
+  <meta property="article:modified_time" content="2026-11-13T15:55:16.887518+03:00">
+  <meta property="article:section" content="Announcement">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://rynexnative.com/news/major-microsoft-365-outage-nov-12-13-2026/"},"headline":"Major Microsoft 365 outage (Nov 12-13, 2026)","description":"Waris has launched an AI agent training program tailored for HR professionals. This initiative helps… nvidia, ai Nvidia CEO Faces Uncertain Future Amid…","image":["https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1794574512/rynexnative/zlmz6iah70voixdtm2vi.png"],"datePublished":"2026-11-13T15:52:08.838162+03:00","dateModified":"2026-11-13T15:55:16.887518+03:00","articleSection":"Announcement","author":{"@type":"Organization","name":"RynexNative","url":"https://rynexnative.com"},"publisher":{"@type":"Organization","name":"RynexNative","url":"https://rynexnative.com","logo":{"@type":"ImageObject","url":"https://rynexnative.com/logo.png"}}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rynexnative.com/"},{"@type":"ListItem","position":2,"name":"News","item":"https://rynexnative.com/news/"},{"@type":"ListItem","position":3,"name":"Major Microsoft 365 outage (Nov 12-13, 2026)","item":"https://rynexnative.com/news/major-microsoft-365-outage-nov-12-13-2026/"}]}</script>
+</head>
+
+<body>
+  <div id="root"><div class="prerendered max-w-3xl mx-auto px-4 pt-32 pb-16"><article>
+<p><a href="/news/">News</a> · Announcement · <time datetime="2026-11-13T15:52:08.838162+03:00">13 November 2026</time></p>
+<h1>Major Microsoft 365 outage (Nov 12-13, 2026)</h1>
+<p><strong>Waris has launched an AI agent training program tailored for HR professionals. This initiative helps…
+
+nvidia, ai
+Nvidia CEO Faces Uncertain Future Amid Scandal
+Jensen Huang, the leader of Nvidia, is facing serious allegations that could shake his position…</strong></p>
+<img src="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1794574512/rynexnative/zlmz6iah70voixdtm2vi.png" alt="Major Microsoft 365 outage (Nov 12-13, 2026)" width="1200" style="max-width:100%;height:auto;border-radius:1rem">
+<p>Major Microsoft 365 outage (Nov 12-13, 2026)<br>How it started<br>The outage began Thursday, Nov 12, in the afternoon. Nearly 130,000 users reported problems opening Outlook on Downdetector just after 1 p.m. ET. It was not limited to North America. It reached users in 74 countries, and Outlook reports peaked at 138,058 early Friday<br>Services affected<br>The hardest hit were services that depend on Exchange Online, Microsoft&#39;s email system:<br>Outlook: people couldn&#39;t open mailboxes on web, desktop or mobile, and sending and receiving mail was delayed.<br>Copilot: it had trouble loading responses and reaching emails, calendars and files.<br>Teams: messaging and online meetings mostly kept working, but calendars, meeting scheduling and chat creation were affected for organisations using Information Barriers.  (business-standard)<br>Others: SharePoint, Planner, To Do, Defender, Power BI, Intune and Windows 365.<br>Cause<br>Microsoft said a process on the affected servers, responsible for establishing secure connections, became overwhelmed, so the servers stopped processing requests. Some servers also failed automated health checks and dropped out. Microsoft later clarified the problem was fewer servers available to handle traffic, not a general increase in traffic. It was also reversing a recent network configuration change that coincided with the start of the outage, to see whether it contributed.  (Microsoft reveals cause of massive service outage +2)<br>Not a cyberattack: Executive Vice President Charles Lamanna confirmed it was not caused by a security breach.  (business-standard)<br>Impact<br>Government and health: Service NSW in Australia asked customers to avoid visiting its offices and use online services instead. Some hospitals had clerical problems, but patient care was not affected.  (business-standard)<br>Companies: Workhorse Group postponed its third-quarter results to Nov 16 because of the disruption.  (business-standard)<br>AI services: OpenAI&#39;s and Anthropic&#39;s Microsoft 365 connectors were affected too.  (business-standard)<br>Current status<br>Recovery was slow. Microsoft said its efforts were not going as expected. It was testing other fixes and limiting traffic in some locations, restoring service gradually so the servers wouldn&#39;t be overloaded again. My latest information is from Friday morning, so check status.cloud.microsoft for updates.  (business-standard)<br>Separately, Microsoft expanded its partnership with KPMG, which will use Agent 365 in its AI framework.  (nasdaq)<br>How the Microsoft outage occurred<br>Timeline<br>Thursday, Nov 12, about 1 p.m. ET: nearly 130,000 users reported problems opening Outlook on Downdetector.  (abc7)<br>Same evening: Microsoft said a number of servers were unexpectedly unavailable, and that the connectivity issue could affect users in any region.  (abc7)<br>Overnight: Microsoft began returning some servers to service and said they were stable at first.  (abc7)<br>Early Friday: the recovery was reported as not going as expected, and Microsoft started testing other ways to fix it.  (business-standard)<br>The mechanism, as Microsoft describes it<br>A process on the affected servers, responsible for establishing secure connections, became overwhelmed, so the servers stopped processing requests.  (abc7)<br>Some servers then failed automated health checks and dropped out of service.  (business-standard)<br>Microsoft later clarified the cause was not a general rise in traffic but fewer servers available to handle it.  (business-standard)<br>This looks like a cascade, though that reading is mine, not Microsoft&#39;s wording. Fewer healthy servers means more load on the rest, which then fail too. It also explains why recovery was hard: Microsoft warned that restarted servers could stop responding again once traffic returned. That is why it brought traffic back gradually, with temporary limits in some locations.  (business-standard)<br>The suspected trigger<br>Microsoft began reverting a recent network configuration change that coincided with the start of the disruption. That is a suspect, not a confirmed cause. Reports said Microsoft had not yet confirmed the root cause or whether the rollback would fix the problem. The usual formal post-incident report, which would settle this, was not yet available in what I found.  (outlookindia)  (outlookindia)<br>What it was not<br>Executive Vice President Charles Lamanna confirmed it was not caused by a security breach.  (business-standard)<br>Why Exchange Online mattered<br>Microsoft said the disruption mainly hit services that depend on Exchange Online, and features that did not depend on it kept working. That is why Outlook, Copilot, calendars and some Teams functions broke while basic Teams chat and meetings mostly held up.  (business-standard)<br>Details may change as Microsoft publishes its report, so check status.cloud.microsoft for updates.<br>How the recovery is going<br>The latest reports I found are from Friday morning (about 7 a.m. ET). Recovery is partial and gradual, not complete.<br>Progress so far<br>Europe: Microsoft reported &quot;encouraging recovery progress,&quot; with service availability and email delivery improving across a growing share of the affected infrastructure.  (NBC News)<br>North America: Microsoft said it was also improving, but some users may still see intermittent issues.  (NBC News)<br>Asia Pacific: Recovery actions were completed across parts of the affected infrastructure, and traffic was being restored gradually.  (NBC News)<br>Mailboxes: Mailbox access and delayed email processing were improving, though some intermittent issues could continue.  (abcnews)<br>Teams: Microsoft said its fixes had restored Teams service health and functionality.  (abcnews)<br>Delayed emails: Microsoft extended its email timeout window to 48 hours to protect delayed messages while recovery continues.  (CNN)<br>Setbacks<br>Earlier overnight, Microsoft said some fixes brought partial recovery in the regions where they were applied, but not sustained recovery.  (NBC News)<br>Restored servers became unresponsive again after an initial &quot;gradual recovery&quot; update.  (abc)<br>Still open<br>Microsoft had not given a time for full recovery, and had not yet confirmed whether the network change it was rolling back caused the outage.  (itdaily)<br>A live blog showed Downdetector still had over 40,000 reports at one point. That is far below the peak of over 138,000.  (techradar)<br>Recovery is gradual because Microsoft is restoring traffic in stages so the servers don&#39;t overload again. Users may see their apps reconnect slowly.<br>The main named spokesperson is Charles Lamanna. He is Microsoft&#39;s executive vice president for Copilot, agents and platform. He posted on X that Microsoft regrets the disruption to customers and is working to fix it. He also wrote that there is no indication of malicious or cyber activity. He posted at about 11:40 a.m. Singapore time (SGT), according to AsiaOne. He said Microsoft would keep sharing information as soon as possible.  (Microsoft says attempts to fix global outage not going ‘as expected’ +3)<br>The step-by-step technical updates came from Microsoft&#39;s official channels, not from one named person:<br>the Microsoft 365 Status account on X<br>the Microsoft 365 status page, which said early signs of stabilisation were appearing but capacity had not returned to normal and health remained variable as traffic was carefully reintroduced  (aol)<br>Microsoft has attributed the disruption to elevated load on its infrastructure across multiple regions.  (aol)<br>Government reports about what Microsoft told them: Australia&#39;s Cyber Security Minister Tony Burke told reporters Microsoft believed it was an update that had &quot;gone awry&quot;, similar to the 2024 CrowdStrike outage. That is the minister relaying Microsoft&#39;s view, not an official Microsoft statement. It also differs from Microsoft&#39;s own wording, which so far points to overloaded servers and a network change under review.  (singletonargus)<br>What Microsoft told customers<br>The apology<br>Executive Vice President Charles Lamanna wrote on X that the company regrets the disruption its customers experienced and is working to fix it. He said Microsoft would keep sharing information as soon as possible.  (aol)  (singletonargus)<br>Status updates to customers<br>Early warning: Microsoft said restored servers could stop responding again once traffic returned, and later admitted its recovery efforts were not working as expected.  (business-standard)<br>Gradual recovery: The status page said it saw early signs of stabilisation, but capacity had not returned to normal levels and health remained variable as traffic was carefully reintroduced.  (aol)<br>Expect intermittent problems: Microsoft said mailbox access and delayed email processing were improving, but some intermittent issues might continue.  (abcnews)<br>Delayed emails: Microsoft extended its email timeout window to 48 hours to help protect delayed messages while recovery continues. Messages stuck in queues should therefore still be delivered rather than bounced, at least for now.  (CNN)<br>Security: Microsoft said there was no indication of malicious or cyber activity.  (trendingtopics)<br>What I didn&#39;t find<br>I found no announcement of compensation or credits for this outage, and no formal post-incident report. Some users have called on Microsoft to compensate customers for earlier outages, but that is not specific to this one.  (yahoo)<br>Credits in general<br>This is how Microsoft&#39;s service level agreements (SLAs) usually work, not a statement about this incident:<br>Customers can submit claims and may receive service credits toward future use, not cash.  (directionsonmicrosoft)<br>Microsoft does not proactively tell customers when an SLA wasn&#39;t met. Customers have two months to submit a claim, and Microsoft has 45 days to process it.  (directionsonmicrosoft)<br>Claims usually need your tenant ID and the outage incident ID from the Service Health page in the Microsoft 365 admin center.  (microsoft)<br>There is no date yet. Microsoft has not given an expected time for full recovery.<br>It has said service will come back gradually as capacity returns and apps reconnect, rather than all at once.  (Al Jazeera)<br>It says it is treating the incident with urgency until it is fully resolved, and will publish full root-cause details once the problem is mitigated.  (Forbes)<br>It has also committed to a detailed post-incident report after services are restored.  (gulfbusiness)<br>Why no estimate: some machines remained unhealthy, which stopped recent network changes from syncing as expected. Servers that Microsoft had restored were also failing again. Until that stabilises, any date would be a guess.  (gulfbusiness)  (Al Jazeera)<br>What to expect: The outage began Thursday, Nov 12. Recovery is already improving in Europe, North America and Asia Pacific, as I described earlier. In practice, many users will probably be mostly back within the next day or so, though that is my reading of the trend, not a Microsoft promise. Some people may still see intermittent problems for longer, and the backlog of delayed emails will take time to clear. For comparison, Microsoft&#39;s August outage took a few days for systems to fully recover.  (Forbes)<br>The most reliable source is the Service Health page in your Microsoft 365 admin center or status.cloud.microsoft.<br>What customers should be careful about<br>1. Phishing and fake &quot;fix&quot; messages (the biggest risk)<br>Microsoft says this outage was not a cyberattack, but scammers exploit outages. Experts in Massachusetts warned of phishing risks during this one. McAfee notes that scam campaigns often appear within hours of a major outage. They copy real outage notices and send fake &quot;service restored&quot; emails or texts telling you to sign in again.  (wcvb)  (mcafee)<br>Don&#39;t click links in emails or texts about the outage. Go to status.cloud.microsoft or your admin center yourself.<br>Be suspicious of any &quot;re-verify your account&quot; or &quot;enter this code&quot; request. Australia&#39;s cyber agency has separately warned of device code phishing against Microsoft 365 users.  (acs)<br>Don&#39;t reset passwords just because of the outage unless Microsoft or your IT team tells you to through an official channel.<br>2. Delayed and missing emails<br>Microsoft extended its email timeout window to 48 hours to protect delayed messages. Mail may arrive late, out of order or in bursts, so don&#39;t assume it was lost.  (CNN)<br>Avoid resending the same message several times. That can cause duplicates and confusion.<br>For urgent or time-sensitive items, such as payments, contracts and deadlines, confirm by phone or another channel.<br>Be extra careful with payment or bank-detail changes arriving in the backlog. Verify them by phone first.<br>3. Don&#39;t &quot;fix&quot; your own settings<br>The fault is on Microsoft&#39;s side. Avoid changing DNS or mail-routing records, reinstalling Outlook, or deleting profiles. These rarely help and can cause new problems.<br>4. Use a backup channel<br>Use phone, WhatsApp, Slack or another email service for urgent communication. Remember that OpenAI&#39;s and Anthropic&#39;s Microsoft 365 connectors were also affected, so tools that depend on those may not work yet.  (business-standard)<br>5. Keep records for a possible claim<br>Note the start and end times and which services and users were affected, and save screenshots.<br>Record the incident ID from the Service Health page.<br>SLA claims are not automatic, usually must be submitted within two months, and usually give credits toward future use, not cash.  (directionsonmicrosoft)<br>6. Watch for a repeat<br>Microsoft warned that restored services could become unresponsive again as traffic returns. Save important work locally, and avoid depending on Outlook or Teams for critical tasks for the next day or so.  (business-standard)<br>Microsoft 365 users worldwide are experiencing a major outage affecting key tools like Copilot, Teams,…</p>
+<p>ai<br>Waris Launches AI Agent Training Program<br>Waris has launched an AI agent training program tailored for HR professionals. This initiative helps…</p>
+<p>Waris has launched an AI agent training program tailored for HR professionals. This initiative helps…</p>
+<p>nvidia, ai<br>Nvidia CEO Faces Uncertain Future Amid Scandal<br>Jensen Huang, the leader of Nvidia, is facing serious allegations that could shake his position…</p>
+</article></div></div>
+</body>
+
+</html>
