@@ -58,7 +58,7 @@ export default function CustomerStatementPage() {
         <p className="text-sm text-slate-500 mb-6">No purchases.</p>
       ) : (
         <div className="overflow-x-auto mb-6">
-          <table className="w-full text-sm">
+          <table className="w-full text-sm min-w-[520px] print:min-w-0">
             <thead>
               <tr>
                 <th className={th}>Date</th>
@@ -97,7 +97,7 @@ export default function CustomerStatementPage() {
         <p className="text-sm text-slate-500 mb-6">No payments.</p>
       ) : (
         <div className="overflow-x-auto mb-6">
-          <table className="w-full text-sm">
+          <table className="w-full text-sm min-w-[520px] print:min-w-0">
             <thead>
               <tr>
                 <th className={th}>Date</th>
@@ -129,7 +129,7 @@ export default function CustomerStatementPage() {
         <>
           <h2 className="font-semibold mb-2">Orders not delivered yet</h2>
           <div className="overflow-x-auto mb-6">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm min-w-[520px] print:min-w-0">
               <thead>
                 <tr>
                   <th className={th}>Ordered</th>

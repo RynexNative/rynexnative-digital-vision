@@ -14,7 +14,7 @@ export function Stat({ label, value, sub, tone, icon }: { label: string; value: 
         {icon}
         {label}
       </p>
-      <p className={cn("text-2xl font-bold font-poppins mt-1 tabular-nums", tone === "good" && "text-emerald-600 dark:text-emerald-400", tone === "bad" && "text-red-600 dark:text-red-400")}>
+      <p className={cn("text-lg min-[360px]:text-xl sm:text-2xl font-bold font-poppins mt-1 tabular-nums break-words", tone === "good" && "text-emerald-600 dark:text-emerald-400", tone === "bad" && "text-red-600 dark:text-red-400")}>
         {value}
       </p>
       {sub && <p className="text-xs text-foreground/55 mt-0.5">{sub}</p>}

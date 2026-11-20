@@ -163,7 +163,7 @@ export function FarmSheet({
             <div className="grid grid-cols-2 gap-x-3 gap-y-4 sm:gap-4">
               {visible.map((field) => {
                 const wide = field.wide || field.type === "textarea" || field.type === "receipt"
-                const span = wide ? "col-span-2" : field.half ? "col-span-1" : "col-span-2 sm:col-span-1"
+                const span = wide ? "col-span-2" : field.half ? "col-span-2 min-[360px]:col-span-1" : "col-span-2 sm:col-span-1"
                 const body = (
                   <>
                     <span className={cn("block text-sm font-medium", field.hint ? "mb-1" : "mb-1.5")}>

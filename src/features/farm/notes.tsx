@@ -42,7 +42,7 @@ export function NoteList({ customer }: { customer: number }) {
             const due = n.follow_up_on && !n.follow_up_done && n.follow_up_on <= today()
             return (
               <li key={n.id} className={cn("glass rounded-xl p-3", due && "border-amber-500/50")}>
-                <div className="flex flex-wrap items-start gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-start gap-2">
                   <button type="button" disabled={!manage} onClick={() => setEditing(n)} className="min-w-0 flex-1 text-left enabled:hover:text-amber-700">
                     <p className="text-sm">
                       <Pill className="bg-foreground/5 text-foreground/70 border-foreground/15 mr-2">{NOTE_KINDS[n.kind]}</Pill>
@@ -54,7 +54,7 @@ export function NoteList({ customer }: { customer: number }) {
                     </p>
                   </button>
                   {n.follow_up_on && (
-                    <div className="text-right">
+                    <div className="flex items-center justify-between gap-2 sm:block sm:text-right">
                       {n.follow_up_done ? (
                         <p className="text-xs text-emerald-600 font-semibold">Followed up ✓</p>
                       ) : (

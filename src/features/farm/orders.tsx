@@ -153,7 +153,7 @@ export function OrderList({ customer, params = {}, showAdd = true }: { customer?
             const open = o.status === "open" || o.status === "ready"
             return (
               <li key={o.id} className="glass rounded-2xl p-4">
-                <div className="flex flex-wrap items-start gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-3">
                   <button type="button" disabled={!manage || !open} onClick={() => setEditing(o)} className="min-w-0 flex-1 text-left enabled:hover:text-amber-700">
                     <p className="font-semibold flex flex-wrap items-center gap-2">
                       {o.buyer}
@@ -173,7 +173,7 @@ export function OrderList({ customer, params = {}, showAdd = true }: { customer?
                     {o.cancel_reason && <p className="text-xs text-foreground/60 mt-1">Cancelled: {o.cancel_reason}</p>}
                     {o.notes && <p className="text-xs text-foreground/60 mt-1">{o.notes}</p>}
                   </button>
-                  <div className="text-right">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 sm:block sm:text-right">
                     {due && (
                       <p className={cn("text-xs font-semibold inline-flex items-center gap-1", due.late ? "text-red-600" : "text-foreground/60")}>
                         <CalendarClock className="h-3.5 w-3.5" />

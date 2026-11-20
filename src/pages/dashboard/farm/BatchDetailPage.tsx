@@ -36,7 +36,7 @@ export default function BatchDetailPage() {
 
   return (
     <div>
-      <Link to={`${FARM}/batches`} className="inline-flex items-center gap-1.5 text-sm text-foreground/60 hover:text-foreground mb-4">
+      <Link to={`${FARM}/batches`} className="inline-flex items-center gap-1.5 min-h-11 -my-2 pr-3 text-sm text-foreground/60 hover:text-foreground mb-2">
         <ArrowLeft className="h-4 w-4" />
         Batches
       </Link>

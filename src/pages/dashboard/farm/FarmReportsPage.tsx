@@ -96,25 +96,40 @@ export default function FarmReportsPage() {
             <section className="glass rounded-2xl p-4 sm:p-5">
               <h2 className="font-semibold mb-4">Month by month</h2>
               <MonthChart months={allMonths(data.year, data.months)} />
-              <div className="overflow-x-auto mt-6">
+              {/* Phones: one row per month instead of a table that would not fit */}
+              <ul className="sm:hidden mt-6 divide-y divide-border text-sm tabular-nums">
+                {data.months.map((m) => (
+                  <li key={m.month} className="py-2.5">
+                    <p className="flex justify-between font-semibold">
+                      <span>{monthName(m.month)}</span>
+                      <span className={cn(Number(m.profit) < 0 && "text-red-600")}>Profit {num(m.profit)}</span>
+                    </p>
+                    <p className="text-xs text-foreground/60 mt-0.5">
+                      Sales {num(m.revenue)} · costs {num(m.costs)} · received {num(m.collected)}
+                    </p>
+                  </li>
+                ))}
+                <li className="pt-2 text-xs text-foreground/50">Amounts in TZS.</li>
+              </ul>
+              <div className="overflow-x-auto mt-6 hidden sm:block">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="text-left text-xs uppercase tracking-wider text-foreground/50">
-                      <th className="py-2 pr-3 font-semibold">Month</th>
-                      <th className="py-2 px-3 font-semibold text-right">Sales</th>
-                      <th className="py-2 px-3 font-semibold text-right">Costs</th>
-                      <th className="py-2 px-3 font-semibold text-right">Profit</th>
-                      <th className="py-2 pl-3 font-semibold text-right">Received</th>
+                      <th className="py-2 pr-2 sm:pr-3 font-semibold">Month</th>
+                      <th className="py-2 px-2 sm:px-3 font-semibold text-right">Sales</th>
+                      <th className="py-2 px-2 sm:px-3 font-semibold text-right">Costs</th>
+                      <th className="py-2 pl-2 sm:px-3 font-semibold text-right">Profit</th>
+                      <th className="py-2 pl-3 font-semibold text-right hidden sm:table-cell">Received</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border tabular-nums">
                     {data.months.map((m) => (
                       <tr key={m.month}>
-                        <td className="py-2 pr-3">{monthName(m.month)}</td>
-                        <td className="py-2 px-3 text-right">{num(m.revenue)}</td>
-                        <td className="py-2 px-3 text-right">{num(m.costs)}</td>
-                        <td className={cn("py-2 px-3 text-right font-semibold", Number(m.profit) < 0 && "text-red-600")}>{num(m.profit)}</td>
-                        <td className="py-2 pl-3 text-right text-foreground/70">{num(m.collected)}</td>
+                        <td className="py-2 pr-2 sm:pr-3">{monthName(m.month)}</td>
+                        <td className="py-2 px-2 sm:px-3 text-right">{num(m.revenue)}</td>
+                        <td className="py-2 px-2 sm:px-3 text-right">{num(m.costs)}</td>
+                        <td className={cn("py-2 pl-2 sm:px-3 text-right font-semibold", Number(m.profit) < 0 && "text-red-600")}>{num(m.profit)}</td>
+                        <td className="py-2 pl-3 text-right text-foreground/70 hidden sm:table-cell">{num(m.collected)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -129,7 +144,34 @@ export default function FarmReportsPage() {
           {data.batches.length > 0 && (
             <section>
               <h2 className="text-lg font-semibold mb-3">By batch</h2>
-              <div className="glass rounded-2xl overflow-x-auto">
+              <ul className="sm:hidden space-y-2">
+                {data.batches.map((b) => (
+                  <li key={b.id} className="glass rounded-2xl p-4 text-sm">
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <Link to={`${FARM}/batches/${b.id}`} className="font-semibold hover:text-amber-700 py-1">
+                        {b.code}
+                      </Link>
+                      <Pill className={BATCH_STATUS[b.status].className}>{BATCH_STATUS[b.status].label}</Pill>
+                    </div>
+                    <dl className="grid grid-cols-3 gap-2 tabular-nums">
+                      {[
+                        ["Chicks", num(b.chicks_count)],
+                        ["Died", `${num(b.deaths)} (${b.mortality_pct}%)`],
+                        ["Sold", num(b.sold)],
+                        ["Costs", num(b.costs)],
+                        ["Sales", num(b.revenue)],
+                        ["Profit", num(b.profit)],
+                      ].map(([label, value]) => (
+                        <div key={label}>
+                          <dt className="text-[11px] uppercase tracking-wider text-foreground/50">{label}</dt>
+                          <dd className={cn("font-medium break-words", label === "Profit" && Number(b.profit) < 0 && "text-red-600", label === "Profit" && "font-semibold")}>{value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </li>
+                ))}
+              </ul>
+              <div className="glass rounded-2xl overflow-x-auto hidden sm:block">
                 <table className="w-full text-sm min-w-[640px]">
                   <thead>
                     <tr className="text-left text-xs uppercase tracking-wider text-foreground/50 border-b border-border">

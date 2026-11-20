@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import { useDeletePayment, usePayment, type PaidThing } from "./api"
 import { farmButton } from "./form"
 import { ReasonDialog } from "./ReasonDialog"
-import { PAYMENT_METHODS, shortDate, today, tzs, type Order, type Sale, type SalePayment } from "./types"
+import { PAYMENT_METHODS, num, shortDate, today, tzs, type Order, type Sale, type SalePayment } from "./types"
 
 const RECEIVED = { cash: "Cash", mobile: "Mobile money", bank: "Bank" }
 const field = "w-full px-3 py-2.5 rounded-xl bg-card/60 border border-foreground/15"
@@ -79,20 +79,24 @@ export function PaymentsSheet<T extends Sale | Order>({ target, thing, onClose }
           </SheetTitle>
           {now.note && <SheetDescription>{now.note}</SheetDescription>}
         </SheetHeader>
-        <div className="glass rounded-2xl p-4 grid grid-cols-3 gap-2 text-center mb-5">
-          <div>
+        {/* Amounts without "TZS" so three fit side by side on a small phone; the note below says the currency */}
+        <div className="glass rounded-2xl p-3 sm:p-4 grid grid-cols-3 gap-2 text-center mb-1">
+          <div className="min-w-0">
             <p className="text-xs text-foreground/55">{target === "orders" ? "Expected" : "Total"}</p>
-            <p className="font-semibold tabular-nums">{now.total === null ? "No price yet" : tzs(now.total)}</p>
+            <p className="font-semibold tabular-nums text-sm sm:text-base break-words">{now.total === null ? "No price" : num(now.total)}</p>
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="text-xs text-foreground/55">Paid</p>
-            <p className="font-semibold tabular-nums text-emerald-600">{tzs(now.paid)}</p>
+            <p className="font-semibold tabular-nums text-sm sm:text-base break-words text-emerald-600">{num(now.paid)}</p>
           </div>
-          <div>
+          <div className="min-w-0">
             <p className="text-xs text-foreground/55">{credit ? "We owe them" : "Balance"}</p>
-            <p className={cn("font-semibold tabular-nums", (now.balance > 0 || credit) && "text-red-600")}>{now.total === null && !credit ? "—" : tzs(Math.abs(now.balance))}</p>
+            <p className={cn("font-semibold tabular-nums text-sm sm:text-base break-words", (now.balance > 0 || credit) && "text-red-600")}>
+              {now.total === null && !credit ? "—" : num(Math.abs(now.balance))}
+            </p>
           </div>
         </div>
+        <p className="text-[11px] text-foreground/50 text-center mb-5">Amounts in TZS</p>
         {credit && (
           <p className="mb-5 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm">
             {current.buyer} paid {tzs(-now.balance)} more than {target === "orders" ? "they now owe" : "this sale"}. Give it back and record the refund below.
@@ -133,9 +137,9 @@ export function PaymentsSheet<T extends Sale | Order>({ target, thing, onClose }
         {canRecord && (settled ? null : (
           <form onSubmit={submit} className="glass rounded-2xl p-4">
             <p className="font-semibold mb-3">{values.kind === "refund" ? "Record a refund (money given back)" : target === "orders" ? "Record a deposit" : "Record a payment"}</p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-3">
               {!now.refundsOnly && (
-                <label className="block col-span-2">
+                <label className="block min-[360px]:col-span-2">
                   <span className="block text-sm font-medium mb-1.5">What</span>
                   <select value={values.kind} onChange={(e) => set("kind", e.target.value)} className={field}>
                     <option value="payment">Money received from the customer</option>
