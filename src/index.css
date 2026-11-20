@@ -117,6 +117,35 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   }
+
+  /*
+   * A grid item is as wide as its longest word or unbroken line by default, so one long
+   * description could push a whole page past the edge of a phone. Let items shrink instead
+   * (text inside them truncates or wraps).
+   */
+  .grid > * {
+    min-width: 0;
+  }
+
+  /* Date and month pickers keep a fixed inner width on some phones; let them fit their column */
+  input[type="date"],
+  input[type="month"],
+  input[type="time"] {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /*
+   * Phones zoom into any field whose text is smaller than 16px when it is tapped, and the
+   * page then needs scrolling back. Fields use 16px text on small screens.
+   */
+  @media (max-width: 767px) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+    select,
+    textarea {
+      font-size: 16px !important;
+    }
+  }
 }
 
 @layer components {

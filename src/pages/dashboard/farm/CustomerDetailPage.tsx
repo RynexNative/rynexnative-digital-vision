@@ -36,7 +36,7 @@ export default function CustomerDetailPage() {
 
   return (
     <div>
-      <Link to={`${FARM}/customers`} className="inline-flex items-center gap-1.5 text-sm text-foreground/60 hover:text-foreground mb-4">
+      <Link to={`${FARM}/customers`} className="inline-flex items-center gap-1.5 min-h-11 -my-2 pr-3 text-sm text-foreground/60 hover:text-foreground mb-2">
         <ArrowLeft className="h-4 w-4" />
         Customers
       </Link>
@@ -79,13 +79,13 @@ export default function CustomerDetailPage() {
           </p>
         )}
         {numbers.map((n) => (
-          <button key={n} type="button" onClick={() => copy(localPhone(n))} className="flex items-center gap-2 text-left hover:text-amber-700" title="Copy">
+          <button key={n} type="button" onClick={() => copy(localPhone(n))} className="flex items-center gap-2 text-left hover:text-amber-700 min-h-10" title="Copy">
             <Copy className="h-4 w-4 text-amber-600" />
             {prettyPhone(n)}
           </button>
         ))}
         {c.email && (
-          <a href={`mailto:${c.email}`} className="flex items-center gap-2 hover:text-amber-700 truncate">
+          <a href={`mailto:${c.email}`} className="flex items-center gap-2 hover:text-amber-700 truncate min-h-10">
             <Mail className="h-4 w-4 text-amber-600" />
             {c.email}
           </a>
@@ -122,8 +122,8 @@ export default function CustomerDetailPage() {
           onChange={setTab}
           options={[
             { id: "notes", label: "Contact log" },
-            { id: "orders", label: "Orders & deposits" },
-            { id: "sales", label: "Sales & payments" },
+            { id: "orders", label: "Orders" },
+            { id: "sales", label: "Sales" },
           ]}
         />
       </div>

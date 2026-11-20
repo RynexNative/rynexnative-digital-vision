@@ -24,7 +24,7 @@ export function PrintPage({ title, subtitle, children }: { title: string; subtit
           Print or save as PDF
         </button>
       </div>
-      <div className="bg-white text-slate-900 rounded-2xl border border-slate-200 p-5 sm:p-8 print:border-0 print:p-0 print:rounded-none">
+      <div className="bg-white text-slate-900 rounded-2xl border border-slate-200 p-4 sm:p-8 print:border-0 print:p-0 print:rounded-none">
         <header className="flex flex-wrap items-start justify-between gap-4 border-b-2 border-amber-500 pb-4 mb-6">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-600">Chicken Point</p>
@@ -41,11 +41,12 @@ export function PrintPage({ title, subtitle, children }: { title: string; subtit
             )}
           </p>
         </header>
+        <p className="sm:hidden print:hidden text-xs text-slate-500 mb-4">Swipe the tables sideways to see every column, or print the page.</p>
         {children}
       </div>
     </div>
   )
 }
 
-export const th = "py-2 px-2 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 border-b border-slate-300"
-export const td = "py-1.5 px-2 border-b border-slate-100 align-top"
+export const th = "py-2 px-2 whitespace-nowrap print:whitespace-normal text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500 border-b border-slate-300"
+export const td = "py-1.5 px-2 border-b border-slate-100 align-top whitespace-nowrap print:whitespace-normal"

@@ -15,7 +15,7 @@ export default function CustomerListPrintPage() {
   return (
     <PrintPage title="Customer list" subtitle={`${customers.length} customer${customers.length === 1 ? "" : "s"}${what ? ` · ${what}` : ""}`}>
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full text-sm min-w-[520px] print:min-w-0">
           <thead>
             <tr>
               <th className={th}>Customer</th>

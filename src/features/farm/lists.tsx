@@ -47,7 +47,7 @@ export function HealthList({ batch, params = {} }: { batch?: number; params?: Re
                 type="button"
                 disabled={!manage}
                 onClick={() => setEditing(e)}
-                className="w-full text-left glass rounded-xl p-3 enabled:hover:border-amber-500/40 flex gap-3 items-start"
+                className="w-full text-left glass rounded-xl p-3 enabled:hover:border-amber-500/40 flex flex-col sm:flex-row gap-1.5 sm:gap-3 items-start"
               >
                 <Pill className={HEALTH_KINDS[e.kind].className}>{HEALTH_KINDS[e.kind].label}</Pill>
                 <div className="min-w-0 flex-1">
@@ -99,11 +99,11 @@ export function ExpenseRows({ items, showBatch, onOpen }: { items: Expense[]; sh
             className={cn("glass rounded-xl p-3 flex gap-3 items-center", onOpen && "cursor-pointer hover:border-amber-500/40")}
           >
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium truncate">
+              <p className="text-sm font-medium line-clamp-2">
                 {e.category_label}
                 {e.description && <span className="font-normal text-foreground/70"> · {e.description}</span>}
               </p>
-              <p className="text-xs text-foreground/50 truncate">
+              <p className="text-xs text-foreground/50">
                 {shortDate(e.date)}
                 {showBatch && ` · ${e.batch_code ?? "All batches"}`}
                 {e.quantity && ` · ${num(e.quantity)} ${e.unit}`}
@@ -184,19 +184,19 @@ export function SaleRows({ items, showBatch, onEdit, onPay }: { items: Sale[]; s
       {items.map((s) => {
         const owes = Number(s.balance) > 0
         return (
-          <li key={s.id} className="glass rounded-xl p-3 flex flex-wrap sm:flex-nowrap gap-3 items-center">
-            <button type="button" disabled={!onEdit} onClick={() => onEdit?.(s)} className="min-w-0 flex-1 text-left enabled:hover:text-amber-700">
-              <p className="text-sm font-medium truncate">
+          <li key={s.id} className="glass rounded-xl p-3 flex flex-wrap sm:flex-nowrap gap-x-3 gap-y-2 items-center">
+            <button type="button" disabled={!onEdit} onClick={() => onEdit?.(s)} className="min-w-0 basis-full sm:basis-auto sm:flex-1 text-left enabled:hover:text-amber-700">
+              <p className="text-sm font-medium line-clamp-2 sm:truncate">
                 {s.buyer}
                 {s.customer_kind && <span className="font-normal text-foreground/55"> · {CUSTOMER_KINDS[s.customer_kind]}</span>}
               </p>
-              <p className="text-xs text-foreground/50 truncate">
+              <p className="text-xs text-foreground/50 sm:truncate">
                 {shortDate(s.date)}
                 {showBatch && ` · ${s.batch_code}`} · {num(s.birds)} birds
                 {s.weight_kg && ` · ${num(s.weight_kg)} kg`} · {tzs(s.unit_price)} {s.pricing === "per_kg" ? "/kg" : "/bird"}
               </p>
             </button>
-            <div className="text-right">
+            <div className="flex-1 sm:flex-none sm:text-right">
               <p className="text-sm font-semibold tabular-nums">{tzs(s.total)}</p>
               <p className={cn("text-[11px] font-semibold", owes || Number(s.balance) < 0 ? "text-red-600" : "text-emerald-600")}>
                 {owes ? `Owes ${tzs(s.balance)}` : Number(s.balance) < 0 ? `Refund ${tzs(-Number(s.balance))}` : "Paid"}

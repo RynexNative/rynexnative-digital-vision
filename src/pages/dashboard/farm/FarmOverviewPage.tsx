@@ -81,7 +81,7 @@ export default function FarmOverviewPage() {
                   <Truck className="h-4 w-4 text-amber-600" />
                   Orders to deliver soon
                 </h2>
-                <Link to={`${FARM}/orders`} className="text-xs text-amber-700 dark:text-amber-400 font-medium">
+                <Link to={`${FARM}/orders`} className="text-xs text-amber-700 dark:text-amber-400 font-medium py-2 px-2 -my-2 -mr-2">
                   All →
                 </Link>
               </div>
@@ -138,7 +138,7 @@ export default function FarmOverviewPage() {
                       </p>
                     </Link>
                     {c.phone && (
-                      <a href={waLink(c.phone, `Habari ${c.name}, `)} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-emerald-700 whitespace-nowrap">
+                      <a href={waLink(c.phone, `Habari ${c.name}, `)} target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-emerald-700 whitespace-nowrap py-2.5 px-2 -my-2 -mr-2">
                         WhatsApp
                       </a>
                     )}
@@ -154,7 +154,7 @@ export default function FarmOverviewPage() {
         <section className="mb-8">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-semibold">Open batches</h2>
-            <Link to={`${FARM}/batches`} className="text-sm text-amber-700 dark:text-amber-400 font-medium">
+            <Link to={`${FARM}/batches`} className="text-sm text-amber-700 dark:text-amber-400 font-medium py-2 px-2 -my-2 -mr-2">
               All batches →
             </Link>
           </div>
@@ -207,11 +207,11 @@ export default function FarmOverviewPage() {
               <h2 className="text-lg font-semibold mb-3">Who owes us</h2>
               <ul className="glass rounded-2xl divide-y divide-border">
                 {data.owed.map((o) => (
-                  <li key={o.name} className="p-3 flex justify-between text-sm">
-                    <span>
+                  <li key={o.name} className="p-3 flex justify-between gap-3 text-sm">
+                    <span className="min-w-0">
                       {o.name} <span className="text-foreground/50">· {o.sales} sale{o.sales === 1 ? "" : "s"}</span>
                     </span>
-                    <span className="font-semibold tabular-nums text-red-600">{tzs(o.amount)}</span>
+                    <span className="font-semibold tabular-nums text-red-600 whitespace-nowrap">{tzs(o.amount)}</span>
                   </li>
                 ))}
               </ul>
