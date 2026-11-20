@@ -45,11 +45,11 @@ export function DepositStatus({ order }: { order: Order }) {
 
 const deliverFields: FarmField[] = [
   { name: "batch", label: "From batch", type: "batch", required: true, wide: true },
-  { name: "date", label: "Delivered on", type: "date", required: true },
-  { name: "birds", label: "Birds delivered", type: "number", step: "1", required: true },
-  { name: "pricing", label: "Sold by", type: "select", options: { per_kg: "Per kg", per_bird: "Per bird" } },
-  { name: "weight_kg", label: "Total weight (kg)", type: "number", required: true, showIf: (v) => v.pricing === "per_kg" },
-  { name: "unit_price", label: "Price (TZS)", type: "number", required: true, hint: "Per kg or per bird" },
+  { name: "date", half: true, label: "Delivered on", type: "date", required: true },
+  { name: "birds", half: true, label: "Birds delivered", type: "number", step: "1", required: true },
+  { name: "pricing", half: true, label: "Sold by", type: "select", options: { per_kg: "Per kg", per_bird: "Per bird" } },
+  { name: "weight_kg", half: true, label: "Total weight (kg)", type: "number", required: true, showIf: (v) => v.pricing === "per_kg" },
+  { name: "unit_price", half: true, label: "Price (TZS)", type: "number", required: true, hint: "Per kg or per bird" },
 ]
 
 /** Delivering: the sale is written from the order, the deposits count as its payments. */

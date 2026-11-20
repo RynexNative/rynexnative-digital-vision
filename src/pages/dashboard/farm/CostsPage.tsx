@@ -50,7 +50,7 @@ export default function CostsPage() {
         }
       />
       <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 mb-5">
-        <input type="month" value={month} onChange={(e) => setMonth(e.target.value)} className={cn(select, "sm:w-44")} aria-label="Month" />
+        <input type="month" value={month} onChange={(e) => setMonth(e.target.value)} className={cn(select, "col-span-2 sm:w-44")} aria-label="Month" />
         <select value={category} onChange={(e) => setCategory(e.target.value)} className={cn(select, "sm:w-52")} aria-label="Kind of cost">
           <option value="">Every kind</option>
           {Object.entries(EXPENSE_CATEGORIES).map(([k, l]) => (
@@ -68,7 +68,9 @@ export default function CostsPage() {
             </option>
           ))}
         </select>
-        <SearchInput value={q} onChange={setQ} placeholder="Search details or payee" />
+        <div className="col-span-2 sm:flex-1 flex">
+          <SearchInput value={q} onChange={setQ} placeholder="Search details or payee" />
+        </div>
       </div>
 
       {isLoading ? (

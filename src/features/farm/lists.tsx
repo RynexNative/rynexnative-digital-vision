@@ -99,11 +99,11 @@ export function ExpenseRows({ items, showBatch, onOpen }: { items: Expense[]; sh
             className={cn("glass rounded-xl p-3 flex gap-3 items-center", onOpen && "cursor-pointer hover:border-amber-500/40")}
           >
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium truncate">
+              <p className="text-sm font-medium line-clamp-2">
                 {e.category_label}
                 {e.description && <span className="font-normal text-foreground/70"> · {e.description}</span>}
               </p>
-              <p className="text-xs text-foreground/50 truncate">
+              <p className="text-xs text-foreground/50">
                 {shortDate(e.date)}
                 {showBatch && ` · ${e.batch_code ?? "All batches"}`}
                 {e.quantity && ` · ${num(e.quantity)} ${e.unit}`}

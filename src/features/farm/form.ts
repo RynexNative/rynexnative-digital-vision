@@ -1,6 +1,18 @@
 export type Values = Record<string, unknown>
 
-type Base = { name: string; label: string; hint?: string; required?: boolean; wide?: boolean; showIf?: (v: Values) => boolean }
+type Base = {
+  name: string
+  label: string
+  hint?: string
+  required?: boolean
+  /** Full row on every screen */
+  wide?: boolean
+  /** Half a row even on phones (short fields: amounts, dates, counts), so forms stay short */
+  half?: boolean
+  /** Optional detail, tucked under "More details" until opened (or already filled in) */
+  more?: boolean
+  showIf?: (v: Values) => boolean
+}
 export type FarmField =
   | (Base & { type: "text" | "tel" | "date" | "number"; placeholder?: string; step?: string })
   | (Base & { type: "textarea"; placeholder?: string })
