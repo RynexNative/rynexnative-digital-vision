@@ -253,7 +253,7 @@ function PortraitStage({ content, reduced, compact }: { content: HeroContent; re
       {/* The R from our logo, pressed faintly into the background behind the person. The image is
           only a shape (outline strong, inside faint); the colour and the raised edge come from CSS. */}
       <div
-        className="absolute left-1/2 top-[2%] lg:-top-[4%] h-[88%] aspect-[682/760] -translate-x-[45%] [filter:drop-shadow(1px_1px_0_rgba(255,255,255,0.95))_drop-shadow(0_10px_18px_rgba(6,78,59,0.07))] dark:[filter:drop-shadow(0_0_8px_rgba(16,185,129,0.18))]"
+        className="absolute left-1/2 top-[2%] lg:-top-[4%] h-[88%] aspect-[682/760] opacity-60 -translate-x-[45%] [filter:drop-shadow(1px_1px_0_rgba(255,255,255,0.95))_drop-shadow(0_10px_18px_rgba(6,78,59,0.07))] dark:[filter:drop-shadow(0_0_8px_rgba(16,185,129,0.18))]"
         aria-hidden="true"
       >
         <div
