@@ -114,8 +114,8 @@ export default function HeroAdminPage() {
             portrait
             value={draft.photo}
             onChange={(url) => set("photo", url)}
-            label="Photo of a person"
-            hint="PNG with a transparent background, standing, from the head to the hips (at least 900 px tall). Until one is uploaded, the RynexNative logo shows in its place."
+            label="Photo of a person (optional)"
+            hint="Leave empty to keep the portrait that comes with the website. To change it: a PNG with a transparent background, standing, from the head to the hips (at least 900 px tall)."
           />
           {text("photo_alt", 120, "Describe the photo", "Read aloud to blind visitors, e.g. “Amina, our project manager”")}
         </Card>

@@ -5,6 +5,8 @@ import { useSectionNav } from "@/hooks/use-section-nav"
 import { useTrackRecord } from "@/features/projects/api"
 import { useHeroContent } from "@/features/sitecontent/api"
 import { HERO_DEFAULTS, type HeroContent } from "@/features/sitecontent/types"
+import portrait1300 from "@/assets/hero-portrait-1300.webp"
+import portrait720 from "@/assets/hero-portrait-720.webp"
 import { imageUrl } from "@/lib/media"
 import { cn } from "@/lib/utils"
 
@@ -250,23 +252,19 @@ function PortraitStage({ content, reduced, compact }: { content: HeroContent; re
           <span key={where} className={cn("absolute h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_12px_#34d399]", where, !reduced && "animate-drift-dot")} style={{ animationDelay: delay }} aria-hidden="true" />
         ))}
 
-      {/* The person (uploaded in the dashboard); until then, the RynexNative mark */}
-      {content.photo ? (
-        <img
-          src={imageUrl(content.photo, compact ? 520 : 900)}
-          alt={content.photo_alt}
-          className={cn(
-            "absolute bottom-0 left-1/2 z-10 h-[94%] w-auto max-w-none -translate-x-1/2 object-contain object-bottom",
-            compact && "[mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
-          )}
-          fetchPriority="high"
-          decoding="async"
-        />
-      ) : (
-        <div className="absolute left-1/2 top-[52%] z-10 -translate-x-1/2 -translate-y-1/2 aspect-square w-[34%] rounded-full bg-white/95 shadow-[0_0_60px_rgba(16,185,129,0.45)] flex items-center justify-center" aria-hidden="true">
-          <img src="/logo-128.webp" alt="" className="w-[62%] h-auto" />
-        </div>
-      )}
+      {/* An uploaded photo replaces the approved portrait that ships with the site */}
+      <img
+        src={content.photo ? imageUrl(content.photo, compact ? 520 : 900) : compact ? portrait720 : portrait1300}
+        srcSet={content.photo ? undefined : `${portrait720} 336w, ${portrait1300} 606w`}
+        sizes={content.photo ? undefined : compact ? "180px" : "330px"}
+        alt={content.photo_alt}
+        className={cn(
+          "absolute bottom-0 left-1/2 z-10 h-[94%] w-auto max-w-none -translate-x-1/2 object-contain object-bottom",
+          compact && "[mask-image:linear-gradient(to_bottom,black_80%,transparent)]",
+        )}
+        fetchPriority="high"
+        decoding="async"
+      />
 
       <OrbitChips reduced={reduced} compact={compact} />
 
