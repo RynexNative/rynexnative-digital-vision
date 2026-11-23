@@ -214,7 +214,9 @@ function OrbitChips({ reduced, compact }: { reduced: boolean; compact?: boolean 
   }, [reduced, compact])
 
   return (
-    <div ref={stage} className={cn("absolute inset-x-0 h-[46%] -translate-y-1/2 pointer-events-none", compact ? "top-[66%]" : "top-[64%]")} aria-hidden="true">
+    // No transform or z-index on this layer: either would make it its own stacking context,
+    // and then no chip could come in front of the photo (z-10) as it swings round.
+    <div ref={stage} className={cn("absolute inset-x-0 h-[46%] pointer-events-none", compact ? "top-[43%]" : "top-[41%]")} aria-hidden="true">
       {ORBIT.map(({ label, icon: Icon }, i) => (
         <div
           key={label}
