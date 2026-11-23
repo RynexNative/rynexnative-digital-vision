@@ -86,3 +86,39 @@ export type Testimonial = {
 }
 
 export type AdminTestimonial = Testimonial & { consent: boolean; is_published: boolean; sort_order: number; created_at: string; updated_at: string }
+
+export type HeroContent = {
+  eyebrow: string
+  eyebrow_mobile: string
+  title: string
+  highlight: string
+  /** Words between ** and ** are bold */
+  subtitle: string
+  subtitle_mobile: string
+  audiences: string[]
+  trust_line: string
+  /** Portrait with a transparent background (Cloudinary), or "" */
+  photo: string
+  photo_alt: string
+  show_uptime: boolean
+  uptime_value: string
+  uptime_label: string
+  updated_at?: string
+}
+
+/** The approved design: shown while the content loads, and if it cannot be loaded */
+export const HERO_DEFAULTS: HeroContent = {
+  eyebrow: "Software company · Dodoma, Tanzania",
+  eyebrow_mobile: "Software company · Tanzania",
+  title: "Live greater with",
+  highlight: "premium technology.",
+  subtitle: "We design and build **websites, mobile apps, AI tools and custom systems of every kind**, then keep them secure and running.",
+  subtitle_mobile: "Websites, mobile apps, AI tools and custom systems of every kind, built and secured for you.",
+  audiences: ["schools", "SACCOS & banks", "government", "hospitals", "retail shops", "hotels & tourism", "logistics", "startups"],
+  trust_line: "Schools, hospitals, SACCOS, businesses & government",
+  photo: "",
+  photo_alt: "A member of the RynexNative team",
+  show_uptime: true,
+  uptime_value: "99.9%",
+  uptime_label: "uptime this month",
+}
