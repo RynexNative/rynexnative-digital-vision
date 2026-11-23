@@ -8,6 +8,7 @@ import { useLook } from "@/features/sitecontent/theme"
 import { HERO_DEFAULTS, type HeroContent } from "@/features/sitecontent/types"
 import portrait1300 from "@/assets/hero-portrait-1300.webp"
 import portrait720 from "@/assets/hero-portrait-720.webp"
+import logoMark from "@/assets/hero-mark.webp"
 import { imageUrl } from "@/lib/media"
 import { cn } from "@/lib/utils"
 
@@ -249,6 +250,17 @@ function PortraitStage({ content, reduced, compact }: { content: HeroContent; re
       <div className="absolute left-1/2 top-[50%] -translate-x-1/2 -translate-y-1/2 aspect-square w-[118%] rounded-full bg-[radial-gradient(closest-side,rgba(16,185,129,0.20),rgba(16,185,129,0.06)_55%,transparent)] dark:bg-[radial-gradient(closest-side,rgba(16,185,129,0.26),rgba(16,185,129,0.07)_55%,transparent)] animate-glow-breathe" aria-hidden="true" />
       <div className="absolute left-1/2 top-[50%] -translate-x-1/2 -translate-y-1/2 aspect-square w-[98%] rounded-full border border-emerald-500/20 dark:border-emerald-400/15" aria-hidden="true" />
       <div className="absolute left-1/2 top-[50%] -translate-x-1/2 -translate-y-1/2 aspect-square w-[74%] rounded-full border border-emerald-500/15 dark:border-emerald-400/10" aria-hidden="true" />
+      {/* The R from our logo, pressed faintly into the background behind the person. The image is
+          only a shape (outline strong, inside faint); the colour and the raised edge come from CSS. */}
+      <div
+        className="absolute left-1/2 top-[2%] lg:-top-[4%] h-[88%] aspect-[682/760] -translate-x-[45%] [filter:drop-shadow(1px_1px_0_rgba(255,255,255,0.95))_drop-shadow(0_10px_18px_rgba(6,78,59,0.07))] dark:[filter:drop-shadow(0_0_8px_rgba(16,185,129,0.18))]"
+        aria-hidden="true"
+      >
+        <div
+          className="h-full w-full bg-[linear-gradient(160deg,rgba(6,95,70,0.16),rgba(16,185,129,0.07))] dark:bg-[linear-gradient(160deg,rgba(52,211,153,0.16),rgba(52,211,153,0.05))]"
+          style={{ maskImage: `url(${logoMark})`, WebkitMaskImage: `url(${logoMark})`, maskSize: "contain", WebkitMaskSize: "contain", maskRepeat: "no-repeat", WebkitMaskRepeat: "no-repeat" }}
+        />
+      </div>
       {!compact &&
         [
           ["left-[14%] top-[34%]", "0s"],
