@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { ExternalLink, Loader2, RotateCcw, Save } from "lucide-react"
+import { ExternalLink, Loader2, Monitor, Moon, RotateCcw, Save, Sun } from "lucide-react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,7 +17,7 @@ import { useDashboardQuery } from "@/features/dashboard/api"
 import { ImageField } from "@/features/dashboard/ImageField"
 import { buttonGhost, buttonPrimary, inputClass } from "@/features/dashboard/styles"
 import { ErrorState, ListSkeleton, PageHeader } from "@/features/dashboard/ui"
-import type { HeroContent } from "@/features/sitecontent/types"
+import type { HeroContent, HeroTheme } from "@/features/sitecontent/types"
 import { useToast } from "@/hooks/use-toast"
 import { dashboardRequest, serverMessage } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -47,6 +47,12 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
     </section>
   )
 }
+
+const THEMES: { value: HeroTheme; label: string; hint: string; icon: typeof Sun }[] = [
+  { value: "auto", label: "Automatic", hint: "Follows each visitor's phone or computer", icon: Monitor },
+  { value: "light", label: "Light", hint: "Pale green page, white cards", icon: Sun },
+  { value: "dark", label: "Dark", hint: "Deep green-teal page", icon: Moon },
+]
 
 /** The top of the home page: words, "Built for …", the portrait and the uptime card. */
 export default function HeroAdminPage() {
@@ -109,6 +115,32 @@ export default function HeroAdminPage() {
           save.mutate({ ...draft, audiences: audiences.split("\n").map((a) => a.trim()).filter(Boolean) })
         }}
       >
+        <Card title="Look">
+          <div role="radiogroup" aria-label="Light or dark" className="grid gap-2 sm:grid-cols-3">
+            {THEMES.map(({ value, label, hint, icon: Icon }) => (
+              <button
+                key={value}
+                type="button"
+                role="radio"
+                aria-checked={draft.theme === value}
+                disabled={!manage}
+                onClick={() => set("theme", value)}
+                className={cn(
+                  "flex items-start gap-3 rounded-xl border p-3 text-left transition-colors",
+                  draft.theme === value ? "border-emerald-500 bg-emerald-500/10" : "border-foreground/10 hover:bg-foreground/5",
+                )}
+              >
+                <Icon className="h-5 w-5 mt-0.5 flex-shrink-0 text-emerald-600" />
+                <span>
+                  <span className="block font-medium text-sm">{label}</span>
+                  <span className="block text-xs text-foreground/60 mt-0.5">{hint}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-foreground/50">Covers the top of the home page and the menu bar. Visitors can still switch for themselves with the sun/moon button.</p>
+        </Card>
+
         <Card title="Portrait">
           <ImageField
             portrait
@@ -169,7 +201,7 @@ export default function HeroAdminPage() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Go back to the original wording?</AlertDialogTitle>
-            <AlertDialogDescription>The texts, “Built for …” list and uptime card return to the original design. The photo stays.</AlertDialogDescription>
+            <AlertDialogDescription>The texts, “Built for …” list and uptime card return to the original design. The photo and the light/dark choice stay.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
