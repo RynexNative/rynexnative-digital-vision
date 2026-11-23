@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { apiGet } from "@/lib/api"
-import type { Testimonial, WhyChooseUsContent } from "./types"
+import type { HeroContent, Testimonial, WhyChooseUsContent } from "./types"
 
 export function useWhyChooseUs() {
   return useQuery({
@@ -14,6 +14,14 @@ export function useTestimonials() {
   return useQuery({
     queryKey: ["content", "testimonials"],
     queryFn: () => apiGet<Testimonial[]>("/api/content/testimonials/"),
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
+export function useHeroContent() {
+  return useQuery({
+    queryKey: ["content", "hero"],
+    queryFn: () => apiGet<HeroContent>("/api/content/hero/"),
     staleTime: 5 * 60 * 1000,
   })
 }

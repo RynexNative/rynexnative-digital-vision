@@ -10,7 +10,20 @@ import { inputClass } from "./styles"
 const MAX_MB = 8
 
 /** Cover image picker: upload to Cloudinary, or paste an existing image link. */
-export function ImageField({ value, onChange, label = "Cover image" }: { value: string; onChange: (url: string) => void; label?: string }) {
+export function ImageField({
+  value,
+  onChange,
+  label = "Cover image",
+  portrait,
+  hint,
+}: {
+  value: string
+  onChange: (url: string) => void
+  label?: string
+  /** A standing person with a transparent background: shown whole, on a dark backdrop, not cropped */
+  portrait?: boolean
+  hint?: string
+}) {
   const { toast } = useToast()
   const fileInput = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
@@ -49,8 +62,12 @@ export function ImageField({ value, onChange, label = "Cover image" }: { value: 
     <div>
       <span className="block text-sm font-medium mb-1.5">{label}</span>
       {value ? (
-        <div className="relative rounded-xl overflow-hidden border border-foreground/10 group">
-          <img src={imageUrl(value, 800)} alt="" className="w-full aspect-[16/9] object-cover" />
+        <div className={`relative rounded-xl overflow-hidden border border-foreground/10 group ${portrait ? "max-w-xs" : ""}`}>
+          <img
+            src={imageUrl(value, 800)}
+            alt=""
+            className={portrait ? "w-full aspect-[4/5] object-contain object-bottom bg-[#081a1d]" : "w-full aspect-[16/9] object-cover"}
+          />
           <div className="absolute inset-x-0 bottom-0 p-2 flex justify-end gap-2 bg-gradient-to-t from-black/70 to-transparent">
             <button
               type="button"
@@ -81,11 +98,11 @@ export function ImageField({ value, onChange, label = "Cover image" }: { value: 
             e.preventDefault()
             pick(e.dataTransfer.files?.[0])
           }}
-          className="w-full aspect-[16/9] max-h-56 rounded-xl border-2 border-dashed border-foreground/20 hover:border-primary/60 hover:bg-primary/5 transition-colors flex flex-col items-center justify-center gap-2 text-foreground/60"
+          className={`w-full ${portrait ? "aspect-[4/5] max-w-xs max-h-96" : "aspect-[16/9] max-h-56"} rounded-xl border-2 border-dashed border-foreground/20 hover:border-primary/60 hover:bg-primary/5 transition-colors flex flex-col items-center justify-center gap-2 text-foreground/60`}
         >
           {uploading ? <Loader2 className="h-8 w-8 animate-spin text-primary" /> : <ImagePlus className="h-8 w-8" />}
           <span className="text-sm font-medium">{uploading ? "Uploading..." : "Click or drag an image here"}</span>
-          <span className="text-xs text-foreground/40">JPG, PNG, WebP · up to {MAX_MB} MB · resized automatically</span>
+          <span className="text-xs text-foreground/40 px-4 text-center">{hint ?? `JPG, PNG, WebP · up to ${MAX_MB} MB · resized automatically`}</span>
         </button>
       )}
       <input ref={fileInput} type="file" accept="image/*" className="hidden" onChange={(e) => pick(e.target.files?.[0])} />

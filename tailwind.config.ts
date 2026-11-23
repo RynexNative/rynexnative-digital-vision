@@ -99,6 +99,27 @@ export default {
 					from: { transform: 'translateX(0)' },
 					to: { transform: 'translateX(-50%)' }
 				},
+				// Hero: the assistant "speaking", dots drifting, the uptime line drawing, words changing
+				voice: {
+					'0%, 100%': { transform: 'scaleY(0.35)' },
+					'50%': { transform: 'scaleY(1)' }
+				},
+				'drift-dot': {
+					'0%, 100%': { transform: 'translateY(0)', opacity: '0.9' },
+					'50%': { transform: 'translateY(-14px)', opacity: '0.4' }
+				},
+				'draw-line': {
+					'0%': { strokeDashoffset: '220' },
+					'60%, 100%': { strokeDashoffset: '0' }
+				},
+				'word-in': {
+					from: { opacity: '0', transform: 'translateY(0.4em)' },
+					to: { opacity: '1', transform: 'translateY(0)' }
+				},
+				'glow-breathe': {
+					'0%, 100%': { opacity: '0.55', transform: 'scale(1)' },
+					'50%': { opacity: '0.9', transform: 'scale(1.04)' }
+				},
 				'accordion-down': {
 					from: { height: '0' },
 					to: { height: 'var(--radix-accordion-content-height)' }
@@ -131,6 +152,11 @@ export default {
 			},
 			animation: {
 				marquee: 'marquee 40s linear infinite',
+				voice: 'voice 0.9s ease-in-out infinite',
+				'drift-dot': 'drift-dot 5s ease-in-out infinite',
+				'draw-line': 'draw-line 4s ease-out infinite',
+				'word-in': 'word-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both',
+				'glow-breathe': 'glow-breathe 6s ease-in-out infinite',
 				'ken-burns': 'ken-burns 30s ease-in-out infinite alternate',
 				aurora: 'aurora 14s ease-in-out infinite',
 				'aurora-slow': 'aurora-drift 22s ease-in-out infinite',

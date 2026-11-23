@@ -37,6 +37,7 @@ import {
   Newspaper,
   ScanLine,
   ShieldAlert,
+  Sparkles,
   Users,
 } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
@@ -75,6 +76,7 @@ const InsightsPage = lazyWithReload(() => import("./InsightsPage"))
 const SettingsPage = lazyWithReload(() => import("./SettingsPage"))
 const ProjectsAdminPage = lazyWithReload(() => import("./ProjectsAdminPage"))
 const WhyChooseUsAdminPage = lazyWithReload(() => import("./WhyChooseUsAdminPage"))
+const HeroAdminPage = lazyWithReload(() => import("./HeroAdminPage"))
 const TestimonialsAdminPage = lazyWithReload(() => import("./TestimonialsAdminPage"))
 const UsersPage = lazyWithReload(() => import("./UsersPage"))
 const ActivityPage = lazyWithReload(() => import("./ActivityPage"))
@@ -236,6 +238,7 @@ function Shell() {
     { group: "Operations", to: "/admin/servers", label: "Servers", perm: "operations.view", icon: <Server className="h-5 w-5" /> },
     { group: "Operations", to: "/admin/subscriptions", label: "Subscriptions", perm: "operations.view", icon: <CreditCard className="h-5 w-5" /> },
     { group: "Content & events", to: "/admin/projects", label: "Projects", perm: "content.view", icon: <Briefcase className="h-5 w-5" /> },
+    { group: "Content & events", to: "/admin/hero", label: "Hero section", perm: "content.view", icon: <Sparkles className="h-5 w-5" /> },
     { group: "Content & events", to: "/admin/why-choose-us", label: "Why choose us", perm: "content.view", icon: <HeartHandshake className="h-5 w-5" /> },
     { group: "Content & events", to: "/admin/testimonials", label: "Testimonials", perm: "content.view", icon: <Quote className="h-5 w-5" /> },
     { group: "Content & events", to: "/admin/news", label: "News", perm: "content.view", icon: <Newspaper className="h-5 w-5" />, badge: stats?.news?.drafts },
@@ -385,6 +388,7 @@ function Shell() {
               <Route path="insights" element={<Guard perm="insights.view"><InsightsPage /></Guard>} />
               <Route path="settings" element={<Guard perm="settings.view"><SettingsPage /></Guard>} />
               <Route path="projects" element={<Guard perm="content.view"><ProjectsAdminPage /></Guard>} />
+              <Route path="hero" element={<Guard perm="content.view"><HeroAdminPage /></Guard>} />
               <Route path="why-choose-us" element={<Guard perm="content.view"><WhyChooseUsAdminPage /></Guard>} />
               <Route path="testimonials" element={<Guard perm="content.view"><TestimonialsAdminPage /></Guard>} />
               <Route path="users" element={<Guard perm="users.view"><UsersPage /></Guard>} />
