@@ -87,6 +87,9 @@ export type Testimonial = {
 
 export type AdminTestimonial = Testimonial & { consent: boolean; is_published: boolean; sort_order: number; created_at: string; updated_at: string }
 
+/** "auto" follows the visitor's phone or computer setting */
+export type HeroTheme = "auto" | "light" | "dark"
+
 export type HeroContent = {
   eyebrow: string
   eyebrow_mobile: string
@@ -103,6 +106,7 @@ export type HeroContent = {
   show_uptime: boolean
   uptime_value: string
   uptime_label: string
+  theme: HeroTheme
   updated_at?: string
 }
 
@@ -121,4 +125,5 @@ export const HERO_DEFAULTS: HeroContent = {
   show_uptime: true,
   uptime_value: "99.9%",
   uptime_label: "uptime this month",
+  theme: "auto",
 }
