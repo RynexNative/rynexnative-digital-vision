@@ -239,6 +239,79 @@ export type FarmSummary = {
   quiet_customers?: { id: number; name: string; phone: string; purchases: number; last_purchase: string | null; usual_gap_days: number | null }[]
 }
 
+/** One batch inside one calendar month: figures cut at the month's edges */
+export type MonthBatch = {
+  id: number
+  code: string
+  house: string
+  breed: string
+  status: BatchStatus
+  started_on: string
+  closed_on: string | null
+  chicks_count: number
+  /** Arrived in an earlier month and was still on the farm when this one began */
+  from_earlier_month: boolean
+  arrived_this_month: boolean
+  closed_this_month: boolean
+  /** Still has birds when the month ends (into the next month, or still on the farm) */
+  continues: boolean
+  /** Where its bar starts and stops on the month's timeline, 1..days */
+  first_day: number | null
+  last_day: number | null
+  age_at_end: number
+  target_age_days: number
+  // Birds: for roles that see flocks
+  at_start?: number
+  arrived?: number
+  deaths?: number
+  sold?: number
+  at_end?: number
+  mortality_pct?: number
+  // Money: for roles allowed to see it
+  costs?: string
+  birds_sold?: number
+  kg_sold?: string
+  revenue?: string
+  profit?: string
+  /** For a batch that runs over more than one month: all its months, to date */
+  whole?: { revenue: string; costs: string; profit: string }
+}
+
+export type MonthDeath = { id: number; date: string; batch: number; batch_code: string; count: number; disease: string; notes: string }
+
+export type FarmMonth = {
+  month: string
+  start: string
+  end: string
+  days: number
+  today_day: number | null
+  is_current: boolean
+  previous: string | null
+  next: string | null
+  batches: MonthBatch[]
+  deaths?: MonthDeath[]
+  costs?: Expense[]
+  costs_by_category?: CategoryTotal[]
+  sales?: Sale[]
+  totals: {
+    at_start?: number
+    arrived?: number
+    deaths?: number
+    sold?: number
+    at_end?: number
+    mortality_pct?: number
+    costs?: string
+    general_costs?: string
+    unpaid_costs?: string
+    revenue?: string
+    birds_sold?: number
+    kg_sold?: string
+    collected?: string
+    unpaid_sales?: string
+    profit?: string
+  }
+}
+
 export type MonthRow = { month: string; revenue: string; costs: string; profit: string; collected: string }
 
 export type FarmReport = {
@@ -302,6 +375,10 @@ export const num = (value: string | number | null | undefined) => money.format(N
 
 export const shortDate = (value: string | null | undefined) =>
   value ? new Date(`${value}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "—"
+
+/** "2026-11" -> "November 2026" */
+export const monthName = (month: string, style: "long" | "short" = "long") =>
+  new Date(`${month}-01T00:00:00`).toLocaleDateString("en-GB", { month: style, year: "numeric" })
 
 export const today = () => {
   const d = new Date()

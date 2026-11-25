@@ -1,13 +1,15 @@
 import { useMutation } from "@tanstack/react-query"
 import { query, uploadFile, useDashboardQuery, useInvalidate } from "@/features/dashboard/api"
 import { dashboardFile, dashboardRequest } from "@/lib/api"
-import type { Batch, Customer, CustomerList, CustomerNote, ExpenseList, FarmReport, FarmSummary, HealthEvent, Order, Sale, TrashItem } from "./types"
+import type { Batch, Customer, CustomerList, CustomerNote, ExpenseList, FarmMonth, FarmReport, FarmSummary, HealthEvent, Order, Sale, TrashItem } from "./types"
 
 export type FarmResource = "batches" | "health" | "expenses" | "customers" | "sales" | "orders" | "customer-notes"
 
 const key = (...parts: unknown[]) => ["dashboard", "farm", ...parts]
 
 export const useFarmSummary = () => useDashboardQuery<FarmSummary>(key("summary"), "/farm/summary/")
+/** One month, batch by batch ("" = this month) */
+export const useFarmMonth = (month: string) => useDashboardQuery<FarmMonth>(key("month", month), `/farm/month/${query({ month })}`)
 export const useFarmReport = (year: string, enabled = true) => useDashboardQuery<FarmReport>(key("reports", year), `/farm/reports/${query({ year })}`, enabled)
 export const useBatches = (params: Record<string, string> = {}, enabled = true) =>
   useDashboardQuery<Batch[]>(key("batches", params), `/farm/batches/${query(params)}`, enabled)
