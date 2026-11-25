@@ -367,8 +367,9 @@ export const tzs = (value: string | number | null | undefined) => `TZS ${money.f
 export const tzsShort = (value: string | number | null | undefined) => {
   const n = Number(value ?? 0)
   const abs = Math.abs(n)
-  if (abs >= 1_000_000) return `${(n / 1_000_000).toFixed(abs >= 10_000_000 ? 0 : 1)}M`
-  if (abs >= 1_000) return `${Math.round(n / 1_000)}K`
+  const sign = n < 0 ? "-" : ""
+  if (abs >= 1_000_000) return `${sign}${(abs / 1_000_000).toFixed(abs >= 10_000_000 ? 0 : 1)}M`
+  if (abs >= 1_000) return `${sign}${Math.round(abs / 1_000)}K`
   return money.format(n)
 }
 export const num = (value: string | number | null | undefined) => money.format(Number(value ?? 0))

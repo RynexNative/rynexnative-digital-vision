@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "
 import { Pill } from "@/features/dashboard/ui"
 import { cn } from "@/lib/utils"
 import { Bars, FARM } from "./ui"
-import { BATCH_STATUS, PAYMENT_METHODS, monthName, num, tzs, tzsShort, type FarmMonth, type MonthBatch } from "./types"
+import { BATCH_STATUS, PAYMENT_METHODS, monthName, num, tzs, type FarmMonth, type MonthBatch } from "./types"
 
 /* ------------------------------------------------------------------ helpers */
 
@@ -130,12 +130,14 @@ export function MonthCards({ data, open }: { data: FarmMonth; open: (detail: Det
         label={data.is_current ? "Birds now" : "Birds at month end"}
         icon={<Bird className="h-3.5 w-3.5" />}
         value={num(t.at_end)}
-        sub={
-          <>
-            {num(t.at_start)} at start
-            {t.arrived ? ` · +${num(t.arrived)} arrived` : ""} · −{num(t.deaths)} died · −{num(t.sold)} sold
-          </>
-        }
+        sub={[
+          t.at_start ? `${num(t.at_start)} at start` : "",
+          t.arrived ? `+${num(t.arrived)} arrived` : "",
+          t.deaths ? `−${num(t.deaths)} died` : "",
+          t.sold ? `−${num(t.sold)} sold` : "",
+        ]
+          .filter(Boolean)
+          .join(" · ")}
         onOpen={() => open("birds")}
       />,
     )
@@ -155,16 +157,16 @@ export function MonthCards({ data, open }: { data: FarmMonth; open: (detail: Det
     cards.push(
       <Card
         key="sales"
-        label="Sales"
+        label="Sales, TZS"
         icon={<HandCoins className="h-3.5 w-3.5" />}
-        value={tzsShort(t.revenue)}
-        sub={`${num(t.birds_sold)} birds · received ${tzsShort(t.collected)}`}
+        value={num(t.revenue)}
+        sub={`${num(t.birds_sold)} birds · received ${num(t.collected)}`}
         lines={data.batches
           .filter((b) => money(b.revenue))
           .map((b) => ({
             key: b.id,
             label: b.code,
-            value: tzsShort(b.revenue),
+            value: num(b.revenue),
           }))}
         onOpen={() => open("sales")}
       />,
@@ -174,9 +176,9 @@ export function MonthCards({ data, open }: { data: FarmMonth; open: (detail: Det
     cards.push(
       <Card
         key="costs"
-        label="Costs"
+        label="Costs, TZS"
         icon={<Receipt className="h-3.5 w-3.5" />}
-        value={tzsShort(t.costs)}
+        value={num(t.costs)}
         sub={`${data.costs?.length ?? 0} record${data.costs?.length === 1 ? "" : "s"}`}
         lines={[
           ...data.batches
@@ -184,14 +186,14 @@ export function MonthCards({ data, open }: { data: FarmMonth; open: (detail: Det
             .map((b) => ({
               key: b.id,
               label: b.code,
-              value: tzsShort(b.costs),
+              value: num(b.costs),
             })),
           ...(money(t.general_costs)
             ? [
                 {
                   key: "general",
-                  label: "General (whole farm)",
-                  value: tzsShort(t.general_costs),
+                  label: "General",
+                  value: num(t.general_costs),
                 },
               ]
             : []),
@@ -204,18 +206,22 @@ export function MonthCards({ data, open }: { data: FarmMonth; open: (detail: Det
     cards.push(
       <Card
         key="profit"
-        label="Profit"
+        label="Profit, TZS"
         icon={<TrendingUp className="h-3.5 w-3.5" />}
-        value={tzsShort(t.profit)}
+        value={num(t.profit)}
         tone={money(t.profit) >= 0 ? "good" : "bad"}
-        sub="Sales minus all costs this month"
-        lines={data.batches
-          .filter((b) => b.profit !== undefined && (money(b.revenue) || money(b.costs)))
-          .map((b) => ({
-            key: b.id,
-            label: b.code,
-            value: <span className={cn(money(b.profit) < 0 && "text-red-600")}>{tzsShort(b.profit)}</span>,
-          }))}
+        sub={money(t.revenue) ? "Sales minus all costs this month" : "No sales yet this month: so far this is the money spent"}
+        // The lines add up to the total: each batch, then the costs not tied to a batch
+        lines={[
+          ...data.batches
+            .filter((b) => b.profit !== undefined && (money(b.revenue) || money(b.costs)))
+            .map((b) => ({
+              key: b.id,
+              label: b.code,
+              value: <span className={cn(money(b.profit) < 0 && "text-red-600")}>{num(b.profit)}</span>,
+            })),
+          ...(money(t.general_costs) ? [{ key: "general", label: "General", value: <span className="text-red-600">-{num(t.general_costs)}</span> }] : []),
+        ]}
         onOpen={() => open("profit")}
       />,
     )
@@ -392,13 +398,8 @@ function Table({ head, rows, foot }: { head: ReactNode[]; rows: ReactNode[][]; f
   )
 }
 
-/** The full amount from small tablets up, 1.3M on phones */
-const amount = (value: string | number | undefined) => (
-  <>
-    <span className="sm:hidden">{tzsShort(value)}</span>
-    <span className="hidden sm:inline">{num(value)}</span>
-  </>
-)
+/** Amounts are written out in full everywhere here, so every total matches its records to the shilling */
+const amount = (value: string | number | undefined) => num(value)
 
 const batchCell = (b: { id: number; code: string }, sub?: string) => (
   <Link to={`${FARM}/batches/${b.id}`} className="font-semibold whitespace-nowrap hover:text-amber-700">
@@ -485,20 +486,20 @@ function SalesDetail({ data }: { data: FarmMonth }) {
   const birds = rows.some((b) => b.at_end !== undefined)
   return (
     <>
-      <div className="glass rounded-2xl p-3 grid grid-cols-3 gap-2 text-center mb-6">
-        <div className="min-w-0">
+      <div className="glass rounded-2xl p-3 grid grid-cols-1 sm:grid-cols-3 gap-2 sm:text-center mb-6">
+        <div className="min-w-0 flex items-baseline justify-between gap-3 sm:block">
           <p className="text-xs text-foreground/55">Sold for</p>
           <p className="font-semibold tabular-nums whitespace-nowrap">{amount(t.revenue)}</p>
         </div>
-        <div className="min-w-0">
+        <div className="min-w-0 flex items-baseline justify-between gap-3 sm:block">
           <p className="text-xs text-foreground/55">Received</p>
           <p className="font-semibold tabular-nums whitespace-nowrap text-emerald-600">{amount(t.collected)}</p>
         </div>
-        <div className="min-w-0">
+        <div className="min-w-0 flex items-baseline justify-between gap-3 sm:block">
           <p className="text-xs text-foreground/55">Still owed</p>
           <p className={cn("font-semibold tabular-nums whitespace-nowrap", money(t.unpaid_sales) > 0 && "text-red-600")}>{amount(t.unpaid_sales)}</p>
         </div>
-        <p className="col-span-3 text-[11px] text-foreground/50">TZS · “received” counts every payment dated this month, including for earlier sales</p>
+        <p className="sm:col-span-3 text-[11px] text-foreground/50">TZS · “received” counts every payment dated this month, including for earlier sales</p>
       </div>
       <Section title="By batch">
         <Table
@@ -534,7 +535,7 @@ function SalesDetail({ data }: { data: FarmMonth }) {
                     {dayMonth(s.date)} · {s.batch_code} · {num(s.birds)} birds
                     {s.weight_kg ? ` · ${num(s.weight_kg)} kg` : ""}
                   </span>
-                  {money(s.balance) > 0 ? <span className="text-red-600 whitespace-nowrap">owes {tzsShort(s.balance)}</span> : <span className="text-emerald-600">paid</span>}
+                  {money(s.balance) > 0 ? <span className="text-red-600 whitespace-nowrap">owes {num(s.balance)}</span> : <span className="text-emerald-600">paid</span>}
                 </div>
               </li>
             ))}
@@ -565,7 +566,7 @@ function CostsDetail({ data }: { data: FarmMonth }) {
         filter === key ? "border-amber-500 bg-amber-500/15 text-amber-800 dark:text-amber-300" : "border-border hover:bg-foreground/5",
       )}
     >
-      {label} · {tzsShort(amount)}
+      {label} · {num(amount)}
     </button>
   )
   return (

@@ -95,7 +95,7 @@ export default function FarmOverviewPage() {
         )}
       </section>
 
-      <h2 className="text-lg font-semibold mb-3">Right now</h2>
+      {nowStats && <h2 className="text-lg font-semibold mb-3">Right now</h2>}
       {/* Birds alive, deaths and the open batches are in the month above (this month); who owes us is listed below */}
       {nowStats && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
