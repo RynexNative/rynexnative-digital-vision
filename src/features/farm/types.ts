@@ -259,6 +259,7 @@ export type MonthBatch = {
   first_day: number | null
   last_day: number | null
   age_at_end: number
+  target_age_days: number
   // Birds: for roles that see flocks
   at_start?: number
   arrived?: number

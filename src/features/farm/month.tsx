@@ -9,7 +9,11 @@ import { BATCH_STATUS, PAYMENT_METHODS, monthName, num, tzs, tzsShort, type Farm
 
 /* ------------------------------------------------------------------ helpers */
 
-const dayMonth = (value: string) => new Date(`${value}T00:00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short" })
+const dayMonth = (value: string) =>
+  new Date(`${value}T00:00:00`).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+  })
 
 const money = (value: string | undefined) => Number(value ?? 0)
 
@@ -118,7 +122,6 @@ function Card({
 
 export function MonthCards({ data, open }: { data: FarmMonth; open: (detail: Detail) => void }) {
   const t = data.totals
-  const withBirds = data.batches.filter((b) => b.at_start !== undefined && (b.at_start || b.arrived))
   const cards: ReactNode[] = []
   if (t.at_end !== undefined) {
     cards.push(
@@ -133,7 +136,6 @@ export function MonthCards({ data, open }: { data: FarmMonth; open: (detail: Det
             {t.arrived ? ` · +${num(t.arrived)} arrived` : ""} · −{num(t.deaths)} died · −{num(t.sold)} sold
           </>
         }
-        lines={withBirds.map((b) => ({ key: b.id, label: b.code, value: `${num(b.at_start! + b.arrived!)} → ${num(b.at_end)}` }))}
         onOpen={() => open("birds")}
       />,
     )
@@ -145,7 +147,6 @@ export function MonthCards({ data, open }: { data: FarmMonth; open: (detail: Det
         value={num(t.deaths)}
         tone={t.deaths ? "bad" : undefined}
         sub={`${t.mortality_pct}% of the birds this month`}
-        lines={data.batches.filter((b) => b.deaths).map((b) => ({ key: b.id, label: b.code, value: `${num(b.deaths)} (${b.mortality_pct}%)` }))}
         onOpen={() => open("deaths")}
       />,
     )
@@ -158,7 +159,13 @@ export function MonthCards({ data, open }: { data: FarmMonth; open: (detail: Det
         icon={<HandCoins className="h-3.5 w-3.5" />}
         value={tzsShort(t.revenue)}
         sub={`${num(t.birds_sold)} birds · received ${tzsShort(t.collected)}`}
-        lines={data.batches.filter((b) => b.birds_sold).map((b) => ({ key: b.id, label: b.code, value: `${num(b.birds_sold)} birds` }))}
+        lines={data.batches
+          .filter((b) => money(b.revenue))
+          .map((b) => ({
+            key: b.id,
+            label: b.code,
+            value: tzsShort(b.revenue),
+          }))}
         onOpen={() => open("sales")}
       />,
     )
@@ -170,10 +177,24 @@ export function MonthCards({ data, open }: { data: FarmMonth; open: (detail: Det
         label="Costs"
         icon={<Receipt className="h-3.5 w-3.5" />}
         value={tzsShort(t.costs)}
-        sub={`${data.costs?.length ?? 0} record${data.costs?.length === 1 ? "" : "s"}${money(t.unpaid_costs) ? ` · ${tzsShort(t.unpaid_costs)} not paid yet` : ""}`}
+        sub={`${data.costs?.length ?? 0} record${data.costs?.length === 1 ? "" : "s"}`}
         lines={[
-          ...data.batches.filter((b) => money(b.costs)).map((b) => ({ key: b.id, label: b.code, value: tzsShort(b.costs) })),
-          ...(money(t.general_costs) ? [{ key: "general", label: "General (whole farm)", value: tzsShort(t.general_costs) }] : []),
+          ...data.batches
+            .filter((b) => money(b.costs))
+            .map((b) => ({
+              key: b.id,
+              label: b.code,
+              value: tzsShort(b.costs),
+            })),
+          ...(money(t.general_costs)
+            ? [
+                {
+                  key: "general",
+                  label: "General (whole farm)",
+                  value: tzsShort(t.general_costs),
+                },
+              ]
+            : []),
         ]}
         onOpen={() => open("costs")}
       />,
@@ -190,7 +211,11 @@ export function MonthCards({ data, open }: { data: FarmMonth; open: (detail: Det
         sub="Sales minus all costs this month"
         lines={data.batches
           .filter((b) => b.profit !== undefined && (money(b.revenue) || money(b.costs)))
-          .map((b) => ({ key: b.id, label: b.code, value: <span className={cn(money(b.profit) < 0 && "text-red-600")}>{tzsShort(b.profit)}</span> }))}
+          .map((b) => ({
+            key: b.id,
+            label: b.code,
+            value: <span className={cn(money(b.profit) < 0 && "text-red-600")}>{tzsShort(b.profit)}</span>,
+          }))}
         onOpen={() => open("profit")}
       />,
     )
@@ -199,6 +224,17 @@ export function MonthCards({ data, open }: { data: FarmMonth; open: (detail: Det
 }
 
 /* ------------------------------------------------------------------ timeline */
+
+/** "day 13 of 35": red when an open batch is past its selling age (the warning above says how many birds are left) */
+function Age({ b, current }: { b: MonthBatch; current: boolean }) {
+  const late = current && b.status !== "closed" && b.age_at_end > b.target_age_days
+  return (
+    <span className={cn(late && "text-red-600 font-semibold")}>
+      day {b.age_at_end}
+      {b.status !== "closed" && ` of ${b.target_age_days}`}
+    </span>
+  )
+}
 
 /** Each batch as a bar across the month's days: when it came, when it went, and its numbers */
 export function BatchTimeline({ data }: { data: FarmMonth }) {
@@ -229,13 +265,22 @@ export function BatchTimeline({ data }: { data: FarmMonth }) {
                   <Pill className={BATCH_STATUS[b.status].className}>{BATCH_STATUS[b.status].label}</Pill>
                 </span>
                 <span className="block text-xs text-foreground/55 truncate">
-                  {[b.house, `${num(b.chicks_count)} chicks`, `day ${b.age_at_end}`].filter(Boolean).join(" · ")}
+                  {[b.house, `${num(b.chicks_count)} chicks`].filter(Boolean).join(" · ")}
+                  {" · "}
+                  <Age b={b} current={data.is_current} />
                 </span>
               </Link>
               <div className="flex-1 min-w-0">
                 <div className="relative h-7 rounded-md bg-foreground/[0.04]">
                   {data.today_day && (
-                    <span className="absolute inset-y-0 w-px bg-amber-600/60" style={{ left: `${pos(data.today_day) + 100 / data.days / 2}%` }} title="Today" aria-hidden="true" />
+                    <span
+                      className="absolute inset-y-0 w-px bg-amber-600/60"
+                      style={{
+                        left: `${pos(data.today_day) + 100 / data.days / 2}%`,
+                      }}
+                      title="Today"
+                      aria-hidden="true"
+                    />
                   )}
                   <div
                     className={cn(
@@ -463,9 +508,15 @@ function SalesDetail({ data }: { data: FarmMonth }) {
               ? [batchCell(b, arrival(b)), num(b.at_start! + b.arrived!), <span className="font-semibold">{num(b.birds_sold)}</span>, num(b.at_end), amount(b.revenue)]
               : [batchCell(b), num(b.birds_sold), num(b.kg_sold), amount(b.revenue)],
           )}
-          foot={birds ? ["All", num((t.at_start ?? 0) + (t.arrived ?? 0)), num(t.birds_sold), num(t.at_end), amount(t.revenue)] : ["All", num(t.birds_sold), num(t.kg_sold), amount(t.revenue)]}
+          foot={
+            birds
+              ? ["All", num((t.at_start ?? 0) + (t.arrived ?? 0)), num(t.birds_sold), num(t.at_end), amount(t.revenue)]
+              : ["All", num(t.birds_sold), num(t.kg_sold), amount(t.revenue)]
+          }
         />
-        {birds && <p className="text-xs text-foreground/55 mt-2">“Had” is the birds at the start of the month plus any that arrived; “Left” is what was not sold or lost by the end.</p>}
+        {birds && (
+          <p className="text-xs text-foreground/55 mt-2">“Had” is the birds at the start of the month plus any that arrived; “Left” is what was not sold or lost by the end.</p>
+        )}
       </Section>
       <Section title={`Every sale (${data.sales?.length ?? 0})`}>
         {!data.sales?.length ? (
@@ -480,7 +531,8 @@ function SalesDetail({ data }: { data: FarmMonth }) {
                 </div>
                 <div className="flex justify-between gap-3 text-xs text-foreground/60">
                   <span>
-                    {dayMonth(s.date)} · {s.batch_code} · {num(s.birds)} birds{s.weight_kg ? ` · ${num(s.weight_kg)} kg` : ""}
+                    {dayMonth(s.date)} · {s.batch_code} · {num(s.birds)} birds
+                    {s.weight_kg ? ` · ${num(s.weight_kg)} kg` : ""}
                   </span>
                   {money(s.balance) > 0 ? <span className="text-red-600 whitespace-nowrap">owes {tzsShort(s.balance)}</span> : <span className="text-emerald-600">paid</span>}
                 </div>
@@ -521,7 +573,13 @@ function CostsDetail({ data }: { data: FarmMonth }) {
       {data.costs_by_category && data.costs_by_category.length > 0 && (
         <Section title="Where the money went">
           <div className="glass rounded-xl p-3">
-            <Bars rows={data.costs_by_category.map((c) => ({ label: c.label, value: Number(c.amount) }))} format={tzs} />
+            <Bars
+              rows={data.costs_by_category.map((c) => ({
+                label: c.label,
+                value: Number(c.amount),
+              }))}
+              format={tzs}
+            />
           </div>
         </Section>
       )}
@@ -588,7 +646,17 @@ function ProfitDetail({ data }: { data: FarmMonth }) {
           rows={[
             ...rows.map((b) => [batchCell(b, arrival(b)), amount(b.revenue), amount(b.costs), signed(b.profit)]),
             ...(money(t.general_costs)
-              ? [[<span className="font-semibold">General<span className="block text-[11px] font-normal text-foreground/55">Not tied to a batch</span></span>, "—", amount(t.general_costs), signed(String(-money(t.general_costs)))]]
+              ? [
+                  [
+                    <span className="font-semibold">
+                      General
+                      <span className="block text-[11px] font-normal text-foreground/55">Not tied to a batch</span>
+                    </span>,
+                    "—",
+                    amount(t.general_costs),
+                    signed(String(-money(t.general_costs))),
+                  ],
+                ]
               : []),
           ]}
           foot={["This month", amount(t.revenue), amount(t.costs), signed(t.profit)]}
@@ -618,7 +686,13 @@ function ProfitDetail({ data }: { data: FarmMonth }) {
   )
 }
 
-const TITLES: Record<Detail, string> = { birds: "Birds", deaths: "Deaths", sales: "Sales", costs: "Costs", profit: "Profit" }
+const TITLES: Record<Detail, string> = {
+  birds: "Birds",
+  deaths: "Deaths",
+  sales: "Sales",
+  costs: "Costs",
+  profit: "Profit",
+}
 
 export function MonthDetailSheet({ data, detail, onClose }: { data: FarmMonth; detail: Detail | null; onClose: () => void }) {
   return (
