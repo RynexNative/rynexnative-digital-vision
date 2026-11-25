@@ -6,7 +6,18 @@
   <atom:link href="https://rynexnative.com/rss.xml" rel="self" type="application/rss+xml"/>
   <description>Projects, announcements and articles about technology in Tanzania from RynexNative.</description>
   <language>en</language>
-  <lastBuildDate>Wed, 18 Nov 2026 08:54:23 GMT</lastBuildDate>
+  <lastBuildDate>Tue, 24 Nov 2026 05:57:38 GMT</lastBuildDate>
+  <item>
+    <title>Amazon Announces  $7.5 Billion Deal for Israeli AI Startup Decart*</title>
+    <link>https://rynexnative.com/news/amazon-announces-7-5-billion-deal-for-israeli-ai-startup-decart/</link>
+    <guid isPermaLink="true">https://rynexnative.com/news/amazon-announces-7-5-billion-deal-for-israeli-ai-startup-decart/</guid>
+    <pubDate>Tue, 24 Nov 2026 05:57:38 GMT</pubDate>
+    <category>Announcement</category>
+    <description>*Amazon Announces  $7.5 Billion Deal for Israeli AI Startup Decart*
+
+Amazon has signed an agreement to acquire AI optimization technology and talent from Israeli startup Decart in a deal reportedly valued at approximately $7.5 billion</description>
+    <media:content url="https://res.cloudinary.com/v4ao9agc/image/upload/f_auto,q_auto,c_limit,w_1200/v1795499841/rynexnative/r7vggoe4lvtmi8rkcsij.jpg" medium="image"/>
+  </item>
   <item>
     <title>Apple outage hits iCloud, App Store as company rules out is not cyberattack</title>
     <link>https://rynexnative.com/news/apple-outage-hits-icloud-app-store-as-company-rules-out-is-not-cyberattack/</link>
